@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STL Pothole Reporter</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕳️</text></svg>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pothole STL">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--blue-900:#0c1929;--blue-600:#2563eb;--blue-500:#3b82f6;--blue-400:#60a5fa;--blue-100:#dbeafe;--blue-50:#eff6ff;--gray-900:#111827;--gray-700:#374151;--gray-600:#4b5563;--gray-500:#6b7280;--gray-400:#9ca3af;--gray-300:#d1d5db;--gray-200:#e5e7eb;--gray-100:#f3f4f6;--gray-50:#f9fafb;--red-600:#dc2626;--red-500:#ef4444;--red-100:#fee2e2;--green-700:#15803d;--green-600:#16a34a;--green-50:#f0fdf4;--amber-700:#b45309;--amber-600:#d97706;--amber-50:#fffbeb;--white:#fff;--shadow-md:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -2px rgba(0,0,0,.05);--radius:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.header{background:var(--blue-900);color:var(--white);padding:20px 24px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-top{max-width:540px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-bottom:14px}
+.header h1{font-size:18px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;gap:10px}
+.header h1 .icon{font-size:22px}
+.header-subtitle{font-size:12px;opacity:.6;font-weight:400;margin-top:2px}
+.settings-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:var(--white);padding:8px 14px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer}
+.settings-btn:hover{background:rgba(255,255,255,.18)}
+.tabs{max-width:540px;margin:0 auto;display:flex}
+.tab{flex:1;padding:12px 0;text-align:center;font-size:14px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;background:0 0;border-top:0;border-left:0;border-right:0;font-family:inherit}
+.tab:hover{color:rgba(255,255,255,.8)}
+.tab.active{color:var(--white);border-bottom-color:var(--blue-400)}
+.tab .tab-badge{display:inline-block;background:var(--blue-500);color:var(--white);font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:6px}
+.container{max-width:540px;margin:0 auto;padding:24px 16px 100px}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;margin-bottom:16px;border:1px solid var(--gray-200)}
+.card-title{font-size:15px;font-weight:600;color:var(--gray-700);margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px}
+label{display:block;font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:6px}
+.label-hint{font-weight:400;color:var(--gray-500);font-size:13px}
+input[type=text],input[type=email],input[type=tel],textarea{width:100%;padding:12px 14px;border:1.5px solid var(--gray-300);border-radius:8px;font-family:inherit;font-size:15px;color:var(--gray-900);background:var(--white);transition:border-color .15s,box-shadow .15s;outline:0}
+input:focus,textarea:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+input::placeholder,textarea::placeholder{color:var(--gray-400)}
+.field-group{margin-bottom:18px}.field-group:last-child{margin-bottom:0}
+textarea{resize:vertical;min-height:110px;line-height:1.5}
+.char-count{text-align:right;font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--gray-500);margin-top:6px}
+.char-count.warn{color:var(--amber-600);font-weight:500}.char-count.over{color:var(--red-600);font-weight:600}
+.input-wrap{display:flex;align-items:stretch;gap:8px}
+.input-wrap input,.input-wrap textarea{flex:1;min-width:0}
+.mic-btn{flex-shrink:0;width:48px;border:1.5px solid var(--gray-300);border-radius:8px;background:var(--gray-50);color:var(--gray-500);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.mic-btn:hover{background:var(--blue-50);border-color:var(--blue-400);color:var(--blue-600)}
+.mic-btn.recording{background:var(--red-100);border-color:var(--red-500);color:var(--red-600);animation:pb 1.5s ease-in-out infinite}
+.mic-btn.unsupported{opacity:.3;cursor:not-allowed}
+@keyframes pb{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
+.mic-icon{width:22px;height:22px}
+.narrate-section{margin-bottom:22px}
+.narrate-btn{width:100%;padding:18px 16px;border:2px dashed var(--gray-300);border-radius:12px;background:var(--gray-50);color:var(--gray-600);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.narrate-btn:hover{background:var(--blue-50);border-color:var(--blue-400);color:var(--blue-600)}
+.narrate-btn.recording{background:var(--red-100);border-color:var(--red-500);border-style:solid;color:var(--red-600);animation:pbg 1.5s ease-in-out infinite}
+.narrate-btn.recording .narrate-label{display:none}.narrate-btn .recording-label{display:none}.narrate-btn.recording .recording-label{display:inline}
+.narrate-btn.unsupported{opacity:.4;cursor:not-allowed;border-style:solid}
+@keyframes pbg{0%,100%{background:var(--red-100)}50%{background:#fecaca}}
+.narrate-hint{text-align:center;font-size:12px;color:var(--gray-400);margin-top:8px;line-height:1.5}
+.narrate-hint.recording-hint{color:var(--red-500);font-weight:500}
+.voice-feedback{display:none;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:12px 16px;margin-top:10px;font-size:14px;color:var(--gray-600);line-height:1.5}
+.voice-feedback.show{display:block}
+.voice-feedback .vf-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-400);font-weight:600;margin-bottom:4px}
+.voice-feedback .vf-text{font-style:italic;color:var(--gray-700)}
+.type-options{display:flex;gap:8px}
+.type-option{flex:1;padding:14px 10px;border:2px solid var(--gray-200);border-radius:10px;text-align:center;cursor:pointer;transition:all .15s;background:var(--white);user-select:none}
+.type-option:hover{border-color:var(--gray-300);background:var(--gray-50)}
+.type-option.selected{border-color:var(--blue-600);background:var(--blue-50)}
+.type-option .type-emoji{font-size:22px;margin-bottom:6px}
+.type-option .type-label{font-size:13px;font-weight:600;color:var(--gray-700);line-height:1.3}
+.type-option.selected .type-label{color:var(--blue-600)}
+.type-option .type-code{font-size:11px;color:var(--gray-400);font-family:'JetBrains Mono',monospace;margin-top:4px}
+.submit-btn{width:100%;padding:16px;background:var(--blue-600);color:var(--white);border:0;border-radius:10px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s}
+.submit-btn:hover{background:#1d4ed8}.submit-btn:active{transform:scale(.99)}
+.submit-btn:disabled{background:var(--gray-300);color:var(--gray-500);cursor:not-allowed}
+.save-btn{width:100%;padding:14px;background:var(--green-600);color:var(--white);border:0;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.save-btn:hover{background:var(--green-700)}
+.danger-btn{width:100%;padding:12px;background:var(--white);color:var(--red-600);border:1.5px solid var(--red-600);border-radius:10px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px}
+.danger-btn:hover{background:var(--red-100)}
+.status{padding:16px 18px;border-radius:10px;margin-bottom:16px;font-size:14px;line-height:1.5;display:none}
+.status.show{display:block}
+.status.success{background:var(--green-50);border:1.5px solid #86efac;color:var(--green-700)}
+.status.error{background:var(--red-100);border:1.5px solid #fca5a5;color:var(--red-600)}
+.status.warning{background:var(--amber-50);border:1.5px solid #fcd34d;color:var(--amber-600)}
+.status.info{background:var(--blue-50);border:1.5px solid #93c5fd;color:var(--blue-600)}
+.status strong{font-weight:700}
+.tracking-id{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;background:rgba(255,255,255,.7);padding:4px 10px;border-radius:6px;display:inline-block;margin-top:4px}
+.setup-intro{font-size:15px;color:var(--gray-600);line-height:1.6;margin-bottom:24px}
+.spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:var(--white);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+.spinner-dark{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(37,99,235,.2);border-top-color:var(--blue-600);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.screen{display:none}.screen.active{display:block}
+.divider{border:0;border-top:1px solid var(--gray-200);margin:20px 0}
+.curl-box{width:100%;margin-top:12px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;border-radius:8px;border:1px solid var(--gray-300);min-height:80px;resize:vertical;background:var(--gray-900);color:#a5f3fc;line-height:1.6}
+.copy-curl-btn{margin-top:8px;padding:8px 16px;background:var(--gray-700);color:var(--white);border:0;border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.copy-curl-btn:hover{background:var(--gray-600)}
+/* Debug log */
+.debug-box{margin-top:12px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:6px;background:var(--gray-50);border:1px solid var(--gray-200);color:var(--gray-600);max-height:120px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+/* Address validation */
+.addr-status{font-size:13px;margin-top:8px;line-height:1.5;display:none}
+.addr-status.show{display:block}
+.addr-status.valid{color:var(--green-700)}.addr-status.invalid{color:var(--red-600)}.addr-status.checking{color:var(--gray-500);font-style:italic}
+.addr-detail{font-size:12px;color:var(--gray-500);margin-top:2px}
+.addr-suggestion{font-weight:600;cursor:pointer;text-decoration:underline;color:var(--blue-600)}
+/* Manual SR entry prompt */
+.sr-entry{margin-top:12px;padding:14px;background:var(--blue-50);border:1px solid var(--blue-400);border-radius:10px}
+.sr-entry label{font-size:13px;margin-bottom:4px}
+.sr-entry-row{display:flex;gap:8px}
+.sr-entry-row input{flex:1;padding:10px 12px;font-size:14px}
+.sr-entry-btn{padding:10px 16px;background:var(--blue-600);color:var(--white);border:0;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.sr-entry-btn:hover{background:#1d4ed8}
+/* Tickets */
+.ticket-card{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;margin-bottom:16px;box-shadow:var(--shadow-md);overflow:hidden;transition:opacity .2s}
+.ticket-card.refreshing{opacity:.5}
+.ticket-card-top{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.ticket-sr{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gray-900);display:flex;align-items:center;gap:8px}
+.ticket-sr .edit-sr{font-size:12px;color:var(--blue-600);font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline}
+.ticket-badge{font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.badge-new{background:var(--blue-100);color:var(--blue-600)}
+.badge-dispatch{background:#fef3c7;color:var(--amber-700);border:1px solid #fcd34d}
+.badge-progress{background:#fef3c7;color:var(--amber-700);border:1px solid #fbbf24}
+.badge-closed{background:var(--green-50);color:var(--green-700);border:1px solid #86efac}
+.badge-cancelled{background:var(--gray-100);color:var(--gray-500);border:1px solid var(--gray-300)}
+.badge-unknown{background:var(--amber-50);color:var(--amber-700);border:1px solid #fcd34d}
+.ticket-summary{padding:6px 20px 16px;font-size:14px;color:var(--gray-500);line-height:1.4}
+.ticket-summary strong{color:var(--gray-700)}
+.ticket-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--gray-200)}
+.ticket-field{padding:14px 20px;border-bottom:1px solid var(--gray-100);font-size:13px}
+.ticket-field:nth-child(odd){border-right:1px solid var(--gray-100)}
+.ticket-field-label{font-weight:600;color:var(--gray-500);font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.ticket-field-value{color:var(--gray-900);font-weight:500;font-size:14px}
+.ticket-field-value.empty{color:var(--gray-400);font-style:italic;font-weight:400}
+.ticket-desc-section{padding:14px 20px;border-top:1px solid var(--gray-200);background:var(--gray-50)}
+.ticket-desc-text{font-size:13px;color:var(--gray-600);line-height:1.5;font-style:italic}
+.ticket-actions{padding:14px 20px;border-top:1px solid var(--gray-200);display:flex;gap:8px;flex-wrap:wrap;background:var(--gray-50)}
+.ticket-link{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--white);color:var(--blue-600);border:1.5px solid var(--blue-400);border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:all .15s;cursor:pointer;font-family:inherit}
+.ticket-link:hover{background:var(--blue-50)}
+.ticket-refresh-btn{padding:9px 16px;background:var(--blue-600);color:var(--white);border:0;border-radius:8px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.ticket-refresh-btn:hover{background:#1d4ed8}.ticket-refresh-btn:disabled{opacity:.5;cursor:not-allowed}
+.ticket-remove-btn{padding:9px 16px;background:var(--white);color:var(--gray-400);border:1.5px solid var(--gray-200);border-radius:8px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;margin-left:auto}
+.ticket-remove-btn:hover{color:var(--red-600);border-color:var(--red-500);background:var(--red-100)}
+.ticket-last-checked{font-size:11px;color:var(--gray-400);padding:0 20px 12px;font-style:italic}
+.refresh-all-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px}
+.refresh-all-btn{padding:8px 16px;background:var(--blue-50);color:var(--blue-600);border:1.5px solid var(--blue-400);border-radius:8px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.refresh-all-btn:hover{background:var(--blue-100)}.refresh-all-btn:disabled{opacity:.5;cursor:not-allowed}
+.lookup-row{display:flex;gap:8px}.lookup-row input{flex:1}
+.lookup-btn{flex-shrink:0;padding:12px 18px;background:var(--blue-600);color:var(--white);border:0;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.lookup-btn:hover{background:#1d4ed8}.lookup-btn:disabled{opacity:.5;cursor:not-allowed}
+.lookup-hint{font-size:12px;color:var(--gray-400);margin-top:8px;line-height:1.5}
+.ticket-empty{text-align:center;padding:40px 20px;color:var(--gray-400);font-size:15px;line-height:1.6}
+.ticket-empty .empty-icon{font-size:36px;margin-bottom:12px}
+@media(max-width:400px){.type-options{flex-direction:column}.card{padding:22px 18px}.header{padding:16px 18px 0}.ticket-grid{grid-template-columns:1fr}.ticket-field:nth-child(odd){border-right:0}}
+.footer-note{text-align:center;font-size:12px;color:var(--gray-400);padding:20px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="header-subtitle">City of St. Louis CSB — Open311 API</div></div>
+    <button class="settings-btn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button>
+  </div>
+  <div class="tabs" id="tabBar" style="display:none">
+    <button class="tab active" data-tab="report" onclick="switchTab('report')">Report</button>
+    <button class="tab" data-tab="tracker" onclick="switchTab('tracker')">My Tickets <span class="tab-badge" id="ticketCount" style="display:none">0</span></button>
+  </div>
+</div>
+<div class="container screen active" id="setupScreen">
+  <div class="card">
+    <div class="card-title">First-Time Setup</div>
+    <div class="setup-intro">Your API keys are stored <strong>only on this device</strong>.</div>
+    <div class="field-group"><label>CSB API Key <span class="label-hint">(required)</span></label><input type="text" id="setupApiKey" placeholder="Your CSB (Open 311) API key" autocomplete="off" spellcheck="false"></div>
+    <div class="field-group"><label>Address Validation API Key <span class="label-hint">(optional)</span></label><input type="text" id="setupAddrKey" placeholder="Your Address Validation API key" autocomplete="off" spellcheck="false"></div>
+    <hr class="divider">
+    <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Optional — for city follow-up:</p>
+    <div class="field-group"><label>First Name</label><input type="text" id="setupFirst" placeholder="Optional"></div>
+    <div class="field-group"><label>Last Name</label><input type="text" id="setupLast" placeholder="Optional"></div>
+    <div class="field-group"><label>Email</label><input type="email" id="setupEmail" placeholder="Optional"></div>
+    <div class="field-group"><label>Phone</label><input type="tel" id="setupPhone" placeholder="Optional"></div>
+    <button class="save-btn" onclick="saveSettings()">Save & Start Reporting</button>
+  </div>
+</div>
+<div class="container screen" id="reportScreen">
+  <div id="statusBox" class="status"></div>
+  <div class="card">
+    <div class="card-title">Report a Pothole</div>
+    <div class="narrate-section">
+      <button class="narrate-btn" id="narrateBtn" onclick="toggleNarrate()"><svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg><span class="narrate-label">Narrate Your Report</span><span class="recording-label">Listening... tap to stop</span></button>
+      <div class="narrate-hint" id="narrateHint">Say it all at once — address, street type, and what you see.</div>
+      <div class="voice-feedback" id="voiceFeedback"><div class="vf-label">What I heard</div><div class="vf-text" id="voiceTranscript"></div></div>
+    </div>
+    <div class="field-group"><label>Street Type</label>
+      <div class="type-options">
+        <div class="type-option selected" data-code="323" onclick="selectType(this)"><div class="type-emoji">🛣️</div><div class="type-label">Arterial / Major</div><div class="type-code">323</div></div>
+        <div class="type-option" data-code="372" onclick="selectType(this)"><div class="type-emoji">🏘️</div><div class="type-label">Residential</div><div class="type-code">372</div></div>
+        <div class="type-option" data-code="322" onclick="selectType(this)"><div class="type-emoji">🚗</div><div class="type-label">Alley</div><div class="type-code">322</div></div>
+      </div>
+    </div>
+    <div class="field-group"><label>Address</label>
+      <div class="input-wrap"><input type="text" id="address" placeholder="e.g. 1200 Market St or Grand Blvd and Gravois Ave" autocomplete="street-address"><button class="mic-btn" id="micAddress" onclick="toggleFieldMic('address')"><svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button></div>
+      <div class="addr-status" id="addrStatus"></div>
+    </div>
+    <div class="field-group"><label>Description <span class="label-hint">(max 470 chars)</span></label>
+      <div class="input-wrap"><textarea id="description" maxlength="470" placeholder="e.g. Large pothole in the right lane, northbound. About 18 inches wide and 6 inches deep." oninput="updateCharCount()"></textarea><button class="mic-btn" id="micDescription" onclick="toggleFieldMic('description')"><svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button></div>
+      <div class="char-count" id="charCount">0 / 470</div>
+    </div>
+    <button class="submit-btn" id="submitBtn" onclick="submitReport()">Submit Pothole Report</button>
+  </div>
+</div>
+<div class="container screen" id="trackerScreen">
+  <div id="trackerStatusBox" class="status"></div>
+  <div class="card">
+    <div class="card-title">Look Up a Ticket</div>
+    <label>Service Request ID</label>
+    <div class="lookup-row"><input type="text" id="lookupId" placeholder="e.g. 2055992" inputmode="numeric"><button class="lookup-btn" id="lookupBtn" onclick="lookupTicket()">Look Up</button></div>
+    <div class="lookup-hint">Fetches current status automatically from the city's website.</div>
+  </div>
+  <div class="refresh-all-bar">
+    <div class="card-title" style="margin:0">My Tracked Tickets</div>
+    <button class="refresh-all-btn" id="refreshAllBtn" onclick="refreshAllTickets()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><span id="refreshAllLabel">Refresh All</span></button>
+  </div>
+  <div id="ticketsList"></div>
+  <div class="footer-note">Status fetched from the city's public status page.<br>Only the public ticket number leaves your device.</div>
+</div>
+<div class="container screen" id="settingsScreen">
+  <div class="card">
+    <div class="card-title">Settings</div>
+    <div class="field-group"><label>CSB API Key</label><input type="text" id="editApiKey" autocomplete="off" spellcheck="false"></div>
+    <div class="field-group"><label>Address Validation API Key</label><input type="text" id="editAddrKey" autocomplete="off" spellcheck="false"></div>
+    <div class="field-group"><label>First Name</label><input type="text" id="editFirst"></div>
+    <div class="field-group"><label>Last Name</label><input type="text" id="editLast"></div>
+    <div class="field-group"><label>Email</label><input type="email" id="editEmail"></div>
+    <div class="field-group"><label>Phone</label><input type="tel" id="editPhone"></div>
+    <button class="save-btn" onclick="updateSettings()">Save Changes</button>
+    <button class="danger-btn" onclick="clearAllData()">Clear All Saved Data</button>
+    <button class="settings-btn" style="width:100%;margin-top:12px;background:var(--gray-100);color:var(--gray-700);border-color:var(--gray-300)" onclick="switchTab('report')">← Back</button>
+  </div>
+</div>
+<script>
+const API_BASE='https://www.stlouis-mo.gov/powernap/stlouis/api.cfm';
+const CSB='https://www.stlouis-mo.gov/government/departments/public-safety/neighborhood-stabilization-office/citizens-service-bureau/check-service-request.cfm';
+let selectedCode='323',activeRecognition=null,activeFieldMic=null,addrTimer=null,pendingSubmission=null;
+const SRec=window.SpeechRecognition||window.webkitSpeechRecognition,speechOK=!!SRec;
+const TN={'323':'Pothole — Major/Arterial Street','372':'Pothole — Residential Street','322':'Pothole — Alley'};
+
+// ═══ Fetch helper ═══
+function fetchT(url,ms){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);return fetch(url,{signal:c.signal}).finally(()=>clearTimeout(t));}
+
+// ═══ Address Validation ═══
+function isIntersection(addr){return/\b(and|&|at)\b/i.test(addr)||/\//.test(addr)||!/\d/.test(addr);}
+function setupAddrValidation(){document.getElementById('address').addEventListener('input',function(){clearTimeout(addrTimer);const v=this.value.trim();if(v.length<4){hideAS();return;}if(isIntersection(v)){const hasSuffix=/\b(st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way)\b/i.test(v);showAS('valid','<strong>↔ Intersection</strong> — can\'t be validated automatically.'+(hasSuffix?'':' <br><span class="addr-detail">Tip: Include street types (e.g. <strong>Grand Blvd and Gravois Ave</strong>) to avoid ambiguity — St. Louis has streets that share a name but differ by suffix.</span>'));return;}showAS('checking','Checking address...');addrTimer=setTimeout(()=>validateAddr(v),600);});}
+async function validateAddr(addr){const s=loadS();if(!s.addrKey){hideAS();return;}try{const r=await fetchT(API_BASE+'/addressValidation/properties.json?ADDRESSSEARCH='+encodeURIComponent(addr)+'&api_key='+encodeURIComponent(s.addrKey),8000);if(!r.ok){hideAS();return;}const d=await r.json();if(!Array.isArray(d)||!d.length){showAS('invalid','Address not found in the city\'s database. Check spelling, or use a nearby street number.');return;}const m=d[0],ca=m.OWNERADDRESS||'',hood=m.NEIGHBORHOODNAME||'',ward=m.WARD||'',zip=m.ZIPCODE||'';let h='<strong>✓ Valid</strong>';if(hood)h+=' · '+hood;if(ward)h+=' · Ward '+ward;if(zip)h+=' · '+zip;const typed=document.getElementById('address').value.trim().toUpperCase();if(typed!==ca.toUpperCase()&&ca)h+='<br><span class="addr-detail">City format: <span class="addr-suggestion" onclick="document.getElementById(\'address\').value=\''+ca.replace(/'/g,"\\'")+'\';hideAS();">'+ca+'</span> (tap to use)</span>';showAS('valid',h);}catch(e){hideAS();}}
+function showAS(c,h){const e=document.getElementById('addrStatus');e.className='addr-status show '+c;e.innerHTML=h;}
+function hideAS(){const e=document.getElementById('addrStatus');e.className='addr-status';e.innerHTML='';}
+
+// ═══ City page scraping via CORS proxy ═══
+async function fetchCityPage(rid){
+  const url=CSB+'?requestID='+encodeURIComponent(rid);
+  const px=['https://corsproxy.io/?'+encodeURIComponent(url),'https://api.allorigins.win/raw?url='+encodeURIComponent(url),'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)];
+  let le='';
+  for(const pu of px){try{const r=await fetchT(pu,12000);if(!r.ok){le='HTTP '+r.status;continue;}const h=await r.text();if(!h||h.length<200){le='Empty';continue;}const d=parseSR(h,rid);if(d)return d;le='Parse failed';}catch(e){le=e.name==='AbortError'?'Timed out':e.message;}}
+  throw new Error(le||'All proxies failed');
+}
+function parseSR(html,rid){const doc=new DOMParser().parseFromString(html,'text/html');const t=doc.body?doc.body.textContent:'';if(!t.includes('Service Request')&&!t.includes(rid))return null;function ex(l){for(const re of[new RegExp(l+'\\s*\\n\\s*([^\\n]+)','i'),new RegExp(l+'\\s+([^\\n]+)','i')]){const m=t.match(re);if(m&&m[1]){const v=m[1].trim();if(v&&v.length<200)return v;}}return'';}return{status:ex('Status:'),investigation:ex('Dept Investigation Completed On:'),address:ex('Location:'),dateSubmitted:ex('Request Initiated:'),problemType:ex('Problem Type:'),dept:ex('Dept To Receive SR:'),dueDate:ex('Dept Response Due By:')};}
+
+// ═══ Tabs / Screens ═══
+function switchTab(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));document.getElementById('setupScreen').classList.remove('active');document.getElementById('reportScreen').classList.toggle('active',t==='report');document.getElementById('trackerScreen').classList.toggle('active',t==='tracker');document.getElementById('settingsScreen').classList.remove('active');if(t==='tracker')renderTickets();}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showSettings(){const s=loadS();document.getElementById('editApiKey').value=s.apiKey||'';document.getElementById('editAddrKey').value=s.addrKey||'';document.getElementById('editFirst').value=s.firstName||'';document.getElementById('editLast').value=s.lastName||'';document.getElementById('editEmail').value=s.email||'';document.getElementById('editPhone').value=s.phone||'';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('reportScreen').classList.remove('active');document.getElementById('trackerScreen').classList.remove('active');showScreen('settingsScreen');}
+function showMain(){document.getElementById('tabBar').style.display='flex';switchTab('report');}
+
+// ═══ Settings ═══
+function loadS(){try{return JSON.parse(localStorage.getItem('stl_pothole_settings')||'{}')}catch{return{}}}
+function storeS(o){localStorage.setItem('stl_pothole_settings',JSON.stringify(o))}
+function saveSettings(){const k=document.getElementById('setupApiKey').value.trim();if(!k){alert('CSB API key is required.');return;}storeS({apiKey:k,addrKey:document.getElementById('setupAddrKey').value.trim(),firstName:document.getElementById('setupFirst').value.trim(),lastName:document.getElementById('setupLast').value.trim(),email:document.getElementById('setupEmail').value.trim(),phone:document.getElementById('setupPhone').value.trim()});document.getElementById('settingsToggle').style.display='block';showMain();}
+function updateSettings(){const k=document.getElementById('editApiKey').value.trim();if(!k){alert('CSB API key is required.');return;}storeS({apiKey:k,addrKey:document.getElementById('editAddrKey').value.trim(),firstName:document.getElementById('editFirst').value.trim(),lastName:document.getElementById('editLast').value.trim(),email:document.getElementById('editEmail').value.trim(),phone:document.getElementById('editPhone').value.trim()});switchTab('report');}
+function clearAllData(){if(confirm('Erase everything from this device?')){localStorage.removeItem('stl_pothole_settings');localStorage.removeItem('stl_pothole_tickets');document.getElementById('settingsToggle').style.display='none';document.getElementById('tabBar').style.display='none';showScreen('setupScreen');}}
+
+// ═══ Speech ═══
+function initSpeech(){if(!speechOK){document.getElementById('narrateBtn').classList.add('unsupported');document.getElementById('narrateHint').textContent='Voice not supported. Use Chrome, Safari, or Edge.';document.getElementById('micAddress').classList.add('unsupported');document.getElementById('micDescription').classList.add('unsupported');}}
+function toggleFieldMic(fid){if(!speechOK)return;const btn=document.getElementById(fid==='address'?'micAddress':'micDescription');if(activeFieldMic===fid&&activeRecognition){activeRecognition.stop();return;}if(activeRecognition)activeRecognition.stop();const r=new SRec();r.continuous=false;r.interimResults=true;r.lang='en-US';const field=document.getElementById(fid),ex=field.value;let fin='';btn.classList.add('recording');activeRecognition=r;activeFieldMic=fid;r.onresult=e=>{let i='';fin='';for(let x=0;x<e.results.length;x++){if(e.results[x].isFinal)fin+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}field.value=ex?(ex.endsWith(' ')?ex:ex+' ')+(fin+i):(fin+i);if(fid==='description')updateCC();};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('recording');if(fin){field.value=ex?(ex.endsWith(' ')?ex:ex+' ')+fin:fin;if(fid==='description')updateCC();if(fid==='address')field.dispatchEvent(new Event('input'));}activeRecognition=null;activeFieldMic=null;};r.start();}
+function toggleNarrate(){if(!speechOK)return;const btn=document.getElementById('narrateBtn'),hint=document.getElementById('narrateHint'),fb=document.getElementById('voiceFeedback'),tr=document.getElementById('voiceTranscript');if(activeRecognition){activeRecognition.stop();return;}const r=new SRec();r.continuous=true;r.interimResults=true;r.lang='en-US';btn.classList.add('recording');hint.textContent='Listening...';hint.classList.add('recording-hint');fb.classList.add('show');tr.textContent='...';activeRecognition=r;activeFieldMic='narrate';let full='';r.onresult=e=>{let i='',f='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}if(f)full+=f;tr.textContent=(full+' '+i).trim()||'...';};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('recording');hint.classList.remove('recording-hint');activeRecognition=null;activeFieldMic=null;if(full.trim()){tr.textContent=full.trim();hint.innerHTML='Fields auto-filled — <strong>review before submitting</strong>.';parseNar(full.trim());}else{hint.textContent='No speech detected.';fb.classList.remove('show');}};r.start();}
+function parseNar(t){const l=t.toLowerCase();if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');let addr='';const nm=t.match(/(?:at|on|near|address\s*(?:is)?)\s+(\d+\s+[A-Za-z][A-Za-z0-9\s.'-]+?)(?:\s*[,.]|\s+(?:there|it|the|I|big|large|small|medium|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this))/i)||t.match(/(?:at|on|near|address\s*(?:is)?)\s+(\d+\s+[A-Za-z][\w\s.'-]+)/i);const im=t.match(/(?:at|on|near|corner\s+of)\s+([A-Z][a-zA-Z.\s'-]+?)\s+(?:and|&)\s+([A-Z][a-zA-Z.\s'-]+?)(?:\s*[,.]|\s+(?:there|it|the|I|big|large|small|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|arterial|residential|alley))/i)||t.match(/(?:at|on|near|corner\s+of)\s+([A-Z][a-zA-Z.\s'-]+?)\s+(?:and|&)\s+([A-Z][a-zA-Z.\s'-]+)/i);if(nm)addr=nm[1].trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');else if(im)addr=im[1].trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'')+' and '+im[2].trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>470)d=d.substring(0,467)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updateCC();af.dispatchEvent(new Event('input'));}
+function stbc(c){document.querySelectorAll('.type-option').forEach(o=>o.classList.toggle('selected',o.dataset.code===c));selectedCode=c;}
+function selectType(el){document.querySelectorAll('.type-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');selectedCode=el.dataset.code;}
+function updateCC(){const l=document.getElementById('description').value.length,c=document.getElementById('charCount');c.textContent=l+' / 470';c.className='char-count'+(l>450?' warn':'')+(l>470?' over':'');}
+function showRS(t,h){const b=document.getElementById('statusBox');b.className='status show '+t;b.innerHTML=h;b.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function hideRS(){document.getElementById('statusBox').className='status';}
+function showTS(t,h){document.getElementById('trackerStatusBox').className='status show '+t;document.getElementById('trackerStatusBox').innerHTML=h;}
+function hideTS(){document.getElementById('trackerStatusBox').className='status';}
+
+// ═══ Tickets ═══
+function loadT(){try{return JSON.parse(localStorage.getItem('stl_pothole_tickets')||'[]')}catch{return[]}}
+function saveT(t){localStorage.setItem('stl_pothole_tickets',JSON.stringify(t));updateBadge();}
+function addTicket(t){const ts=loadT();if(!ts.find(x=>x.id===t.id)){ts.unshift(t);saveT(ts);}}
+function removeTicket(id){if(!confirm('Remove this ticket?'))return;saveT(loadT().filter(x=>x.id!==id));renderTickets();}
+function updateBadge(){const ts=loadT(),open=ts.filter(t=>!t.status||(!t.status.toLowerCase().includes('close')&&!t.status.toLowerCase().includes('cancel'))).length,b=document.getElementById('ticketCount');if(ts.length){b.textContent=open;b.style.display='inline-block';}else b.style.display='none';}
+
+function editTicketSR(oldId){
+  const newId=prompt('Enter the correct SR number from the city:',oldId==='pending'?'':oldId);
+  if(!newId||!newId.trim())return;
+  const ts=loadT(),idx=ts.findIndex(t=>t.id===oldId);
+  if(idx>=0){ts[idx].id=newId.trim();ts[idx].needsSR=false;saveT(ts);renderTickets();}
+}
+
+async function refreshTicket(id){
+  if(id==='pending')return false;
+  const card=document.querySelector('[data-ticket-id="'+id+'"]');
+  const btn=card&&card.querySelector('.ticket-refresh-btn');
+  if(card)card.classList.add('refreshing');if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner-dark"></span>';}
+  try{const data=await fetchCityPage(id);const ts=loadT(),idx=ts.findIndex(t=>t.id===id);if(idx>=0){for(const k of['status','investigation','address','dateSubmitted','problemType','dept','dueDate']){if(data[k])ts[idx][k]=data[k];}ts[idx].lastChecked=new Date().toISOString();saveT(ts);}renderTickets();return true;}
+  catch(e){if(card)card.classList.remove('refreshing');if(btn){btn.disabled=false;btn.textContent='Refresh';}return false;}
+}
+async function refreshAllTickets(){const ts=loadT();if(!ts.length)return;const btn=document.getElementById('refreshAllBtn'),label=document.getElementById('refreshAllLabel');btn.disabled=true;label.innerHTML='<span class="spinner-dark"></span> Refreshing...';hideTS();let ok=0,fail=0;for(const t of ts){if(t.id==='pending'){fail++;continue;}(await refreshTicket(t.id))?ok++:fail++;}btn.disabled=false;label.textContent='Refresh All';if(fail===ts.length)showTS('warning','<strong>Could not reach the city.</strong> Click "View on City Site" to check manually.');else if(fail)showTS('info','Updated '+ok+' of '+ts.length+'. '+fail+' failed.');else{showTS('success','All '+ok+' ticket(s) updated.');setTimeout(hideTS,4000);}}
+async function lookupTicket(){const id=document.getElementById('lookupId').value.trim();if(!id)return;const btn=document.getElementById('lookupBtn');btn.disabled=true;btn.textContent='Loading...';hideTS();addTicket({id,address:'',code:'',dateSubmitted:'',description:'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false});renderTickets();try{const data=await fetchCityPage(id);const ts=loadT(),idx=ts.findIndex(t=>t.id===id);if(idx>=0){Object.assign(ts[idx],data,{lastChecked:new Date().toISOString()});saveT(ts);}renderTickets();showTS('success','<strong>#'+id+'</strong> — '+(data.status||'Loaded'));document.getElementById('lookupId').value='';setTimeout(hideTS,4000);}catch(e){showTS('warning','<strong>Could not auto-fetch #'+id+'.</strong> Added — <a href="'+CSB+'?requestID='+id+'" target="_blank" style="color:inherit;font-weight:700">check city site</a>.');document.getElementById('lookupId').value='';}finally{btn.disabled=false;btn.textContent='Look Up';}}
+
+function getBadgeClass(s){if(!s)return'badge-new';const l=s.toLowerCase();if(l.includes('close'))return'badge-closed';if(l.includes('cancel'))return'badge-cancelled';if(l.includes('dispatch'))return'badge-dispatch';if(l.includes('progress'))return'badge-progress';if(l==='pending')return'badge-unknown';return'badge-new';}
+
+function renderTickets(){
+  const ts=loadT(),c=document.getElementById('ticketsList');
+  if(!ts.length){c.innerHTML='<div class="ticket-empty"><div class="empty-icon">📋</div>No tickets yet.<br>Submit a report or look one up.</div>';return;}
+  c.innerHTML=ts.map(t=>{
+    const isPending=t.id==='pending'||t.needsSR;
+    const stat=isPending?'Needs SR#':t.status||'Pending';
+    const bc=isPending?'badge-unknown':getBadgeClass(t.status);
+    const ptype=t.problemType||TN[t.code]||'Pothole';
+    const lc=t.lastChecked?'Last refreshed '+fmtD(t.lastChecked):(isPending?'Awaiting SR number':'Not yet refreshed');
+    const srDisplay=isPending?'Pending':'SR #'+t.id;
+    const editLink=isPending?'<span class="edit-sr" onclick="editTicketSR(\''+t.id+'\')">Enter SR#</span>':'<span class="edit-sr" onclick="editTicketSR(\''+t.id+'\')">Edit</span>';
+    const viewDisabled=isPending;
+    return '<div class="ticket-card" data-ticket-id="'+t.id+'"><div class="ticket-card-top"><div class="ticket-sr">'+srDisplay+' '+editLink+'</div><span class="ticket-badge '+bc+'">'+stat+'</span></div><div class="ticket-summary"><strong>'+ptype+'</strong> at <strong>'+(t.address||'—')+'</strong>'+(t.dateSubmitted?' · submitted '+t.dateSubmitted:'')+'</div><div class="ticket-grid"><div class="ticket-field"><div class="ticket-field-label">Status</div><div class="ticket-field-value'+(t.status?'':' empty')+'">'+(t.status||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Investigation</div><div class="ticket-field-value'+(t.investigation?'':' empty')+'">'+(t.investigation||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Dept Assigned</div><div class="ticket-field-value'+(t.dept?'':' empty')+'">'+(t.dept||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Response Due By</div><div class="ticket-field-value'+(t.dueDate?'':' empty')+'">'+(t.dueDate||'—')+'</div></div></div>'+(t.description?'<div class="ticket-desc-section"><div class="ticket-field-label">Your Description</div><div class="ticket-desc-text">"'+trunc(t.description,200)+'"</div></div>':'')+'<div class="ticket-last-checked">'+lc+'</div><div class="ticket-actions">'+(isPending?'':'<button class="ticket-refresh-btn" onclick="refreshTicket(\''+t.id+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>')+(viewDisabled?'':'<a class="ticket-link" href="'+CSB+'?requestID='+t.id+'" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> View on City Site</a>')+'<button class="ticket-remove-btn" onclick="removeTicket(\''+t.id+'\')">Remove</button></div></div>';
+  }).join('');
+}
+function trunc(s,n){return s.length>n?s.substring(0,n)+'...':s;}
+function fmtD(iso){try{return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch{return iso}}
+
+// ═══ Extract SR ID from API response (robust) ═══
+function extractSR(data){
+  // data could be array or object. Try every known field name.
+  const fields=['service_request_id','SERVICE_REQUEST_ID','serviceRequestId','request_id','REQUEST_ID','requestId','REQUESTID','id','ID','token','TOKEN'];
+  const sources=Array.isArray(data)?data:[data];
+  for(const obj of sources){
+    if(!obj||typeof obj!=='object')continue;
+    for(const f of fields){
+      const v=obj[f];
+      if(v!==undefined&&v!==null&&v!==''){return{id:String(v),field:f,isToken:f.toLowerCase().includes('token')};}
+    }
+  }
+  // Last resort: stringify and look for any number that could be an SR
+  const str=JSON.stringify(data);
+  const numMatch=str.match(/(\d{6,8})/);
+  if(numMatch)return{id:numMatch[1],field:'regex_fallback',isToken:false};
+  return null;
+}
+
+// ═══ Submit ═══
+function buildCurl(s,code,addr,desc){let c='curl -X POST "'+API_BASE+'/requests.json" \\\n  -d "api_key='+s.apiKey+'" \\\n  -d "service_code='+code+'" \\\n  -d "address_string='+addr+'" \\\n  -d "attribute[detail_description]='+desc+'"';if(s.firstName)c+=' \\\n  -d "first_name='+s.firstName+'"';if(s.lastName)c+=' \\\n  -d "last_name='+s.lastName+'"';if(s.email)c+=' \\\n  -d "email='+s.email+'"';if(s.phone)c+=' \\\n  -d "phone='+s.phone+'"';return c;}
+
+async function submitReport(){
+  const s=loadS(),addr=document.getElementById('address').value.trim(),desc=document.getElementById('description').value.trim();
+  if(!addr){showRS('error','<strong>Address required.</strong>');return;}
+  if(!desc){showRS('error','<strong>Description required.</strong>');return;}
+  if(desc.length>470){showRS('error','<strong>Too long.</strong> Under 470 characters.');return;}
+  const params=new URLSearchParams();params.append('api_key',s.apiKey);params.append('service_code',selectedCode);params.append('address_string',addr);params.append('attribute[detail_description]',desc);
+  if(s.firstName)params.append('first_name',s.firstName);if(s.lastName)params.append('last_name',s.lastName);if(s.email)params.append('email',s.email);if(s.phone)params.append('phone',s.phone);
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Submitting...';hideRS();
+  // Store submission details in case we need to create a pending ticket
+  pendingSubmission={addr,desc,code:selectedCode};
+  try{
+    const resp=await fetch(API_BASE+'/requests.json',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()});
+
+    // Try to read response body
+    let rawText='';
+    try{rawText=await resp.text();}catch(e){rawText='';}
+
+    // Try to parse as JSON
+    let data=null;
+    try{data=JSON.parse(rawText);}catch(e){}
+
+    // Debug info for troubleshooting
+    const debugInfo='HTTP '+resp.status+' | Response: '+rawText.substring(0,300);
+
+    if(resp.ok&&data){
+      // Check for API-level errors in the parsed data
+      const hasError=(Array.isArray(data)&&data[0]?.code>=400)||(data.error)||(Array.isArray(data)&&data[0]?.description&&data[0]?.code);
+      if(hasError&&!extractSR(data)){
+        const errMsg=(Array.isArray(data)&&data[0]?.description)||data?.description||data?.error||rawText.substring(0,200);
+        showRS('error','<strong>City error:</strong><br>'+errMsg+'<div class="debug-box">'+debugInfo+'</div>');
+        return;
+      }
+      const sr=extractSR(data);
+      if(sr&&!sr.isToken){
+        // Got a real SR number
+        showRS('success','<strong>Report submitted!</strong><br>Tracking ID: <span class="tracking-id">'+sr.id+'</span><br><span style="font-size:13px;opacity:.8">Check the My Tickets tab to track it.</span><div class="debug-box">Field: '+sr.field+' | '+debugInfo+'</div>');
+        addTicket({id:sr.id,address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'New',investigation:'Investigation Still Open',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:false});
+        clearForm();
+      }else if(sr&&sr.isToken){
+        // Got a token — city is processing asynchronously
+        showRS('info','<strong>Report accepted!</strong> The city gave a processing token: <span class="tracking-id">'+sr.id+'</span><br>The final SR number will be assigned shortly. Check the My Tickets tab — you can enter the real SR# once you get it (via email or the city website).<div class="debug-box">'+debugInfo+'</div>');
+        addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true,token:sr.id});
+        clearForm();
+      }else{
+        // Response OK but couldn't find an SR or token
+        showRS('warning','<strong>The city accepted the request</strong> but the response didn\'t include a recognizable tracking number.<div class="debug-box">'+debugInfo+'</div><div class="sr-entry"><label>If you received an SR# (check your email or the city website), enter it here:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div>');
+        addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true});
+        clearForm();
+      }
+    }else if(resp.ok){
+      // 200 but not JSON — unusual
+      showRS('warning','<strong>The city returned a 200 OK</strong> but the response wasn\'t JSON. The report was likely submitted.<div class="debug-box">'+debugInfo+'</div><div class="sr-entry"><label>Enter the SR# when you get it:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div>');
+      addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true});
+      clearForm();
+    }else{
+      // Non-200 response
+      showRS('error','<strong>City returned HTTP '+resp.status+'</strong><div class="debug-box">'+debugInfo+'</div>');
+    }
+  }catch(err){
+    // Network error — CORS blocked the response, or truly offline
+    // The POST may have gone through even though we can't read the response!
+    const curl=buildCurl(s,selectedCode,addr,desc);
+    showRS('warning','<strong>The request may have been submitted</strong> but the browser couldn\'t read the city\'s response (CORS restriction).<br><br><strong>Check the city website</strong> to see if a new ticket was created for this address. If so, enter the SR# below.<div class="sr-entry"><label>SR# from city website:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div><br><strong>If it wasn\'t submitted</strong>, paste this into Terminal / PowerShell:<br><textarea readonly class="curl-box" onclick="this.select()">'+curl+'</textarea><button class="copy-curl-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>this.textContent=\'Copied!\').catch(()=>{})">Copy to Clipboard</button>');
+    addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true});
+    clearForm();
+  }finally{btn.disabled=false;btn.innerHTML='Submit Pothole Report';}
+}
+
+function clearForm(){document.getElementById('address').value='';document.getElementById('description').value='';updateCC();document.getElementById('voiceFeedback').classList.remove('show');hideAS();}
+
+function linkManualSR(){
+  const sr=document.getElementById('manualSR').value.trim();
+  if(!sr)return;
+  const ts=loadT(),idx=ts.findIndex(t=>t.id==='pending'||t.needsSR);
+  if(idx>=0){ts[idx].id=sr;ts[idx].needsSR=false;saveT(ts);renderTickets();showRS('success','<strong>Ticket linked to SR #'+sr+'.</strong> Go to My Tickets to refresh its status.');}
+  else{addTicket({id:sr,address:pendingSubmission?.addr||'',code:pendingSubmission?.code||'',dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:pendingSubmission?.desc||'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false});showRS('success','<strong>SR #'+sr+' saved.</strong> Go to My Tickets to refresh.');}
+}
+
+// ═══ Init ═══
+(function(){const s=loadS();if(s.apiKey){document.getElementById('settingsToggle').style.display='block';showMain();}initSpeech();updateBadge();setupAddrValidation();})();
+</script>
+</body>
+</html>
