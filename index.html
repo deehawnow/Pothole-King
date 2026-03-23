@@ -16,7 +16,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--gray-100);c
 .header-top{max-width:540px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-bottom:14px}
 .header h1{font-size:18px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;gap:10px}
 .header h1 .icon{font-size:22px}
-.header-subtitle{font-size:12px;opacity:.6;font-weight:400;margin-top:2px}
+.header-subtitle{font-size:12px;opacity:.6;margin-top:2px}
 .settings-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:var(--white);padding:8px 14px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer}
 .settings-btn:hover{background:rgba(255,255,255,.18)}
 .tabs{max-width:540px;margin:0 auto;display:flex}
@@ -29,20 +29,13 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--gray-100);c
 .card-title{font-size:15px;font-weight:600;color:var(--gray-700);margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px}
 label{display:block;font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:6px}
 .label-hint{font-weight:400;color:var(--gray-500);font-size:13px}
-input[type=text],input[type=email],input[type=tel],textarea{width:100%;padding:12px 14px;border:1.5px solid var(--gray-300);border-radius:8px;font-family:inherit;font-size:15px;color:var(--gray-900);background:var(--white);transition:border-color .15s,box-shadow .15s;outline:0}
+input[type=text],input[type=email],input[type=tel],textarea{width:100%;padding:12px 14px;border:1.5px solid var(--gray-300);border-radius:8px;font-family:inherit;font-size:15px;color:var(--gray-900);background:var(--white);outline:0;transition:border-color .15s,box-shadow .15s}
 input:focus,textarea:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
 input::placeholder,textarea::placeholder{color:var(--gray-400)}
 .field-group{margin-bottom:18px}.field-group:last-child{margin-bottom:0}
 textarea{resize:vertical;min-height:110px;line-height:1.5}
 .char-count{text-align:right;font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--gray-500);margin-top:6px}
 .char-count.warn{color:var(--amber-600);font-weight:500}.char-count.over{color:var(--red-600);font-weight:600}
-.input-wrap{display:flex;align-items:stretch;gap:8px}
-.input-wrap input,.input-wrap textarea{flex:1;min-width:0}
-.mic-btn{flex-shrink:0;width:48px;border:1.5px solid var(--gray-300);border-radius:8px;background:var(--gray-50);color:var(--gray-500);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.mic-btn:hover{background:var(--blue-50);border-color:var(--blue-400);color:var(--blue-600)}
-.mic-btn.recording{background:var(--red-100);border-color:var(--red-500);color:var(--red-600);animation:pb 1.5s ease-in-out infinite}
-.mic-btn.unsupported{opacity:.3;cursor:not-allowed}
-@keyframes pb{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
 .mic-icon{width:22px;height:22px}
 .narrate-section{margin-bottom:22px}
 .narrate-btn{width:100%;padding:18px 16px;border:2px dashed var(--gray-300);border-radius:12px;background:var(--gray-50);color:var(--gray-600);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
@@ -89,24 +82,34 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .curl-box{width:100%;margin-top:12px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;border-radius:8px;border:1px solid var(--gray-300);min-height:80px;resize:vertical;background:var(--gray-900);color:#a5f3fc;line-height:1.6}
 .copy-curl-btn{margin-top:8px;padding:8px 16px;background:var(--gray-700);color:var(--white);border:0;border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .copy-curl-btn:hover{background:var(--gray-600)}
-/* Debug log */
 .debug-box{margin-top:12px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:6px;background:var(--gray-50);border:1px solid var(--gray-200);color:var(--gray-600);max-height:120px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
-/* Address validation */
 .addr-status{font-size:13px;margin-top:8px;line-height:1.5;display:none}
 .addr-status.show{display:block}
 .addr-status.valid{color:var(--green-700)}.addr-status.invalid{color:var(--red-600)}.addr-status.checking{color:var(--gray-500);font-style:italic}
 .addr-detail{font-size:12px;color:var(--gray-500);margin-top:2px}
 .addr-suggestion{font-weight:600;cursor:pointer;text-decoration:underline;color:var(--blue-600)}
-/* Manual SR entry prompt */
 .sr-entry{margin-top:12px;padding:14px;background:var(--blue-50);border:1px solid var(--blue-400);border-radius:10px}
 .sr-entry label{font-size:13px;margin-bottom:4px}
 .sr-entry-row{display:flex;gap:8px}
 .sr-entry-row input{flex:1;padding:10px 12px;font-size:14px}
 .sr-entry-btn{padding:10px 16px;background:var(--blue-600);color:var(--white);border:0;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
-.sr-entry-btn:hover{background:#1d4ed8}
+.photo-area{display:flex;flex-direction:column;gap:10px}
+.photo-btn{width:100%;padding:14px;border:1.5px dashed var(--gray-300);border-radius:8px;background:var(--gray-50);color:var(--gray-500);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.photo-btn:hover{background:var(--blue-50);border-color:var(--blue-400);color:var(--blue-600)}
+.photo-preview{position:relative;display:inline-block;border-radius:8px;overflow:hidden;border:1px solid var(--gray-200)}
+.photo-preview img{max-width:100%;max-height:200px;display:block;border-radius:8px}
+.photo-remove{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);color:var(--white);border:0;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.photo-remove:hover{background:rgba(220,38,38,.8)}
+.photo-note{font-size:11px;color:var(--gray-400);margin-top:4px;font-style:italic}
+/* Sub-tabs */
+.sub-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--gray-200);padding:3px;border-radius:10px}
+.sub-tab{flex:1;padding:9px 12px;text-align:center;font-size:13px;font-weight:600;color:var(--gray-500);border:0;border-radius:8px;background:transparent;cursor:pointer;font-family:inherit;transition:all .15s}
+.sub-tab.active{background:var(--white);color:var(--gray-900);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.sub-tab .sub-badge{font-size:11px;font-weight:700;margin-left:4px;opacity:.6}
 /* Tickets */
 .ticket-card{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;margin-bottom:16px;box-shadow:var(--shadow-md);overflow:hidden;transition:opacity .2s}
 .ticket-card.refreshing{opacity:.5}
+.ticket-card.newly-closed{border-color:#86efac;border-width:2px}
 .ticket-card-top{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-start}
 .ticket-sr{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gray-900);display:flex;align-items:center;gap:8px}
 .ticket-sr .edit-sr{font-size:12px;color:var(--blue-600);font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline}
@@ -117,6 +120,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .badge-closed{background:var(--green-50);color:var(--green-700);border:1px solid #86efac}
 .badge-cancelled{background:var(--gray-100);color:var(--gray-500);border:1px solid var(--gray-300)}
 .badge-unknown{background:var(--amber-50);color:var(--amber-700);border:1px solid #fcd34d}
+.badge-completed{background:var(--green-50);color:var(--green-700);border:1px solid #86efac}
 .ticket-summary{padding:6px 20px 16px;font-size:14px;color:var(--gray-500);line-height:1.4}
 .ticket-summary strong{color:var(--gray-700)}
 .ticket-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--gray-200)}
@@ -132,8 +136,10 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .ticket-link:hover{background:var(--blue-50)}
 .ticket-refresh-btn{padding:9px 16px;background:var(--blue-600);color:var(--white);border:0;border-radius:8px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .ticket-refresh-btn:hover{background:#1d4ed8}.ticket-refresh-btn:disabled{opacity:.5;cursor:not-allowed}
-.ticket-remove-btn{padding:9px 16px;background:var(--white);color:var(--gray-400);border:1.5px solid var(--gray-200);border-radius:8px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;margin-left:auto}
-.ticket-remove-btn:hover{color:var(--red-600);border-color:var(--red-500);background:var(--red-100)}
+.ticket-complete-btn{padding:9px 16px;background:var(--green-600);color:var(--white);border:0;border-radius:8px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer}
+.ticket-complete-btn:hover{background:var(--green-700)}
+.ticket-delete-btn{padding:9px 16px;background:var(--white);color:var(--gray-400);border:1.5px solid var(--gray-200);border-radius:8px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;margin-left:auto}
+.ticket-delete-btn:hover{color:var(--red-600);border-color:var(--red-500);background:var(--red-100)}
 .ticket-last-checked{font-size:11px;color:var(--gray-400);padding:0 20px 12px;font-style:italic}
 .refresh-all-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px}
 .refresh-all-btn{padding:8px 16px;background:var(--blue-50);color:var(--blue-600);border:1.5px solid var(--blue-400);border-radius:8px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
@@ -146,50 +152,32 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .ticket-empty .empty-icon{font-size:36px;margin-bottom:12px}
 @media(max-width:400px){.type-options{flex-direction:column}.card{padding:22px 18px}.header{padding:16px 18px 0}.ticket-grid{grid-template-columns:1fr}.ticket-field:nth-child(odd){border-right:0}}
 .footer-note{text-align:center;font-size:12px;color:var(--gray-400);padding:20px;line-height:1.5}
-/* Photo */
-.photo-area{display:flex;flex-direction:column;gap:10px}
-.photo-btn{width:100%;padding:14px;border:1.5px dashed var(--gray-300);border-radius:8px;background:var(--gray-50);color:var(--gray-500);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
-.photo-btn:hover{background:var(--blue-50);border-color:var(--blue-400);color:var(--blue-600)}
-.photo-preview{position:relative;display:inline-block;border-radius:8px;overflow:hidden;border:1px solid var(--gray-200)}
-.photo-preview img{max-width:100%;max-height:200px;display:block;border-radius:8px}
-.photo-remove{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);color:var(--white);border:0;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
-.photo-remove:hover{background:rgba(220,38,38,.8)}
-.photo-note{font-size:11px;color:var(--gray-400);margin-top:4px;font-style:italic}
 </style>
 </head>
 <body>
 <div class="header">
-  <div class="header-top">
-    <div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="header-subtitle">City of St. Louis CSB — Open311 API</div></div>
-    <button class="settings-btn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button>
-  </div>
-  <div class="tabs" id="tabBar" style="display:none">
-    <button class="tab active" data-tab="report" onclick="switchTab('report')">Report</button>
-    <button class="tab" data-tab="tracker" onclick="switchTab('tracker')">My Tickets <span class="tab-badge" id="ticketCount" style="display:none">0</span></button>
-  </div>
+  <div class="header-top"><div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="header-subtitle">City of St. Louis CSB — Open311 API</div></div><button class="settings-btn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button></div>
+  <div class="tabs" id="tabBar" style="display:none"><button class="tab active" data-tab="report" onclick="switchTab('report')">Report</button><button class="tab" data-tab="tracker" onclick="switchTab('tracker')">My Tickets <span class="tab-badge" id="ticketCount" style="display:none">0</span></button></div>
 </div>
-<div class="container screen active" id="setupScreen">
-  <div class="card">
-    <div class="card-title">First-Time Setup</div>
-    <div class="setup-intro">Your API keys are stored <strong>only on this device</strong>.</div>
-    <div class="field-group"><label>CSB API Key <span class="label-hint">(required)</span></label><input type="text" id="setupApiKey" placeholder="Your CSB (Open 311) API key" autocomplete="off" spellcheck="false"></div>
-    <div class="field-group"><label>Address Validation API Key <span class="label-hint">(optional)</span></label><input type="text" id="setupAddrKey" placeholder="Your Address Validation API key" autocomplete="off" spellcheck="false"></div>
-    <hr class="divider">
-    <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Optional — for city follow-up:</p>
-    <div class="field-group"><label>First Name</label><input type="text" id="setupFirst" placeholder="Optional"></div>
-    <div class="field-group"><label>Last Name</label><input type="text" id="setupLast" placeholder="Optional"></div>
-    <div class="field-group"><label>Email</label><input type="email" id="setupEmail" placeholder="Optional"></div>
-    <div class="field-group"><label>Phone</label><input type="tel" id="setupPhone" placeholder="Optional"></div>
-    <button class="save-btn" onclick="saveSettings()">Save & Start Reporting</button>
-  </div>
-</div>
+<div class="container screen active" id="setupScreen"><div class="card">
+  <div class="card-title">First-Time Setup</div><div class="setup-intro">Your API keys are stored <strong>only on this device</strong>.</div>
+  <div class="field-group"><label>CSB API Key <span class="label-hint">(required)</span></label><input type="text" id="setupApiKey" placeholder="CSB (Open 311) API key" autocomplete="off" spellcheck="false"></div>
+  <div class="field-group"><label>Address Validation API Key <span class="label-hint">(optional)</span></label><input type="text" id="setupAddrKey" placeholder="Address Validation API key" autocomplete="off" spellcheck="false"></div>
+  <hr class="divider"><p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Optional — for city follow-up:</p>
+  <div class="field-group"><label>First Name</label><input type="text" id="setupFirst" placeholder="Optional"></div>
+  <div class="field-group"><label>Last Name</label><input type="text" id="setupLast" placeholder="Optional"></div>
+  <div class="field-group"><label>Email</label><input type="email" id="setupEmail" placeholder="Optional"></div>
+  <div class="field-group"><label>Phone</label><input type="tel" id="setupPhone" placeholder="Optional"></div>
+  <button class="save-btn" onclick="saveSettings()">Save & Start Reporting</button>
+</div></div>
+
 <div class="container screen" id="reportScreen">
   <div id="statusBox" class="status"></div>
   <div class="card">
     <div class="card-title">Report a Pothole</div>
     <div class="narrate-section">
       <button class="narrate-btn" id="narrateBtn" onclick="toggleNarrate()"><svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg><span class="narrate-label">Narrate Your Report</span><span class="recording-label">Listening... tap to stop</span></button>
-      <div class="narrate-hint" id="narrateHint">Say it all at once — address, street type, and what you see.</div>
+      <div class="narrate-hint" id="narrateHint">Say it all at once — address (or intersection with street types), street category, and what you see.</div>
       <div class="voice-feedback" id="voiceFeedback"><div class="vf-label">What I heard</div><div class="vf-text" id="voiceTranscript"></div></div>
     </div>
     <div class="field-group"><label>Street Type</label>
@@ -199,86 +187,63 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
         <div class="type-option" data-code="322" onclick="selectType(this)"><div class="type-emoji">🚗</div><div class="type-label">Alley</div><div class="type-code">322</div></div>
       </div>
     </div>
-    <div class="field-group"><label>Address</label>
-      <div class="input-wrap"><input type="text" id="address" placeholder="e.g. 1200 Market St or Grand Blvd and Gravois Ave" autocomplete="street-address"><button class="mic-btn" id="micAddress" onclick="toggleFieldMic('address')"><svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button></div>
-      <div class="addr-status" id="addrStatus"></div>
-    </div>
-    <div class="field-group"><label>Description <span class="label-hint">(max 470 chars)</span></label>
-      <div class="input-wrap"><textarea id="description" maxlength="470" placeholder="e.g. Large pothole in the right lane, northbound. About 18 inches wide and 6 inches deep." oninput="updateCharCount()"></textarea><button class="mic-btn" id="micDescription" onclick="toggleFieldMic('description')"><svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button></div>
-      <div class="char-count" id="charCount">0 / 470</div>
-    </div>
-    <div class="field-group">
-      <label>Photo <span class="label-hint">(optional)</span></label>
-      <div class="photo-area" id="photoArea">
-        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
-        <button class="photo-btn" onclick="document.getElementById('photoInput').click()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          <span>Take Photo or Choose File</span>
-        </button>
-        <div class="photo-preview" id="photoPreview" style="display:none">
-          <img id="photoThumb" src="" alt="Preview">
-          <button class="photo-remove" onclick="removePhoto()">✕</button>
-        </div>
-      </div>
-      <div class="photo-note" id="photoNote">The city's API may not accept photos — if it doesn't, your text report still goes through.</div>
+    <div class="field-group"><label>Address</label><input type="text" id="address" placeholder="e.g. 1200 Market St or Grand Blvd and Gravois Ave" autocomplete="street-address"><div class="addr-status" id="addrStatus"></div></div>
+    <div class="field-group"><label>Description <span class="label-hint">(max 470 chars)</span></label><textarea id="description" maxlength="470" placeholder="e.g. Large pothole in the right lane, northbound. About 18 inches wide and 6 inches deep." oninput="updateCC()"></textarea><div class="char-count" id="charCount">0 / 470</div></div>
+    <div class="field-group"><label>Photo <span class="label-hint">(optional)</span></label>
+      <div class="photo-area"><input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+        <button class="photo-btn" onclick="document.getElementById('photoInput').click()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Take Photo or Choose File</span></button>
+        <div class="photo-preview" id="photoPreview" style="display:none"><img id="photoThumb" src="" alt="Preview"><button class="photo-remove" onclick="removePhoto()">✕</button></div>
+      </div><div class="photo-note" id="photoNote">Photo may not be accepted by the city's API — your text report will still go through regardless.</div>
     </div>
     <button class="submit-btn" id="submitBtn" onclick="submitReport()">Submit Pothole Report</button>
   </div>
 </div>
+
 <div class="container screen" id="trackerScreen">
   <div id="trackerStatusBox" class="status"></div>
-  <div class="card">
-    <div class="card-title">Look Up a Ticket</div>
-    <label>Service Request ID</label>
-    <div class="lookup-row"><input type="text" id="lookupId" placeholder="e.g. 2055992" inputmode="numeric"><button class="lookup-btn" id="lookupBtn" onclick="lookupTicket()">Look Up</button></div>
-    <div class="lookup-hint">Fetches current status automatically from the city's website.</div>
+  <div class="card"><div class="card-title">Look Up a Ticket</div><label>Service Request ID</label><div class="lookup-row"><input type="text" id="lookupId" placeholder="e.g. 2055992" inputmode="numeric"><button class="lookup-btn" id="lookupBtn" onclick="lookupTicket()">Look Up</button></div><div class="lookup-hint">Fetches current status automatically from the city's website.</div></div>
+  <div class="sub-tabs"><button class="sub-tab active" data-st="active" onclick="switchSubTab('active')">Active <span class="sub-badge" id="activeBadge"></span></button><button class="sub-tab" data-st="completed" onclick="switchSubTab('completed')">Completed <span class="sub-badge" id="completedBadge"></span></button></div>
+  <div id="activePanel">
+    <div class="refresh-all-bar"><div class="card-title" style="margin:0">Active Tickets</div><button class="refresh-all-btn" id="refreshAllBtn" onclick="refreshAllTickets()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><span id="refreshAllLabel">Refresh All</span></button></div>
+    <div id="activeList"></div>
   </div>
-  <div class="refresh-all-bar">
-    <div class="card-title" style="margin:0">My Tracked Tickets</div>
-    <button class="refresh-all-btn" id="refreshAllBtn" onclick="refreshAllTickets()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><span id="refreshAllLabel">Refresh All</span></button>
-  </div>
-  <div id="ticketsList"></div>
-  <div class="footer-note">Status fetched from the city's public status page.<br>Only the public ticket number leaves your device.</div>
+  <div id="completedPanel" style="display:none"><div class="card-title" style="margin-bottom:12px;padding:0 4px">Completed Tickets</div><div id="completedList"></div></div>
+  <div class="footer-note">Status fetched from the city's public status page. Only the public ticket number leaves your device.</div>
 </div>
-<div class="container screen" id="settingsScreen">
-  <div class="card">
-    <div class="card-title">Settings</div>
-    <div class="field-group"><label>CSB API Key</label><input type="text" id="editApiKey" autocomplete="off" spellcheck="false"></div>
-    <div class="field-group"><label>Address Validation API Key</label><input type="text" id="editAddrKey" autocomplete="off" spellcheck="false"></div>
-    <div class="field-group"><label>First Name</label><input type="text" id="editFirst"></div>
-    <div class="field-group"><label>Last Name</label><input type="text" id="editLast"></div>
-    <div class="field-group"><label>Email</label><input type="email" id="editEmail"></div>
-    <div class="field-group"><label>Phone</label><input type="tel" id="editPhone"></div>
-    <button class="save-btn" onclick="updateSettings()">Save Changes</button>
-    <button class="danger-btn" onclick="clearAllData()">Clear All Saved Data</button>
-    <button class="settings-btn" style="width:100%;margin-top:12px;background:var(--gray-100);color:var(--gray-700);border-color:var(--gray-300)" onclick="switchTab('report')">← Back</button>
-  </div>
-</div>
+
+<div class="container screen" id="settingsScreen"><div class="card">
+  <div class="card-title">Settings</div>
+  <div class="field-group"><label>CSB API Key</label><input type="text" id="editApiKey" autocomplete="off" spellcheck="false"></div>
+  <div class="field-group"><label>Address Validation API Key</label><input type="text" id="editAddrKey" autocomplete="off" spellcheck="false"></div>
+  <div class="field-group"><label>First Name</label><input type="text" id="editFirst"></div>
+  <div class="field-group"><label>Last Name</label><input type="text" id="editLast"></div>
+  <div class="field-group"><label>Email</label><input type="email" id="editEmail"></div>
+  <div class="field-group"><label>Phone</label><input type="tel" id="editPhone"></div>
+  <button class="save-btn" onclick="updateSettings()">Save Changes</button>
+  <button class="danger-btn" onclick="clearAllData()">Clear All Saved Data</button>
+  <button class="settings-btn" style="width:100%;margin-top:12px;background:var(--gray-100);color:var(--gray-700);border-color:var(--gray-300)" onclick="switchTab('report')">← Back</button>
+</div></div>
+
 <script>
-const API_BASE='https://www.stlouis-mo.gov/powernap/stlouis/api.cfm';
-const CSB='https://www.stlouis-mo.gov/government/departments/public-safety/neighborhood-stabilization-office/citizens-service-bureau/check-service-request.cfm';
-let selectedCode='323',activeRecognition=null,activeFieldMic=null,addrTimer=null,pendingSubmission=null,selectedPhoto=null;
+const API=`https://www.stlouis-mo.gov/powernap/stlouis/api.cfm`;
+const CSB=`https://www.stlouis-mo.gov/government/departments/public-safety/neighborhood-stabilization-office/citizens-service-bureau/check-service-request.cfm`;
+let selectedCode='323',activeRecognition=null,addrTimer=null,pendingSubmission=null,selectedPhoto=null,currentSubTab='active';
 const SRec=window.SpeechRecognition||window.webkitSpeechRecognition,speechOK=!!SRec;
-const TN={'323':'Pothole — Major/Arterial Street','372':'Pothole — Residential Street','322':'Pothole — Alley'};
+const TN={'323':'Pothole — Major/Arterial','372':'Pothole — Residential','322':'Pothole — Alley'};
+const BATCH_SIZE=5;
 
 // ═══ Fetch helper ═══
 function fetchT(url,ms){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);return fetch(url,{signal:c.signal}).finally(()=>clearTimeout(t));}
 
 // ═══ Address Validation ═══
-function isIntersection(addr){return/\b(and|&|at)\b/i.test(addr)||/\//.test(addr)||!/\d/.test(addr);}
-function setupAddrValidation(){document.getElementById('address').addEventListener('input',function(){clearTimeout(addrTimer);const v=this.value.trim();if(v.length<4){hideAS();return;}if(isIntersection(v)){const hasSuffix=/\b(st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way)\b/i.test(v);showAS('valid','<strong>↔ Intersection</strong> — can\'t be validated automatically.'+(hasSuffix?'':' <br><span class="addr-detail">Tip: Include street types (e.g. <strong>Grand Blvd and Gravois Ave</strong>) to avoid ambiguity — St. Louis has streets that share a name but differ by suffix.</span>'));return;}showAS('checking','Checking address...');addrTimer=setTimeout(()=>validateAddr(v),600);});}
-async function validateAddr(addr){const s=loadS();if(!s.addrKey){hideAS();return;}try{const r=await fetchT(API_BASE+'/addressValidation/properties.json?ADDRESSSEARCH='+encodeURIComponent(addr)+'&api_key='+encodeURIComponent(s.addrKey),8000);if(!r.ok){hideAS();return;}const d=await r.json();if(!Array.isArray(d)||!d.length){showAS('invalid','Address not found in the city\'s database. Check spelling, or use a nearby street number.');return;}const m=d[0],ca=m.OWNERADDRESS||'',hood=m.NEIGHBORHOODNAME||'',ward=m.WARD||'',zip=m.ZIPCODE||'';let h='<strong>✓ Valid</strong>';if(hood)h+=' · '+hood;if(ward)h+=' · Ward '+ward;if(zip)h+=' · '+zip;const typed=document.getElementById('address').value.trim().toUpperCase();if(typed!==ca.toUpperCase()&&ca)h+='<br><span class="addr-detail">City format: <span class="addr-suggestion" onclick="document.getElementById(\'address\').value=\''+ca.replace(/'/g,"\\'")+'\';hideAS();">'+ca+'</span> (tap to use)</span>';showAS('valid',h);}catch(e){hideAS();}}
+function isIntersection(a){return/\b(and|&|at)\b/i.test(a)||/\//.test(a)||!/\d/.test(a);}
+function setupAddrVal(){document.getElementById('address').addEventListener('input',function(){clearTimeout(addrTimer);const v=this.value.trim();if(v.length<4){hideAS();return;}if(isIntersection(v)){const hasSfx=/\b(st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way)\b/i.test(v);showAS('valid','<strong>↔ Intersection</strong> — can\'t be validated automatically.'+(hasSfx?'':' <br><span class="addr-detail">Tip: Include street types (e.g. <strong>Grand Blvd and Gravois Ave</strong>) to avoid ambiguity.</span>'));return;}showAS('checking','Checking address...');addrTimer=setTimeout(()=>valAddr(v),600);});}
+async function valAddr(addr){const s=loadS();if(!s.addrKey){hideAS();return;}try{const r=await fetchT(API+'/addressValidation/properties.json?ADDRESSSEARCH='+encodeURIComponent(addr)+'&api_key='+encodeURIComponent(s.addrKey),8000);if(!r.ok){hideAS();return;}const d=await r.json();if(!Array.isArray(d)||!d.length){showAS('invalid','Address not found in the city\'s database. Check spelling, or use a nearby street number.');return;}const m=d[0],ca=m.OWNERADDRESS||'',hood=m.NEIGHBORHOODNAME||'',ward=m.WARD||'',zip=m.ZIPCODE||'';let h='<strong>✓ Valid</strong>';if(hood)h+=' · '+hood;if(ward)h+=' · Ward '+ward;if(zip)h+=' · '+zip;const typed=document.getElementById('address').value.trim().toUpperCase();if(typed!==ca.toUpperCase()&&ca)h+='<br><span class="addr-detail">City format: <span class="addr-suggestion" onclick="document.getElementById(\'address\').value=\''+ca.replace(/'/g,"\\'")+'\';hideAS();">'+ca+'</span> (tap to use)</span>';showAS('valid',h);}catch(e){hideAS();}}
 function showAS(c,h){const e=document.getElementById('addrStatus');e.className='addr-status show '+c;e.innerHTML=h;}
 function hideAS(){const e=document.getElementById('addrStatus');e.className='addr-status';e.innerHTML='';}
 
-// ═══ City page scraping via CORS proxy ═══
-async function fetchCityPage(rid){
-  const url=CSB+'?requestID='+encodeURIComponent(rid);
-  const px=['https://corsproxy.io/?'+encodeURIComponent(url),'https://api.allorigins.win/raw?url='+encodeURIComponent(url),'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)];
-  let le='';
-  for(const pu of px){try{const r=await fetchT(pu,12000);if(!r.ok){le='HTTP '+r.status;continue;}const h=await r.text();if(!h||h.length<200){le='Empty';continue;}const d=parseSR(h,rid);if(d)return d;le='Parse failed';}catch(e){le=e.name==='AbortError'?'Timed out':e.message;}}
-  throw new Error(le||'All proxies failed');
-}
+// ═══ City page scraping ═══
+async function fetchCityPage(rid){const url=CSB+'?requestID='+encodeURIComponent(rid);const px=['https://corsproxy.io/?'+encodeURIComponent(url),'https://api.allorigins.win/raw?url='+encodeURIComponent(url),'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)];let le='';for(const pu of px){try{const r=await fetchT(pu,12000);if(!r.ok){le='HTTP '+r.status;continue;}const h=await r.text();if(!h||h.length<200){le='Empty';continue;}const d=parseSR(h,rid);if(d)return d;le='Parse failed';}catch(e){le=e.name==='AbortError'?'Timed out':e.message;}}throw new Error(le);}
 function parseSR(html,rid){const doc=new DOMParser().parseFromString(html,'text/html');const t=doc.body?doc.body.textContent:'';if(!t.includes('Service Request')&&!t.includes(rid))return null;function ex(l){for(const re of[new RegExp(l+'\\s*\\n\\s*([^\\n]+)','i'),new RegExp(l+'\\s+([^\\n]+)','i')]){const m=t.match(re);if(m&&m[1]){const v=m[1].trim();if(v&&v.length<200)return v;}}return'';}return{status:ex('Status:'),investigation:ex('Dept Investigation Completed On:'),address:ex('Location:'),dateSubmitted:ex('Request Initiated:'),problemType:ex('Problem Type:'),dept:ex('Dept To Receive SR:'),dueDate:ex('Dept Response Due By:')};}
 
 // ═══ Tabs / Screens ═══
@@ -286,21 +251,22 @@ function switchTab(t){document.querySelectorAll('.tab').forEach(x=>x.classList.t
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 function showSettings(){const s=loadS();document.getElementById('editApiKey').value=s.apiKey||'';document.getElementById('editAddrKey').value=s.addrKey||'';document.getElementById('editFirst').value=s.firstName||'';document.getElementById('editLast').value=s.lastName||'';document.getElementById('editEmail').value=s.email||'';document.getElementById('editPhone').value=s.phone||'';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('reportScreen').classList.remove('active');document.getElementById('trackerScreen').classList.remove('active');showScreen('settingsScreen');}
 function showMain(){document.getElementById('tabBar').style.display='flex';switchTab('report');}
+function switchSubTab(st){currentSubTab=st;document.querySelectorAll('.sub-tab').forEach(x=>x.classList.toggle('active',x.dataset.st===st));document.getElementById('activePanel').style.display=st==='active'?'block':'none';document.getElementById('completedPanel').style.display=st==='completed'?'block':'none';renderTickets();}
 
 // ═══ Settings ═══
 function loadS(){try{return JSON.parse(localStorage.getItem('stl_pothole_settings')||'{}')}catch{return{}}}
 function storeS(o){localStorage.setItem('stl_pothole_settings',JSON.stringify(o))}
 function saveSettings(){const k=document.getElementById('setupApiKey').value.trim();if(!k){alert('CSB API key is required.');return;}storeS({apiKey:k,addrKey:document.getElementById('setupAddrKey').value.trim(),firstName:document.getElementById('setupFirst').value.trim(),lastName:document.getElementById('setupLast').value.trim(),email:document.getElementById('setupEmail').value.trim(),phone:document.getElementById('setupPhone').value.trim()});document.getElementById('settingsToggle').style.display='block';showMain();}
-function updateSettings(){const k=document.getElementById('editApiKey').value.trim();if(!k){alert('CSB API key is required.');return;}storeS({apiKey:k,addrKey:document.getElementById('editAddrKey').value.trim(),firstName:document.getElementById('editFirst').value.trim(),lastName:document.getElementById('editLast').value.trim(),email:document.getElementById('editEmail').value.trim(),phone:document.getElementById('editPhone').value.trim()});switchTab('report');}
+function updateSettings(){const k=document.getElementById('editApiKey').value.trim();if(!k){alert('CSB API key required.');return;}storeS({apiKey:k,addrKey:document.getElementById('editAddrKey').value.trim(),firstName:document.getElementById('editFirst').value.trim(),lastName:document.getElementById('editLast').value.trim(),email:document.getElementById('editEmail').value.trim(),phone:document.getElementById('editPhone').value.trim()});switchTab('report');}
 function clearAllData(){if(confirm('Erase everything from this device?')){localStorage.removeItem('stl_pothole_settings');localStorage.removeItem('stl_pothole_tickets');document.getElementById('settingsToggle').style.display='none';document.getElementById('tabBar').style.display='none';showScreen('setupScreen');}}
 
-// ═══ Speech ═══
-function initSpeech(){if(!speechOK){document.getElementById('narrateBtn').classList.add('unsupported');document.getElementById('narrateHint').textContent='Voice not supported. Use Chrome, Safari, or Edge.';document.getElementById('micAddress').classList.add('unsupported');document.getElementById('micDescription').classList.add('unsupported');}}
-function toggleFieldMic(fid){if(!speechOK)return;const btn=document.getElementById(fid==='address'?'micAddress':'micDescription');if(activeFieldMic===fid&&activeRecognition){activeRecognition.stop();return;}if(activeRecognition)activeRecognition.stop();const r=new SRec();r.continuous=false;r.interimResults=true;r.lang='en-US';const field=document.getElementById(fid),ex=field.value;let fin='';btn.classList.add('recording');activeRecognition=r;activeFieldMic=fid;r.onresult=e=>{let i='';fin='';for(let x=0;x<e.results.length;x++){if(e.results[x].isFinal)fin+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}field.value=ex?(ex.endsWith(' ')?ex:ex+' ')+(fin+i):(fin+i);if(fid==='description')updateCC();};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('recording');if(fin){field.value=ex?(ex.endsWith(' ')?ex:ex+' ')+fin:fin;if(fid==='description')updateCC();if(fid==='address')field.dispatchEvent(new Event('input'));}activeRecognition=null;activeFieldMic=null;};r.start();}
-function toggleNarrate(){if(!speechOK)return;const btn=document.getElementById('narrateBtn'),hint=document.getElementById('narrateHint'),fb=document.getElementById('voiceFeedback'),tr=document.getElementById('voiceTranscript');if(activeRecognition){activeRecognition.stop();return;}const r=new SRec();r.continuous=true;r.interimResults=true;r.lang='en-US';btn.classList.add('recording');hint.textContent='Listening...';hint.classList.add('recording-hint');fb.classList.add('show');tr.textContent='...';activeRecognition=r;activeFieldMic='narrate';let full='';r.onresult=e=>{let i='',f='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}if(f)full+=f;tr.textContent=(full+' '+i).trim()||'...';};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('recording');hint.classList.remove('recording-hint');activeRecognition=null;activeFieldMic=null;if(full.trim()){tr.textContent=full.trim();hint.innerHTML='Fields auto-filled — <strong>review before submitting</strong>.';parseNar(full.trim());}else{hint.textContent='No speech detected.';fb.classList.remove('show');}};r.start();}
-function parseNar(t){const l=t.toLowerCase();if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');const addr=extractAddr(t);let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>470)d=d.substring(0,467)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updateCC();af.dispatchEvent(new Event('input'));}
+// ═══ Speech (single Narrate button only) ═══
+function initSpeech(){if(!speechOK){document.getElementById('narrateBtn').classList.add('unsupported');document.getElementById('narrateHint').textContent='Voice not supported. Use Chrome, Safari, or Edge.';}}
+function toggleNarrate(){if(!speechOK)return;const btn=document.getElementById('narrateBtn'),hint=document.getElementById('narrateHint'),fb=document.getElementById('voiceFeedback'),tr=document.getElementById('voiceTranscript');if(activeRecognition){activeRecognition.stop();return;}const r=new SRec();r.continuous=true;r.interimResults=true;r.lang='en-US';btn.classList.add('recording');hint.textContent='Listening...';hint.classList.add('recording-hint');fb.classList.add('show');tr.textContent='...';activeRecognition=r;let full='';r.onresult=e=>{let i='',f='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}if(f)full+=f;tr.textContent=(full+' '+i).trim()||'...';};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('recording');hint.classList.remove('recording-hint');activeRecognition=null;if(full.trim()){tr.textContent=full.trim();hint.innerHTML='Fields auto-filled — <strong>review before submitting</strong>.';parseNar(full.trim());}else{hint.textContent='No speech detected.';fb.classList.remove('show');}};r.start();}
+// ═══ Narration parser ═══
 const _SFX='st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way|hwy';
 const _NOT=/^(big|large|small|deep|wide|huge|massive|really|very|pretty|super|bad|terrible|awful|old|new|long|short|rough|smooth|dark|wet|dry|is|has|was|got|the|a|an|it|in|on|at|to|of|up)$/i;
+function parseNar(t){const l=t.toLowerCase();if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');const addr=extractAddr(t);let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>470)d=d.substring(0,467)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updateCC();af.dispatchEvent(new Event('input'));}
 function extractAddr(t){let addr='';const am=t.match(/([A-Za-z][A-Za-z.\s'-]*?)\s+(?:and|&)\s+([A-Za-z][A-Za-z.\s'-]*)/i);if(am){const w1=am[1].trim().split(/\s+/).pop(),w2=am[2].trim().split(/\s+/)[0];if(!_NOT.test(w1)&&!_NOT.test(w2)){let s1=am[1],s2=am[2];s1=s1.replace(/^.*?\b(?:at|on|near|corner\s+of|pothole|there|theres|there's|is|has|big|large|huge|massive)\s+/i,'').trim();const x1=s1.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x1)s1=x1[1];s1=s1.trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');const x2=s2.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x2)s2=x2[1];else s2=s2.replace(/\s+(there|it|the|I|a|an|big|large|small|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|has|is|got|needs|really|in|on|arterial|residential|alley)\b.*/i,'');s2=s2.trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');if(s1.length>=2&&s2.length>=2)addr=s1+' and '+s2;}}if(!addr){const nm=t.match(/(?:at|on|near|address\s*(?:is)?)?\s*(\d+\s+[A-Za-z][A-Za-z0-9\s.'-]+?)(?:\s*[,.]|\s+(?:there|it|the|I|big|large|small|medium|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|has|is|got|needs))/i);if(nm){let a=nm[1].trim();const x=a.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x)a=x[1].trim();addr=a;}else{const nm2=t.match(/(?:at|on|near)?\s*(\d+\s+[A-Za-z][\w\s.'-]+)/i);if(nm2){let a=nm2[1].trim();const x=a.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x)a=x[1].trim();else a=a.replace(/\s+(there|it|the|I|big|large|small|has|is|got|pothole|hole).*/i,'').trim();addr=a;}}}return addr;}
 function stbc(c){document.querySelectorAll('.type-option').forEach(o=>o.classList.toggle('selected',o.dataset.code===c));selectedCode=c;}
 function selectType(el){document.querySelectorAll('.type-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');selectedCode=el.dataset.code;}
@@ -310,20 +276,23 @@ function hideRS(){document.getElementById('statusBox').className='status';}
 function showTS(t,h){document.getElementById('trackerStatusBox').className='status show '+t;document.getElementById('trackerStatusBox').innerHTML=h;}
 function hideTS(){document.getElementById('trackerStatusBox').className='status';}
 
+// ═══ Photo ═══
+function handlePhoto(input){if(!input.files||!input.files[0])return;selectedPhoto=input.files[0];const reader=new FileReader();reader.onload=function(e){document.getElementById('photoThumb').src=e.target.result;document.getElementById('photoPreview').style.display='block';document.getElementById('photoNote').textContent='Photo attached ('+Math.round(selectedPhoto.size/1024)+' KB).';};reader.readAsDataURL(selectedPhoto);}
+function removePhoto(){selectedPhoto=null;document.getElementById('photoInput').value='';document.getElementById('photoPreview').style.display='none';document.getElementById('photoNote').textContent='Photo may not be accepted by the city\'s API — your text report will still go through regardless.';}
+
 // ═══ Tickets ═══
 function loadT(){try{return JSON.parse(localStorage.getItem('stl_pothole_tickets')||'[]')}catch{return[]}}
-function saveT(t){localStorage.setItem('stl_pothole_tickets',JSON.stringify(t));updateBadge();}
+function saveT(t){localStorage.setItem('stl_pothole_tickets',JSON.stringify(t));updateBadges();}
 function addTicket(t){const ts=loadT();if(!ts.find(x=>x.id===t.id)){ts.unshift(t);saveT(ts);}}
-function removeTicket(id){if(!confirm('Remove this ticket?'))return;saveT(loadT().filter(x=>x.id!==id));renderTickets();}
-function updateBadge(){const ts=loadT(),open=ts.filter(t=>!t.status||(!t.status.toLowerCase().includes('close')&&!t.status.toLowerCase().includes('cancel'))).length,b=document.getElementById('ticketCount');if(ts.length){b.textContent=open;b.style.display='inline-block';}else b.style.display='none';}
+function deleteTicket(id){if(!confirm('Permanently delete this ticket?'))return;saveT(loadT().filter(x=>x.id!==id));renderTickets();}
+function completeTicket(id){const ts=loadT(),idx=ts.findIndex(t=>t.id===id);if(idx>=0){ts[idx].completed=true;ts[idx].completedDate=new Date().toISOString();saveT(ts);renderTickets();}}
+function reactivateTicket(id){const ts=loadT(),idx=ts.findIndex(t=>t.id===id);if(idx>=0){ts[idx].completed=false;delete ts[idx].completedDate;saveT(ts);renderTickets();}}
+function editTicketSR(oldId){const newId=prompt('Enter the correct SR number:',oldId==='pending'?'':oldId);if(!newId||!newId.trim())return;const ts=loadT(),idx=ts.findIndex(t=>t.id===oldId);if(idx>=0){ts[idx].id=newId.trim();ts[idx].needsSR=false;saveT(ts);renderTickets();}}
+function updateBadges(){const ts=loadT(),active=ts.filter(t=>!t.completed),completed=ts.filter(t=>t.completed);const b=document.getElementById('ticketCount');const ab=document.getElementById('activeBadge');const cb=document.getElementById('completedBadge');if(active.length){b.textContent=active.length;b.style.display='inline-block';}else b.style.display='none';ab.textContent='('+active.length+')';cb.textContent='('+completed.length+')';}
 
-function editTicketSR(oldId){
-  const newId=prompt('Enter the correct SR number from the city:',oldId==='pending'?'':oldId);
-  if(!newId||!newId.trim())return;
-  const ts=loadT(),idx=ts.findIndex(t=>t.id===oldId);
-  if(idx>=0){ts[idx].id=newId.trim();ts[idx].needsSR=false;saveT(ts);renderTickets();}
-}
+function isClosed(t){return t.status&&(/close|cancel/i.test(t.status));}
 
+// ═══ Batch parallel refresh ═══
 async function refreshTicket(id){
   if(id==='pending')return false;
   const card=document.querySelector('[data-ticket-id="'+id+'"]');
@@ -332,145 +301,111 @@ async function refreshTicket(id){
   try{const data=await fetchCityPage(id);const ts=loadT(),idx=ts.findIndex(t=>t.id===id);if(idx>=0){for(const k of['status','investigation','address','dateSubmitted','problemType','dept','dueDate']){if(data[k])ts[idx][k]=data[k];}ts[idx].lastChecked=new Date().toISOString();saveT(ts);}renderTickets();return true;}
   catch(e){if(card)card.classList.remove('refreshing');if(btn){btn.disabled=false;btn.textContent='Refresh';}return false;}
 }
-async function refreshAllTickets(){const ts=loadT();if(!ts.length)return;const btn=document.getElementById('refreshAllBtn'),label=document.getElementById('refreshAllLabel');btn.disabled=true;label.innerHTML='<span class="spinner-dark"></span> Refreshing...';hideTS();let ok=0,fail=0;for(const t of ts){if(t.id==='pending'){fail++;continue;}(await refreshTicket(t.id))?ok++:fail++;}btn.disabled=false;label.textContent='Refresh All';if(fail===ts.length)showTS('warning','<strong>Could not reach the city.</strong> Click "View on City Site" to check manually.');else if(fail)showTS('info','Updated '+ok+' of '+ts.length+'. '+fail+' failed.');else{showTS('success','All '+ok+' ticket(s) updated.');setTimeout(hideTS,4000);}}
-async function lookupTicket(){const id=document.getElementById('lookupId').value.trim();if(!id)return;const btn=document.getElementById('lookupBtn');btn.disabled=true;btn.textContent='Loading...';hideTS();addTicket({id,address:'',code:'',dateSubmitted:'',description:'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false});renderTickets();try{const data=await fetchCityPage(id);const ts=loadT(),idx=ts.findIndex(t=>t.id===id);if(idx>=0){Object.assign(ts[idx],data,{lastChecked:new Date().toISOString()});saveT(ts);}renderTickets();showTS('success','<strong>#'+id+'</strong> — '+(data.status||'Loaded'));document.getElementById('lookupId').value='';setTimeout(hideTS,4000);}catch(e){showTS('warning','<strong>Could not auto-fetch #'+id+'.</strong> Added — <a href="'+CSB+'?requestID='+id+'" target="_blank" style="color:inherit;font-weight:700">check city site</a>.');document.getElementById('lookupId').value='';}finally{btn.disabled=false;btn.textContent='Look Up';}}
+async function refreshBatch(ids){return Promise.allSettled(ids.map(id=>refreshTicket(id)));}
+async function refreshAllTickets(){
+  const ts=loadT().filter(t=>!t.completed&&t.id!=='pending');if(!ts.length)return;
+  const btn=document.getElementById('refreshAllBtn'),label=document.getElementById('refreshAllLabel');
+  btn.disabled=true;let ok=0,fail=0,done=0;const total=ts.length;
+  label.innerHTML='<span class="spinner-dark"></span> 0 / '+total;
+  for(let i=0;i<total;i+=BATCH_SIZE){
+    const batch=ts.slice(i,i+BATCH_SIZE);
+    const results=await refreshBatch(batch.map(t=>t.id));
+    results.forEach(r=>{if(r.status==='fulfilled'&&r.value)ok++;else fail++;done++;});
+    label.innerHTML='<span class="spinner-dark"></span> '+done+' / '+total;
+  }
+  btn.disabled=false;label.textContent='Refresh All';hideTS();
+  if(fail===total)showTS('warning','<strong>Could not reach the city.</strong> Click "View on City Site" to check manually.');
+  else if(fail)showTS('info','Updated '+ok+' of '+total+'. '+fail+' failed.');
+  else{showTS('success','All '+ok+' ticket(s) updated.');setTimeout(hideTS,4000);}
+}
+async function lookupTicket(){const id=document.getElementById('lookupId').value.trim();if(!id)return;const btn=document.getElementById('lookupBtn');btn.disabled=true;btn.textContent='Loading...';hideTS();addTicket({id,address:'',code:'',dateSubmitted:'',description:'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false,completed:false});renderTickets();try{const data=await fetchCityPage(id);const ts=loadT(),idx=ts.findIndex(t=>t.id===id);if(idx>=0){Object.assign(ts[idx],data,{lastChecked:new Date().toISOString()});saveT(ts);}renderTickets();showTS('success','<strong>#'+id+'</strong> — '+(data.status||'Loaded'));document.getElementById('lookupId').value='';setTimeout(hideTS,4000);}catch(e){showTS('warning','<strong>Could not auto-fetch #'+id+'.</strong> Added — <a href="'+CSB+'?requestID='+id+'" target="_blank" style="color:inherit;font-weight:700">check city site</a>.');document.getElementById('lookupId').value='';}finally{btn.disabled=false;btn.textContent='Look Up';}}
 
+// ═══ Render ═══
 function getBadgeClass(s){if(!s)return'badge-new';const l=s.toLowerCase();if(l.includes('close'))return'badge-closed';if(l.includes('cancel'))return'badge-cancelled';if(l.includes('dispatch'))return'badge-dispatch';if(l.includes('progress'))return'badge-progress';if(l==='pending')return'badge-unknown';return'badge-new';}
 
 function renderTickets(){
-  const ts=loadT(),c=document.getElementById('ticketsList');
-  if(!ts.length){c.innerHTML='<div class="ticket-empty"><div class="empty-icon">📋</div>No tickets yet.<br>Submit a report or look one up.</div>';return;}
-  c.innerHTML=ts.map(t=>{
-    const isPending=t.id==='pending'||t.needsSR;
-    const stat=isPending?'Needs SR#':t.status||'Pending';
-    const bc=isPending?'badge-unknown':getBadgeClass(t.status);
-    const ptype=t.problemType||TN[t.code]||'Pothole';
-    const lc=t.lastChecked?'Last refreshed '+fmtD(t.lastChecked):(isPending?'Awaiting SR number':'Not yet refreshed');
-    const srDisplay=isPending?'Pending':'SR #'+t.id;
-    const editLink=isPending?'<span class="edit-sr" onclick="editTicketSR(\''+t.id+'\')">Enter SR#</span>':'<span class="edit-sr" onclick="editTicketSR(\''+t.id+'\')">Edit</span>';
-    const viewDisabled=isPending;
-    return '<div class="ticket-card" data-ticket-id="'+t.id+'"><div class="ticket-card-top"><div class="ticket-sr">'+srDisplay+' '+editLink+'</div><span class="ticket-badge '+bc+'">'+stat+'</span></div><div class="ticket-summary"><strong>'+ptype+'</strong> at <strong>'+(t.address||'—')+'</strong>'+(t.dateSubmitted?' · submitted '+t.dateSubmitted:'')+'</div><div class="ticket-grid"><div class="ticket-field"><div class="ticket-field-label">Status</div><div class="ticket-field-value'+(t.status?'':' empty')+'">'+(t.status||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Investigation</div><div class="ticket-field-value'+(t.investigation?'':' empty')+'">'+(t.investigation||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Dept Assigned</div><div class="ticket-field-value'+(t.dept?'':' empty')+'">'+(t.dept||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Response Due By</div><div class="ticket-field-value'+(t.dueDate?'':' empty')+'">'+(t.dueDate||'—')+'</div></div></div>'+(t.description?'<div class="ticket-desc-section"><div class="ticket-field-label">Your Description</div><div class="ticket-desc-text">"'+trunc(t.description,200)+'"</div></div>':'')+'<div class="ticket-last-checked">'+lc+'</div><div class="ticket-actions">'+(isPending?'':'<button class="ticket-refresh-btn" onclick="refreshTicket(\''+t.id+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>')+(viewDisabled?'':'<a class="ticket-link" href="'+CSB+'?requestID='+t.id+'" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> View on City Site</a>')+'<button class="ticket-remove-btn" onclick="removeTicket(\''+t.id+'\')">Remove</button></div></div>';
-  }).join('');
+  const ts=loadT();
+  const active=ts.filter(t=>!t.completed);
+  const completed=ts.filter(t=>t.completed);
+  // Sort active: closed/cancelled first so user sees them
+  active.sort((a,b)=>{const ac=isClosed(a)?0:1,bc=isClosed(b)?0:1;return ac-bc;});
+  updateBadges();
+  // Active panel
+  const aEl=document.getElementById('activeList');
+  if(!active.length)aEl.innerHTML='<div class="ticket-empty"><div class="empty-icon">📋</div>No active tickets.<br>Submit a report or look one up.</div>';
+  else aEl.innerHTML=active.map(t=>renderCard(t,false)).join('');
+  // Completed panel
+  const cEl=document.getElementById('completedList');
+  if(!completed.length)cEl.innerHTML='<div class="ticket-empty"><div class="empty-icon">✅</div>No completed tickets yet.</div>';
+  else cEl.innerHTML=completed.map(t=>renderCard(t,true)).join('');
+}
+
+function renderCard(t,isCompleted){
+  const isPending=t.id==='pending'||t.needsSR;
+  const stat=isPending?'Needs SR#':t.status||'Pending';
+  const bc=isPending?'badge-unknown':isCompleted?'badge-completed':getBadgeClass(t.status);
+  const ptype=t.problemType||TN[t.code]||'Pothole';
+  const lc=t.lastChecked?'Last refreshed '+fmtD(t.lastChecked):(isPending?'Awaiting SR number':'Not yet refreshed');
+  const srDisplay=isPending?'Pending':'SR #'+t.id;
+  const editLink='<span class="edit-sr" onclick="editTicketSR(\''+t.id+'\')">'+(isPending?'Enter SR#':'Edit')+'</span>';
+  let actions='';
+  if(!isCompleted){
+    if(!isPending)actions+='<button class="ticket-refresh-btn" onclick="refreshTicket(\''+t.id+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>';
+    if(!isPending)actions+='<a class="ticket-link" href="'+CSB+'?requestID='+t.id+'" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> City Site</a>';
+    actions+='<button class="ticket-complete-btn" onclick="completeTicket(\''+t.id+'\')">Accept as Completed</button>';
+    actions+='<button class="ticket-delete-btn" onclick="deleteTicket(\''+t.id+'\')">Delete</button>';
+  }else{
+    if(!isPending)actions+='<a class="ticket-link" href="'+CSB+'?requestID='+t.id+'" target="_blank" rel="noopener">View on City Site</a>';
+    actions+='<button class="ticket-link" onclick="reactivateTicket(\''+t.id+'\')">Reactivate</button>';
+    actions+='<button class="ticket-delete-btn" onclick="deleteTicket(\''+t.id+'\')">Delete</button>';
+  }
+  const closedClass=(!isCompleted&&isClosed(t))?' newly-closed':'';
+  return '<div class="ticket-card'+closedClass+'" data-ticket-id="'+t.id+'"><div class="ticket-card-top"><div class="ticket-sr">'+srDisplay+' '+editLink+'</div><span class="ticket-badge '+bc+'">'+(isCompleted?'Completed':stat)+'</span></div><div class="ticket-summary"><strong>'+ptype+'</strong> at <strong>'+(t.address||'—')+'</strong>'+(t.dateSubmitted?' · submitted '+t.dateSubmitted:'')+'</div><div class="ticket-grid"><div class="ticket-field"><div class="ticket-field-label">Status</div><div class="ticket-field-value'+(t.status?'':' empty')+'">'+(t.status||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Investigation</div><div class="ticket-field-value'+(t.investigation?'':' empty')+'">'+(t.investigation||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Dept Assigned</div><div class="ticket-field-value'+(t.dept?'':' empty')+'">'+(t.dept||'—')+'</div></div><div class="ticket-field"><div class="ticket-field-label">Response Due By</div><div class="ticket-field-value'+(t.dueDate?'':' empty')+'">'+(t.dueDate||'—')+'</div></div></div>'+(t.description?'<div class="ticket-desc-section"><div class="ticket-field-label">Your Description</div><div class="ticket-desc-text">"'+trunc(t.description,200)+'"</div></div>':'')+'<div class="ticket-last-checked">'+lc+(t.completedDate?' · Accepted '+fmtD(t.completedDate):'')+'</div><div class="ticket-actions">'+actions+'</div></div>';
 }
 function trunc(s,n){return s.length>n?s.substring(0,n)+'...':s;}
 function fmtD(iso){try{return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch{return iso}}
 
-// ═══ Photo ═══
-function handlePhoto(input){if(!input.files||!input.files[0])return;selectedPhoto=input.files[0];const reader=new FileReader();reader.onload=function(e){document.getElementById('photoThumb').src=e.target.result;document.getElementById('photoPreview').style.display='block';document.getElementById('photoNote').textContent='Photo attached ('+Math.round(selectedPhoto.size/1024)+' KB). Will attempt to include with submission.';};reader.readAsDataURL(selectedPhoto);}
-function removePhoto(){selectedPhoto=null;document.getElementById('photoInput').value='';document.getElementById('photoPreview').style.display='none';document.getElementById('photoNote').textContent='The city\'s API may not accept photos — if it doesn\'t, your text report still goes through.';}
-
-// ═══ Extract SR ID from API response (robust) ═══
-function extractSR(data){
-  // data could be array or object. Try every known field name.
-  const fields=['service_request_id','SERVICE_REQUEST_ID','serviceRequestId','request_id','REQUEST_ID','requestId','REQUESTID','id','ID','token','TOKEN'];
-  const sources=Array.isArray(data)?data:[data];
-  for(const obj of sources){
-    if(!obj||typeof obj!=='object')continue;
-    for(const f of fields){
-      const v=obj[f];
-      if(v!==undefined&&v!==null&&v!==''){return{id:String(v),field:f,isToken:f.toLowerCase().includes('token')};}
-    }
-  }
-  // Last resort: stringify and look for any number that could be an SR
-  const str=JSON.stringify(data);
-  const numMatch=str.match(/(\d{6,8})/);
-  if(numMatch)return{id:numMatch[1],field:'regex_fallback',isToken:false};
-  return null;
-}
+// ═══ Extract SR (robust) ═══
+function extractSR(data){const fields=['service_request_id','SERVICE_REQUEST_ID','serviceRequestId','request_id','REQUEST_ID','requestId','REQUESTID','id','ID','token','TOKEN'];const sources=Array.isArray(data)?data:[data];for(const obj of sources){if(!obj||typeof obj!=='object')continue;for(const f of fields){const v=obj[f];if(v!==undefined&&v!==null&&v!=='')return{id:String(v),field:f,isToken:f.toLowerCase().includes('token')};}}const str=JSON.stringify(data);const m=str.match(/(\d{6,8})/);if(m)return{id:m[1],field:'regex_fallback',isToken:false};return null;}
 
 // ═══ Submit ═══
-function buildCurl(s,code,addr,desc){let c='curl -X POST "'+API_BASE+'/requests.json" \\\n  -d "api_key='+s.apiKey+'" \\\n  -d "service_code='+code+'" \\\n  -d "address_string='+addr+'" \\\n  -d "attribute[detail_description]='+desc+'"';if(s.firstName)c+=' \\\n  -d "first_name='+s.firstName+'"';if(s.lastName)c+=' \\\n  -d "last_name='+s.lastName+'"';if(s.email)c+=' \\\n  -d "email='+s.email+'"';if(s.phone)c+=' \\\n  -d "phone='+s.phone+'"';return c;}
+function buildCurl(s,code,addr,desc){let c='curl -X POST "'+API+'/requests.json" \\\n  -d "api_key='+s.apiKey+'" \\\n  -d "service_code='+code+'" \\\n  -d "address_string='+addr+'" \\\n  -d "attribute[detail_description]='+desc+'"';if(s.firstName)c+=' \\\n  -d "first_name='+s.firstName+'"';if(s.lastName)c+=' \\\n  -d "last_name='+s.lastName+'"';if(s.email)c+=' \\\n  -d "email='+s.email+'"';if(s.phone)c+=' \\\n  -d "phone='+s.phone+'"';return c;}
 
 async function submitReport(){
   const s=loadS(),addr=document.getElementById('address').value.trim(),desc=document.getElementById('description').value.trim();
   if(!addr){showRS('error','<strong>Address required.</strong>');return;}
   if(!desc){showRS('error','<strong>Description required.</strong>');return;}
   if(desc.length>470){showRS('error','<strong>Too long.</strong> Under 470 characters.');return;}
-  // Build request body — use FormData if photo attached, URLSearchParams otherwise
   let fetchOpts;
-  if(selectedPhoto){
-    const fd=new FormData();
-    fd.append('api_key',s.apiKey);fd.append('service_code',selectedCode);fd.append('address_string',addr);fd.append('attribute[detail_description]',desc);
-    if(s.firstName)fd.append('first_name',s.firstName);if(s.lastName)fd.append('last_name',s.lastName);if(s.email)fd.append('email',s.email);if(s.phone)fd.append('phone',s.phone);
-    fd.append('media[]',selectedPhoto,selectedPhoto.name);
-    fetchOpts={method:'POST',body:fd}; // browser sets Content-Type with boundary automatically
-  }else{
-    const params=new URLSearchParams();params.append('api_key',s.apiKey);params.append('service_code',selectedCode);params.append('address_string',addr);params.append('attribute[detail_description]',desc);
-    if(s.firstName)params.append('first_name',s.firstName);if(s.lastName)params.append('last_name',s.lastName);if(s.email)params.append('email',s.email);if(s.phone)params.append('phone',s.phone);
-    fetchOpts={method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()};
-  }
+  if(selectedPhoto){const fd=new FormData();fd.append('api_key',s.apiKey);fd.append('service_code',selectedCode);fd.append('address_string',addr);fd.append('attribute[detail_description]',desc);if(s.firstName)fd.append('first_name',s.firstName);if(s.lastName)fd.append('last_name',s.lastName);if(s.email)fd.append('email',s.email);if(s.phone)fd.append('phone',s.phone);fd.append('media[]',selectedPhoto,selectedPhoto.name);fetchOpts={method:'POST',body:fd};}
+  else{const p=new URLSearchParams();p.append('api_key',s.apiKey);p.append('service_code',selectedCode);p.append('address_string',addr);p.append('attribute[detail_description]',desc);if(s.firstName)p.append('first_name',s.firstName);if(s.lastName)p.append('last_name',s.lastName);if(s.email)p.append('email',s.email);if(s.phone)p.append('phone',s.phone);fetchOpts={method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()};}
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Submitting...';hideRS();
   pendingSubmission={addr,desc,code:selectedCode};
   try{
-    const resp=await fetch(API_BASE+'/requests.json',fetchOpts);
-
-    // Try to read response body
-    let rawText='';
-    try{rawText=await resp.text();}catch(e){rawText='';}
-
-    // Try to parse as JSON
-    let data=null;
-    try{data=JSON.parse(rawText);}catch(e){}
-
-    // Debug info for troubleshooting
-    const debugInfo='HTTP '+resp.status+' | Response: '+rawText.substring(0,300);
-
+    const resp=await fetch(API+'/requests.json',fetchOpts);
+    let rawText='';try{rawText=await resp.text();}catch(e){}
+    let data=null;try{data=JSON.parse(rawText);}catch(e){}
+    const debugInfo='HTTP '+resp.status+' | '+rawText.substring(0,300);
     if(resp.ok&&data){
-      // Check for API-level errors in the parsed data
-      const hasError=(Array.isArray(data)&&data[0]?.code>=400)||(data.error)||(Array.isArray(data)&&data[0]?.description&&data[0]?.code);
-      if(hasError&&!extractSR(data)){
-        const errMsg=(Array.isArray(data)&&data[0]?.description)||data?.description||data?.error||rawText.substring(0,200);
-        showRS('error','<strong>City error:</strong><br>'+errMsg+'<div class="debug-box">'+debugInfo+'</div>');
-        return;
-      }
+      const hasErr=(Array.isArray(data)&&data[0]?.code>=400)||(data.error);
+      if(hasErr&&!extractSR(data)){const em=(Array.isArray(data)&&data[0]?.description)||data?.description||data?.error||rawText.substring(0,200);showRS('error','<strong>City error:</strong><br>'+em+'<div class="debug-box">'+debugInfo+'</div>');return;}
       const sr=extractSR(data);
-      if(sr&&!sr.isToken){
-        // Got a real SR number
-        showRS('success','<strong>Report submitted!</strong><br>Tracking ID: <span class="tracking-id">'+sr.id+'</span><br><span style="font-size:13px;opacity:.8">Check the My Tickets tab to track it.</span><div class="debug-box">Field: '+sr.field+' | '+debugInfo+'</div>');
-        addTicket({id:sr.id,address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'New',investigation:'Investigation Still Open',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:false});
-        clearForm();
-      }else if(sr&&sr.isToken){
-        // Got a token — city is processing asynchronously
-        showRS('info','<strong>Report accepted!</strong> The city gave a processing token: <span class="tracking-id">'+sr.id+'</span><br>The final SR number will be assigned shortly. Check the My Tickets tab — you can enter the real SR# once you get it (via email or the city website).<div class="debug-box">'+debugInfo+'</div>');
-        addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true,token:sr.id});
-        clearForm();
-      }else{
-        // Response OK but couldn't find an SR or token
-        showRS('warning','<strong>The city accepted the request</strong> but the response didn\'t include a recognizable tracking number.<div class="debug-box">'+debugInfo+'</div><div class="sr-entry"><label>If you received an SR# (check your email or the city website), enter it here:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div>');
-        addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true});
-        clearForm();
-      }
-    }else if(resp.ok){
-      // 200 but not JSON — unusual
-      showRS('warning','<strong>The city returned a 200 OK</strong> but the response wasn\'t JSON. The report was likely submitted.<div class="debug-box">'+debugInfo+'</div><div class="sr-entry"><label>Enter the SR# when you get it:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div>');
-      addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true});
-      clearForm();
-    }else{
-      // Non-200 response
-      showRS('error','<strong>City returned HTTP '+resp.status+'</strong><div class="debug-box">'+debugInfo+'</div>');
-    }
+      if(sr&&!sr.isToken){showRS('success','<strong>Report submitted!</strong><br>Tracking ID: <span class="tracking-id">'+sr.id+'</span><br><span style="font-size:13px;opacity:.8">Check My Tickets to track it.</span><div class="debug-box">Field: '+sr.field+'</div>');addTicket({id:sr.id,address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'New',investigation:'Investigation Still Open',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:false,completed:false});clearForm();}
+      else if(sr&&sr.isToken){showRS('info','<strong>Report accepted!</strong> Token: <span class="tracking-id">'+sr.id+'</span><br>Enter the real SR# when the city assigns it.<div class="debug-box">'+debugInfo+'</div>');addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',dept:'Street Division',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true,completed:false,token:sr.id});clearForm();}
+      else{showRS('warning','<strong>City accepted the request</strong> but no tracking number in response.<div class="debug-box">'+debugInfo+'</div><div class="sr-entry"><label>Enter SR# when you get it:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div>');addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',dept:'Street Division',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true,completed:false});clearForm();}
+    }else if(resp.ok){showRS('warning','<strong>200 OK but not JSON.</strong> Likely submitted.<div class="debug-box">'+debugInfo+'</div><div class="sr-entry"><label>Enter SR#:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div>');addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',problemType:'',lastChecked:'',needsSR:true,completed:false});clearForm();}
+    else showRS('error','<strong>HTTP '+resp.status+'</strong><div class="debug-box">'+debugInfo+'</div>');
   }catch(err){
-    // Network error — CORS blocked the response, or truly offline
-    // The POST may have gone through even though we can't read the response!
     const curl=buildCurl(s,selectedCode,addr,desc);
-    showRS('warning','<strong>The request may have been submitted</strong> but the browser couldn\'t read the city\'s response (CORS restriction).<br><br><strong>Check the city website</strong> to see if a new ticket was created for this address. If so, enter the SR# below.<div class="sr-entry"><label>SR# from city website:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div><br><strong>If it wasn\'t submitted</strong>, paste this into Terminal / PowerShell:<br><textarea readonly class="curl-box" onclick="this.select()">'+curl+'</textarea><button class="copy-curl-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>this.textContent=\'Copied!\').catch(()=>{})">Copy to Clipboard</button>');
-    addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',investigation:'',dept:'',dueDate:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true});
-    clearForm();
+    showRS('warning','<strong>Request may have been submitted</strong> but the response was blocked (CORS).<br>Check the city website for a new ticket at this address.<div class="sr-entry"><label>SR# from city:</label><div class="sr-entry-row"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sr-entry-btn" onclick="linkManualSR()">Save</button></div></div><br>If not submitted, paste into terminal:<br><textarea readonly class="curl-box" onclick="this.select()">'+curl+'</textarea><button class="copy-curl-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>this.textContent=\'Copied!\').catch(()=>{})">Copy to Clipboard</button>');
+    addTicket({id:'pending',address:addr,code:selectedCode,dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:desc,status:'',problemType:TN[selectedCode]||'Pothole',lastChecked:'',needsSR:true,completed:false});clearForm();
   }finally{btn.disabled=false;btn.innerHTML='Submit Pothole Report';}
 }
-
 function clearForm(){document.getElementById('address').value='';document.getElementById('description').value='';updateCC();document.getElementById('voiceFeedback').classList.remove('show');hideAS();removePhoto();}
-
-function linkManualSR(){
-  const sr=document.getElementById('manualSR').value.trim();
-  if(!sr)return;
-  const ts=loadT(),idx=ts.findIndex(t=>t.id==='pending'||t.needsSR);
-  if(idx>=0){ts[idx].id=sr;ts[idx].needsSR=false;saveT(ts);renderTickets();showRS('success','<strong>Ticket linked to SR #'+sr+'.</strong> Go to My Tickets to refresh its status.');}
-  else{addTicket({id:sr,address:pendingSubmission?.addr||'',code:pendingSubmission?.code||'',dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:pendingSubmission?.desc||'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false});showRS('success','<strong>SR #'+sr+' saved.</strong> Go to My Tickets to refresh.');}
-}
+function linkManualSR(){const sr=document.getElementById('manualSR').value.trim();if(!sr)return;const ts=loadT(),idx=ts.findIndex(t=>t.id==='pending'||t.needsSR);if(idx>=0){ts[idx].id=sr;ts[idx].needsSR=false;saveT(ts);renderTickets();showRS('success','<strong>Linked to SR #'+sr+'.</strong>');}else{addTicket({id:sr,address:pendingSubmission?.addr||'',code:pendingSubmission?.code||'',dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:pendingSubmission?.desc||'',status:'',problemType:'',lastChecked:'',needsSR:false,completed:false});showRS('success','<strong>SR #'+sr+' saved.</strong>');}}
 
 // ═══ Init ═══
-(function(){const s=loadS();if(s.apiKey){document.getElementById('settingsToggle').style.display='block';showMain();}initSpeech();updateBadge();setupAddrValidation();})();
+(function(){const s=loadS();if(s.apiKey){document.getElementById('settingsToggle').style.display='block';showMain();}initSpeech();updateBadges();setupAddrVal();})();
 </script>
 </body>
 </html>
