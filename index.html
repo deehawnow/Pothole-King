@@ -146,6 +146,15 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .ticket-empty .empty-icon{font-size:36px;margin-bottom:12px}
 @media(max-width:400px){.type-options{flex-direction:column}.card{padding:22px 18px}.header{padding:16px 18px 0}.ticket-grid{grid-template-columns:1fr}.ticket-field:nth-child(odd){border-right:0}}
 .footer-note{text-align:center;font-size:12px;color:var(--gray-400);padding:20px;line-height:1.5}
+/* Photo */
+.photo-area{display:flex;flex-direction:column;gap:10px}
+.photo-btn{width:100%;padding:14px;border:1.5px dashed var(--gray-300);border-radius:8px;background:var(--gray-50);color:var(--gray-500);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.photo-btn:hover{background:var(--blue-50);border-color:var(--blue-400);color:var(--blue-600)}
+.photo-preview{position:relative;display:inline-block;border-radius:8px;overflow:hidden;border:1px solid var(--gray-200)}
+.photo-preview img{max-width:100%;max-height:200px;display:block;border-radius:8px}
+.photo-remove{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);color:var(--white);border:0;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.photo-remove:hover{background:rgba(220,38,38,.8)}
+.photo-note{font-size:11px;color:var(--gray-400);margin-top:4px;font-style:italic}
 </style>
 </head>
 <body>
@@ -198,6 +207,21 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
       <div class="input-wrap"><textarea id="description" maxlength="470" placeholder="e.g. Large pothole in the right lane, northbound. About 18 inches wide and 6 inches deep." oninput="updateCharCount()"></textarea><button class="mic-btn" id="micDescription" onclick="toggleFieldMic('description')"><svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button></div>
       <div class="char-count" id="charCount">0 / 470</div>
     </div>
+    <div class="field-group">
+      <label>Photo <span class="label-hint">(optional)</span></label>
+      <div class="photo-area" id="photoArea">
+        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+        <button class="photo-btn" onclick="document.getElementById('photoInput').click()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Take Photo or Choose File</span>
+        </button>
+        <div class="photo-preview" id="photoPreview" style="display:none">
+          <img id="photoThumb" src="" alt="Preview">
+          <button class="photo-remove" onclick="removePhoto()">✕</button>
+        </div>
+      </div>
+      <div class="photo-note" id="photoNote">The city's API may not accept photos — if it doesn't, your text report still goes through.</div>
+    </div>
     <button class="submit-btn" id="submitBtn" onclick="submitReport()">Submit Pothole Report</button>
   </div>
 </div>
@@ -233,7 +257,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 <script>
 const API_BASE='https://www.stlouis-mo.gov/powernap/stlouis/api.cfm';
 const CSB='https://www.stlouis-mo.gov/government/departments/public-safety/neighborhood-stabilization-office/citizens-service-bureau/check-service-request.cfm';
-let selectedCode='323',activeRecognition=null,activeFieldMic=null,addrTimer=null,pendingSubmission=null;
+let selectedCode='323',activeRecognition=null,activeFieldMic=null,addrTimer=null,pendingSubmission=null,selectedPhoto=null;
 const SRec=window.SpeechRecognition||window.webkitSpeechRecognition,speechOK=!!SRec;
 const TN={'323':'Pothole — Major/Arterial Street','372':'Pothole — Residential Street','322':'Pothole — Alley'};
 
@@ -274,7 +298,10 @@ function clearAllData(){if(confirm('Erase everything from this device?')){localS
 function initSpeech(){if(!speechOK){document.getElementById('narrateBtn').classList.add('unsupported');document.getElementById('narrateHint').textContent='Voice not supported. Use Chrome, Safari, or Edge.';document.getElementById('micAddress').classList.add('unsupported');document.getElementById('micDescription').classList.add('unsupported');}}
 function toggleFieldMic(fid){if(!speechOK)return;const btn=document.getElementById(fid==='address'?'micAddress':'micDescription');if(activeFieldMic===fid&&activeRecognition){activeRecognition.stop();return;}if(activeRecognition)activeRecognition.stop();const r=new SRec();r.continuous=false;r.interimResults=true;r.lang='en-US';const field=document.getElementById(fid),ex=field.value;let fin='';btn.classList.add('recording');activeRecognition=r;activeFieldMic=fid;r.onresult=e=>{let i='';fin='';for(let x=0;x<e.results.length;x++){if(e.results[x].isFinal)fin+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}field.value=ex?(ex.endsWith(' ')?ex:ex+' ')+(fin+i):(fin+i);if(fid==='description')updateCC();};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('recording');if(fin){field.value=ex?(ex.endsWith(' ')?ex:ex+' ')+fin:fin;if(fid==='description')updateCC();if(fid==='address')field.dispatchEvent(new Event('input'));}activeRecognition=null;activeFieldMic=null;};r.start();}
 function toggleNarrate(){if(!speechOK)return;const btn=document.getElementById('narrateBtn'),hint=document.getElementById('narrateHint'),fb=document.getElementById('voiceFeedback'),tr=document.getElementById('voiceTranscript');if(activeRecognition){activeRecognition.stop();return;}const r=new SRec();r.continuous=true;r.interimResults=true;r.lang='en-US';btn.classList.add('recording');hint.textContent='Listening...';hint.classList.add('recording-hint');fb.classList.add('show');tr.textContent='...';activeRecognition=r;activeFieldMic='narrate';let full='';r.onresult=e=>{let i='',f='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}if(f)full+=f;tr.textContent=(full+' '+i).trim()||'...';};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('recording');hint.classList.remove('recording-hint');activeRecognition=null;activeFieldMic=null;if(full.trim()){tr.textContent=full.trim();hint.innerHTML='Fields auto-filled — <strong>review before submitting</strong>.';parseNar(full.trim());}else{hint.textContent='No speech detected.';fb.classList.remove('show');}};r.start();}
-function parseNar(t){const l=t.toLowerCase();if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');let addr='';const nm=t.match(/(?:at|on|near|address\s*(?:is)?)\s+(\d+\s+[A-Za-z][A-Za-z0-9\s.'-]+?)(?:\s*[,.]|\s+(?:there|it|the|I|big|large|small|medium|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this))/i)||t.match(/(?:at|on|near|address\s*(?:is)?)\s+(\d+\s+[A-Za-z][\w\s.'-]+)/i);const im=t.match(/(?:at|on|near|corner\s+of)\s+([A-Z][a-zA-Z.\s'-]+?)\s+(?:and|&)\s+([A-Z][a-zA-Z.\s'-]+?)(?:\s*[,.]|\s+(?:there|it|the|I|big|large|small|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|arterial|residential|alley))/i)||t.match(/(?:at|on|near|corner\s+of)\s+([A-Z][a-zA-Z.\s'-]+?)\s+(?:and|&)\s+([A-Z][a-zA-Z.\s'-]+)/i);if(nm)addr=nm[1].trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');else if(im)addr=im[1].trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'')+' and '+im[2].trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>470)d=d.substring(0,467)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updateCC();af.dispatchEvent(new Event('input'));}
+function parseNar(t){const l=t.toLowerCase();if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');const addr=extractAddr(t);let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>470)d=d.substring(0,467)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updateCC();af.dispatchEvent(new Event('input'));}
+const _SFX='st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way|hwy';
+const _NOT=/^(big|large|small|deep|wide|huge|massive|really|very|pretty|super|bad|terrible|awful|old|new|long|short|rough|smooth|dark|wet|dry|is|has|was|got|the|a|an|it|in|on|at|to|of|up)$/i;
+function extractAddr(t){let addr='';const am=t.match(/([A-Za-z][A-Za-z.\s'-]*?)\s+(?:and|&)\s+([A-Za-z][A-Za-z.\s'-]*)/i);if(am){const w1=am[1].trim().split(/\s+/).pop(),w2=am[2].trim().split(/\s+/)[0];if(!_NOT.test(w1)&&!_NOT.test(w2)){let s1=am[1],s2=am[2];s1=s1.replace(/^.*?\b(?:at|on|near|corner\s+of|pothole|there|theres|there's|is|has|big|large|huge|massive)\s+/i,'').trim();const x1=s1.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x1)s1=x1[1];s1=s1.trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');const x2=s2.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x2)s2=x2[1];else s2=s2.replace(/\s+(there|it|the|I|a|an|big|large|small|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|has|is|got|needs|really|in|on|arterial|residential|alley)\b.*/i,'');s2=s2.trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');if(s1.length>=2&&s2.length>=2)addr=s1+' and '+s2;}}if(!addr){const nm=t.match(/(?:at|on|near|address\s*(?:is)?)?\s*(\d+\s+[A-Za-z][A-Za-z0-9\s.'-]+?)(?:\s*[,.]|\s+(?:there|it|the|I|big|large|small|medium|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|has|is|got|needs))/i);if(nm){let a=nm[1].trim();const x=a.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x)a=x[1].trim();addr=a;}else{const nm2=t.match(/(?:at|on|near)?\s*(\d+\s+[A-Za-z][\w\s.'-]+)/i);if(nm2){let a=nm2[1].trim();const x=a.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x)a=x[1].trim();else a=a.replace(/\s+(there|it|the|I|big|large|small|has|is|got|pothole|hole).*/i,'').trim();addr=a;}}}return addr;}
 function stbc(c){document.querySelectorAll('.type-option').forEach(o=>o.classList.toggle('selected',o.dataset.code===c));selectedCode=c;}
 function selectType(el){document.querySelectorAll('.type-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');selectedCode=el.dataset.code;}
 function updateCC(){const l=document.getElementById('description').value.length,c=document.getElementById('charCount');c.textContent=l+' / 470';c.className='char-count'+(l>450?' warn':'')+(l>470?' over':'');}
@@ -328,6 +355,10 @@ function renderTickets(){
 function trunc(s,n){return s.length>n?s.substring(0,n)+'...':s;}
 function fmtD(iso){try{return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch{return iso}}
 
+// ═══ Photo ═══
+function handlePhoto(input){if(!input.files||!input.files[0])return;selectedPhoto=input.files[0];const reader=new FileReader();reader.onload=function(e){document.getElementById('photoThumb').src=e.target.result;document.getElementById('photoPreview').style.display='block';document.getElementById('photoNote').textContent='Photo attached ('+Math.round(selectedPhoto.size/1024)+' KB). Will attempt to include with submission.';};reader.readAsDataURL(selectedPhoto);}
+function removePhoto(){selectedPhoto=null;document.getElementById('photoInput').value='';document.getElementById('photoPreview').style.display='none';document.getElementById('photoNote').textContent='The city\'s API may not accept photos — if it doesn\'t, your text report still goes through.';}
+
 // ═══ Extract SR ID from API response (robust) ═══
 function extractSR(data){
   // data could be array or object. Try every known field name.
@@ -355,13 +386,23 @@ async function submitReport(){
   if(!addr){showRS('error','<strong>Address required.</strong>');return;}
   if(!desc){showRS('error','<strong>Description required.</strong>');return;}
   if(desc.length>470){showRS('error','<strong>Too long.</strong> Under 470 characters.');return;}
-  const params=new URLSearchParams();params.append('api_key',s.apiKey);params.append('service_code',selectedCode);params.append('address_string',addr);params.append('attribute[detail_description]',desc);
-  if(s.firstName)params.append('first_name',s.firstName);if(s.lastName)params.append('last_name',s.lastName);if(s.email)params.append('email',s.email);if(s.phone)params.append('phone',s.phone);
+  // Build request body — use FormData if photo attached, URLSearchParams otherwise
+  let fetchOpts;
+  if(selectedPhoto){
+    const fd=new FormData();
+    fd.append('api_key',s.apiKey);fd.append('service_code',selectedCode);fd.append('address_string',addr);fd.append('attribute[detail_description]',desc);
+    if(s.firstName)fd.append('first_name',s.firstName);if(s.lastName)fd.append('last_name',s.lastName);if(s.email)fd.append('email',s.email);if(s.phone)fd.append('phone',s.phone);
+    fd.append('media[]',selectedPhoto,selectedPhoto.name);
+    fetchOpts={method:'POST',body:fd}; // browser sets Content-Type with boundary automatically
+  }else{
+    const params=new URLSearchParams();params.append('api_key',s.apiKey);params.append('service_code',selectedCode);params.append('address_string',addr);params.append('attribute[detail_description]',desc);
+    if(s.firstName)params.append('first_name',s.firstName);if(s.lastName)params.append('last_name',s.lastName);if(s.email)params.append('email',s.email);if(s.phone)params.append('phone',s.phone);
+    fetchOpts={method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()};
+  }
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Submitting...';hideRS();
-  // Store submission details in case we need to create a pending ticket
   pendingSubmission={addr,desc,code:selectedCode};
   try{
-    const resp=await fetch(API_BASE+'/requests.json',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()});
+    const resp=await fetch(API_BASE+'/requests.json',fetchOpts);
 
     // Try to read response body
     let rawText='';
@@ -418,7 +459,7 @@ async function submitReport(){
   }finally{btn.disabled=false;btn.innerHTML='Submit Pothole Report';}
 }
 
-function clearForm(){document.getElementById('address').value='';document.getElementById('description').value='';updateCC();document.getElementById('voiceFeedback').classList.remove('show');hideAS();}
+function clearForm(){document.getElementById('address').value='';document.getElementById('description').value='';updateCC();document.getElementById('voiceFeedback').classList.remove('show');hideAS();removePhoto();}
 
 function linkManualSR(){
   const sr=document.getElementById('manualSR').value.trim();
