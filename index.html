@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Pothole STL">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--blue-900:#0c1929;--blue-600:#2563eb;--blue-500:#3b82f6;--blue-400:#60a5fa;--blue-100:#dbeafe;--blue-50:#eff6ff;--g9:#111827;--g7:#374151;--g6:#4b5563;--g5:#6b7280;--g4:#9ca3af;--g3:#d1d5db;--g2:#e5e7eb;--g1:#f3f4f6;--g0:#f9fafb;--red-600:#dc2626;--red-100:#fee2e2;--grn7:#15803d;--grn6:#16a34a;--grn5:#f0fdf4;--amb7:#b45309;--amb6:#d97706;--amb5:#fffbeb;--w:#fff;--sh:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -2px rgba(0,0,0,.05);--r:10px}
+:root{--blue-900:#0c1929;--blue-600:#2563eb;--blue-500:#3b82f6;--blue-400:#60a5fa;--blue-100:#dbeafe;--blue-50:#eff6ff;--g9:#111827;--g7:#374151;--g6:#4b5563;--g5:#6b7280;--g4:#9ca3af;--g3:#d1d5db;--g2:#e5e7eb;--g1:#f3f4f6;--g0:#f9fafb;--red-600:#dc2626;--red-500:#ef4444;--red-100:#fee2e2;--grn7:#15803d;--grn6:#16a34a;--grn5:#f0fdf4;--amb7:#b45309;--amb6:#d97706;--amb5:#fffbeb;--w:#fff;--sh:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -2px rgba(0,0,0,.05);--r:10px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--g1);color:var(--g9);min-height:100vh;-webkit-font-smoothing:antialiased}
 .hdr{background:var(--blue-900);color:var(--w);padding:20px 24px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
@@ -19,11 +19,12 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--g1);color:v
 .hdr-sub{font-size:12px;opacity:.6;margin-top:2px}
 .sbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:var(--w);padding:8px 14px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer}
 .sbtn:hover{background:rgba(255,255,255,.18)}
-.tabs{max-width:540px;margin:0 auto;display:flex}
-.tab{flex:1;padding:12px 0;text-align:center;font-size:14px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;background:0 0;border-top:0;border-left:0;border-right:0;font-family:inherit}
+.tabs{max-width:540px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;padding:12px 8px;text-align:center;font-size:13px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;background:0 0;border-top:0;border-left:0;border-right:0;font-family:inherit;white-space:nowrap;min-width:70px}
 .tab:hover{color:rgba(255,255,255,.8)}
 .tab.active{color:var(--w);border-bottom-color:var(--blue-400)}
-.tab .tbdg{display:inline-block;background:var(--blue-500);color:var(--w);font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:6px}
+.tab .tbdg{display:inline-block;background:var(--blue-500);color:var(--w);font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:4px}
 .ct{max-width:540px;margin:0 auto;padding:24px 16px 100px}
 .card{background:var(--w);border-radius:var(--r);box-shadow:var(--sh);padding:28px 24px;margin-bottom:16px;border:1px solid var(--g2)}
 .card-t{font-size:15px;font-weight:600;color:var(--g7);margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px}
@@ -101,20 +102,17 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .pr{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);color:var(--w);border:0;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .pr:hover{background:rgba(220,38,38,.8)}
 .pn{font-size:11px;color:var(--g4);margin-top:4px;font-style:italic}
-/* Sub-tabs */
 .stabs{display:flex;gap:4px;margin-bottom:16px;background:var(--g2);padding:3px;border-radius:10px}
 .stab{flex:1;padding:9px 12px;text-align:center;font-size:13px;font-weight:600;color:var(--g5);border:0;border-radius:8px;background:transparent;cursor:pointer;font-family:inherit;transition:all .15s}
 .stab.on{background:var(--w);color:var(--g9);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .stab .sb{font-size:11px;font-weight:700;margin-left:4px;opacity:.6}
-/* Toast */
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--g9);color:var(--w);padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:300;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* Tickets */
 .tc-card{background:var(--w);border:1px solid var(--g2);border-radius:12px;margin-bottom:16px;box-shadow:var(--sh);overflow:hidden;transition:opacity .4s,max-height .5s,margin .4s,padding .4s}
 .tc-card.refreshing{opacity:.5}
 .tc-card.closing{opacity:0;max-height:0!important;margin-bottom:0;overflow:hidden}
 .tc-card.newly-closed{border-color:#86efac;border-width:2px}
-.tc-top{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.tc-top{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .tc-sr{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--g9);display:flex;align-items:center;gap:8px}
 .tc-sr .esr{font-size:12px;color:var(--blue-600);font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline}
 .tc-bdg{font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
@@ -124,13 +122,19 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .b-closed{background:var(--grn5);color:var(--grn7);border:1px solid #86efac}
 .b-cancel{background:var(--g1);color:var(--g5);border:1px solid var(--g3)}
 .b-unk{background:var(--amb5);color:var(--amb7);border:1px solid #fcd34d}
+/* SLA badge */
+.sla-bdg{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;margin-left:6px;text-transform:uppercase;letter-spacing:.3px}
+.sla-ok{background:var(--grn5);color:var(--grn7);border:1px solid #86efac}
+.sla-due{background:var(--amb5);color:var(--amb7);border:1px solid #fcd34d}
+.sla-late{background:var(--red-100);color:var(--red-600);border:1px solid #fca5a5}
+.sla-met{background:var(--grn5);color:var(--grn7);border:1px solid #86efac}
 .tc-sum{padding:6px 20px 12px;font-size:14px;color:var(--g5);line-height:1.4}
 .tc-sum strong{color:var(--g7)}
-/* Dynamic fields */
 .tc-fields{padding:0 20px 14px;display:flex;flex-wrap:wrap;gap:6px 16px}
 .tc-f{font-size:13px;color:var(--g6);line-height:1.4}
 .tc-f strong{color:var(--g7);font-weight:600}
 .tc-f.closed-date{color:var(--grn7);font-weight:600}
+.tc-f.ward-tag{color:var(--blue-600);font-weight:600}
 .tc-desc{padding:10px 20px 14px;font-size:13px;color:var(--g5);line-height:1.5;font-style:italic;border-top:1px solid var(--g1)}
 .tc-meta{font-size:11px;color:var(--g4);padding:0 20px 12px;font-style:italic}
 .tc-acts{padding:12px 20px;border-top:1px solid var(--g2);display:flex;gap:8px;flex-wrap:wrap;background:var(--g0)}
@@ -142,7 +146,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .tc-close:hover{background:var(--grn7)}
 .tc-del{padding:9px 16px;background:var(--w);color:var(--g4);border:1.5px solid var(--g2);border-radius:8px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;margin-left:auto}
 .tc-del:hover{color:var(--red-600);border-color:#ef4444;background:var(--red-100)}
-.rab{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px}
+.rab{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px;gap:8px;flex-wrap:wrap}
 .rabtn{padding:8px 16px;background:var(--blue-50);color:var(--blue-600);border:1.5px solid var(--blue-400);border-radius:8px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .rabtn:hover{background:var(--blue-100)}.rabtn:disabled{opacity:.5;cursor:not-allowed}
 .lr{display:flex;gap:8px}.lr input{flex:1}
@@ -151,14 +155,66 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .lhint{font-size:12px;color:var(--g4);margin-top:8px;line-height:1.5}
 .te-empty{text-align:center;padding:40px 20px;color:var(--g4);font-size:15px;line-height:1.6}
 .te-empty .ei{font-size:36px;margin-bottom:12px}
-@media(max-width:400px){.to{flex-direction:column}.card{padding:22px 18px}.hdr{padding:16px 18px 0}}
+/* Stats tab */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:var(--w);border:1px solid var(--g2);border-radius:10px;padding:16px;box-shadow:var(--sh)}
+.kpi-v{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--g9);line-height:1.1}
+.kpi-l{font-size:11px;color:var(--g5);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;font-weight:600}
+.kpi-s{font-size:11px;color:var(--g4);margin-top:6px}
+.kpi-v.grn{color:var(--grn7)}
+.kpi-v.amb{color:var(--amb7)}
+.kpi-v.red{color:var(--red-600)}
+.acc-strip{background:var(--w);border:1px solid var(--g2);border-radius:10px;padding:18px;margin-bottom:16px;box-shadow:var(--sh)}
+.acc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--g1);font-size:14px}
+.acc-row:last-child{border-bottom:0}
+.acc-lbl{color:var(--g7);font-weight:600}
+.acc-val{font-family:'JetBrains Mono',monospace;font-weight:600}
+.acc-val.ok{color:var(--grn7)}.acc-val.late{color:var(--red-600)}
+.cs-panel{background:linear-gradient(135deg,var(--blue-50),var(--w));border:1px solid var(--blue-400);border-radius:10px;padding:18px;margin-bottom:16px}
+.cs-head{font-size:12px;color:var(--blue-600);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.cs-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:10px}
+.cs-s{font-size:13px}
+.cs-s strong{display:block;font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--blue-600);font-weight:700;margin-bottom:2px}
+.cs-src{font-size:10px;color:var(--g4);font-style:italic;margin-top:8px}
+.ward-bar{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
+.ward-name{flex-shrink:0;width:130px;color:var(--g7);font-weight:500}
+.ward-track{flex:1;height:18px;background:var(--g1);border-radius:9px;overflow:hidden;position:relative}
+.ward-fill{height:100%;background:var(--blue-500);border-radius:9px;transition:width .4s}
+.ward-count{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--g7);min-width:24px;text-align:right}
+.chart-wrap{background:var(--w);border:1px solid var(--g2);border-radius:10px;padding:18px;margin-bottom:16px;box-shadow:var(--sh)}
+.chart-title{font-size:13px;font-weight:600;color:var(--g7);margin-bottom:12px;text-transform:uppercase;letter-spacing:.4px}
+.chart-sub{font-size:11px;color:var(--g4);margin-bottom:10px;font-style:italic}
+.chart-mount{min-height:160px}
+.hist-bars{display:flex;flex-direction:column;gap:8px}
+.hist-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.hist-lbl{flex-shrink:0;width:90px;color:var(--g6);font-weight:500}
+.hist-trk{flex:1;height:22px;background:var(--g1);border-radius:4px;overflow:hidden}
+.hist-fill{height:100%;transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:var(--w);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700}
+.hist-fill.ok{background:var(--grn6)}
+.hist-fill.due{background:var(--amb6)}
+.hist-fill.late{background:var(--red-500)}
+.hist-fill.open{background:var(--g4)}
+.stats-empty{text-align:center;padding:50px 20px;color:var(--g4);font-size:15px;line-height:1.6}
+.stats-empty .ei{font-size:40px;margin-bottom:14px}
+.loading-charts{text-align:center;padding:20px;font-size:13px;color:var(--g5)}
+.citystat-iframe-wrap{background:var(--w);border:1px solid var(--g2);border-radius:10px;overflow:hidden;box-shadow:var(--sh);margin-bottom:16px}
+.citystat-iframe-wrap iframe{width:100%;border:0;display:block;height:560px}
+.citystat-link{display:block;text-align:center;padding:14px;background:var(--blue-50);color:var(--blue-600);font-size:13px;font-weight:600;text-decoration:none;border-top:1px solid var(--g2)}
+.citystat-link:hover{background:var(--blue-100)}
+@media(max-width:400px){.to{flex-direction:column}.card{padding:22px 18px}.hdr{padding:16px 18px 0}.kpi-grid{grid-template-columns:1fr 1fr}.cs-stats{grid-template-columns:1fr 1fr}.ward-name{width:100px}}
 .fn{text-align:center;font-size:12px;color:var(--g4);padding:20px;line-height:1.5}
 </style>
 </head>
 <body>
+<div id="app-body">
 <div class="hdr">
   <div class="hdr-top"><div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="hdr-sub">City of St. Louis CSB — Open311 API</div></div><button class="sbtn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button></div>
-  <div class="tabs" id="tabBar" style="display:none"><button class="tab active" data-tab="report" onclick="switchTab('report')">Report</button><button class="tab" data-tab="tracker" onclick="switchTab('tracker')">My Tickets <span class="tbdg" id="ticketCount" style="display:none">0</span></button></div>
+  <div class="tabs" id="tabBar" style="display:none">
+    <button class="tab active" data-tab="report" onclick="switchTab('report')">Report</button>
+    <button class="tab" data-tab="tracker" onclick="switchTab('tracker')">My Tickets <span class="tbdg" id="ticketCount" style="display:none">0</span></button>
+    <button class="tab" data-tab="stats" onclick="switchTab('stats')">My Stats</button>
+    <button class="tab" data-tab="city" onclick="switchTab('city')">The City</button>
+  </div>
 </div>
 <div id="toast" class="toast"></div>
 
@@ -185,9 +241,9 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
     </div>
     <div class="fg"><label>Street Type</label>
       <div class="to">
-        <div class="tp sel" data-code="323" onclick="selType(this)"><div class="te">🛣️</div><div class="tl">Arterial / Major</div><div class="tc">323</div></div>
-        <div class="tp" data-code="372" onclick="selType(this)"><div class="te">🏘️</div><div class="tl">Residential</div><div class="tc">372</div></div>
-        <div class="tp" data-code="322" onclick="selType(this)"><div class="te">🚗</div><div class="tl">Alley</div><div class="tc">322</div></div>
+        <div class="tp sel" data-code="323" onclick="selType(this)"><div class="te">🛣️</div><div class="tl">Arterial / Major</div><div class="tc">323 · 2d</div></div>
+        <div class="tp" data-code="372" onclick="selType(this)"><div class="te">🏘️</div><div class="tl">Residential</div><div class="tc">372 · 7d</div></div>
+        <div class="tp" data-code="322" onclick="selType(this)"><div class="te">🚗</div><div class="tl">Alley</div><div class="tc">322 · 16d</div></div>
       </div>
     </div>
     <div class="fg"><label>Address</label><input type="text" id="address" placeholder="e.g. 1200 Market St or Grand Blvd and Gravois Ave" autocomplete="street-address"><div class="as" id="addrSt"></div></div>
@@ -214,6 +270,31 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
   <div class="fn">Status fetched from the city's public status page. Only the public ticket number leaves your device.</div>
 </div>
 
+<div class="ct scr" id="statsScreen">
+  <div class="card-t" style="padding:0 4px;margin-bottom:14px">Your Pothole Stats</div>
+  <div id="statsBody"></div>
+</div>
+
+<div class="ct scr" id="cityScreen">
+  <div class="card-t" style="padding:0 4px;margin-bottom:14px">How's the City Doing?</div>
+  <div class="cs-panel">
+    <div class="cs-head">CityStat · Pothole Performance</div>
+    <div class="cs-stats">
+      <div class="cs-s"><strong>46%</strong>completed on time (Apr '25 – Mar '26)</div>
+      <div class="cs-s"><strong>2,227</strong>tickets completed in that window</div>
+      <div class="cs-s"><strong>1,805</strong>potholes filled in Mayor's first 100 days</div>
+      <div class="cs-s"><strong>~70%</strong>backlog reduction</div>
+    </div>
+    <div style="font-size:13px;color:var(--g7);margin-top:6px;line-height:1.5">The city publishes SLA targets: <strong>2 business days</strong> for arterial streets, <strong>7</strong> for residential, <strong>16</strong> for alleys. Your ticket cards compare against these automatically.</div>
+    <div class="cs-src">Source: stlouis-mo.gov/citystat · updated quarterly · last refreshed Apr 2026</div>
+  </div>
+  <div class="citystat-iframe-wrap">
+    <iframe id="csFrame" src="about:blank" loading="lazy" title="CityStat Streets Dashboard"></iframe>
+    <a class="citystat-link" href="https://www.stlouis-mo.gov/government/departments/mayor/initiatives/citystat/street/streets.cfm" target="_blank" rel="noopener">Open full CityStat Streets page →</a>
+  </div>
+  <div class="fn">CityStat data is published by the Mayor's Office and updated quarterly.<br>Your own stats are always current — check the <strong>My Stats</strong> tab.</div>
+</div>
+
 <div class="ct scr" id="settingsScreen"><div class="card">
   <div class="card-t">Settings</div>
   <div class="fg"><label>CSB API Key</label><input type="text" id="editApiKey" autocomplete="off" spellcheck="false"></div>
@@ -230,33 +311,121 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 <script>
 const API='https://www.stlouis-mo.gov/powernap/stlouis/api.cfm';
 const CSB='https://www.stlouis-mo.gov/government/departments/public-safety/neighborhood-stabilization-office/citizens-service-bureau/check-service-request.cfm';
+const CITYSTAT_URL='https://www.stlouis-mo.gov/government/departments/mayor/initiatives/citystat/street/streets.cfm';
+// Business-day SLA targets per street type (days)
+const SLA={'323':2,'372':7,'322':16};
+const SLA_LABEL={'323':'Arterial: 2 biz days','372':'Residential: 7 biz days','322':'Alley: 16 biz days'};
+// Esri AGOL endpoints (CORS-safe, anonymous)
+const AGOL_WARDS='https://services1.arcgis.com/Hp9wjRMr2uDQQUyG/arcgis/rest/services/Wards2022/FeatureServer/0/query?where=1%3D1&outFields=WARD&outSR=4326&f=geojson';
+const AGOL_NEIGHBORHOODS='https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/neighborhoods_rev/FeatureServer/0/query?where=1%3D1&outFields=NHD_NAME,NHD_NUM&outSR=4326&f=geojson';
+const FRAPPE_CDN='https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.iife.js';
+
 let selCode='323',aRec=null,aTimer=null,pendSub=null,selPhoto=null,curSub='active';
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition,spOK=!!SR;
+let wardGeoJSON=null,neighborhoodGeoJSON=null,boundaryLoadAttempted=false;
+let frappeLoaded=false,frappeLoading=null;
+const SRec=window.SpeechRecognition||window.webkitSpeechRecognition,spOK=!!SRec;
 const TN={'323':'Pothole — Major/Arterial','372':'Pothole — Residential','322':'Pothole — Alley'};
 const BATCH=5;
 
+// ═══ General helpers ═══
 function fetchT(u,ms){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);return fetch(u,{signal:c.signal}).finally(()=>clearTimeout(t));}
 function toast(msg,dur){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),dur||3000);}
+function trunc(s,n){return s.length>n?s.substring(0,n)+'...':s;}
+function fmtD(iso){try{return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch{return iso}}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+// ═══ Date utilities for SLA ═══
+// Parse city date format "mm/dd/yyyy" (and some variants)
+function parseCityDate(s){
+  if(!s)return null;
+  const m=s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(!m)return null;
+  const d=new Date(parseInt(m[3]),parseInt(m[1])-1,parseInt(m[2]));
+  return isNaN(d)?null:d;
+}
+function businessDaysBetween(start,end){
+  if(!start||!end)return 0;
+  const s=new Date(start),e=new Date(end);
+  if(isNaN(s)||isNaN(e))return 0;
+  let days=0;
+  const cur=new Date(s);cur.setHours(0,0,0,0);e.setHours(0,0,0,0);
+  while(cur<e){cur.setDate(cur.getDate()+1);const d=cur.getDay();if(d!==0&&d!==6)days++;}
+  return days;
+}
+function addBusinessDays(d,n){
+  const r=new Date(d);let added=0;
+  while(added<n){r.setDate(r.getDate()+1);const day=r.getDay();if(day!==0&&day!==6)added++;}
+  return r;
+}
+
+// ═══ SLA evaluation for a ticket ═══
+// Returns null (no data), 'met'/'missed'/'on-track'/'due'/'late'
+function evalSLA(t){
+  if(!t||!t.code||!SLA[t.code])return null;
+  const sub=parseCityDate(t.dateSubmitted);
+  if(!sub)return null;
+  const target=SLA[t.code];
+  const closedDate=parseCityDate(t.investigation);
+  const isCityClosed=t.status&&/close/i.test(t.status);
+  
+  if(closedDate&&isCityClosed){
+    // Completed - compare against target
+    const bd=businessDaysBetween(sub,closedDate);
+    return {
+      state:bd<=target?'met':'missed',
+      daysUsed:bd,
+      target,
+      label:bd<=target?`Met SLA (${bd}/${target}d)`:`Missed SLA (${bd}/${target}d)`,
+    };
+  }
+  // Still open - show progress
+  const now=new Date();
+  const bdSoFar=businessDaysBetween(sub,now);
+  if(bdSoFar>target){
+    return {state:'late',daysUsed:bdSoFar,target,label:`Late: day ${bdSoFar}/${target}`};
+  }else if(bdSoFar>target-2&&target>2){
+    return {state:'due',daysUsed:bdSoFar,target,label:`Day ${bdSoFar}/${target}`};
+  }else if(target<=2&&bdSoFar>=target){
+    return {state:'late',daysUsed:bdSoFar,target,label:`Late: day ${bdSoFar}/${target}`};
+  }
+  return {state:'on-track',daysUsed:bdSoFar,target,label:`Day ${bdSoFar}/${target}`};
+}
+function slaBadge(t){
+  const s=evalSLA(t);if(!s)return'';
+  const cls=s.state==='met'?'sla-met':s.state==='missed'?'sla-late':s.state==='late'?'sla-late':s.state==='due'?'sla-due':'sla-ok';
+  return `<span class="sla-bdg ${cls}" title="${SLA_LABEL[t.code]||''}">${s.label}</span>`;
+}
 
 // ═══ Tab persistence ═══
 function saveTab(t){localStorage.setItem('stl_pothole_tab',t);}
 function loadTab(){return localStorage.getItem('stl_pothole_tab')||'report';}
 
-// ═══ Address ═══
+// ═══ Address validation ═══
 function isInt(a){return/\b(and|&|at)\b/i.test(a)||/\//.test(a)||!/\d/.test(a);}
 function setupAV(){document.getElementById('address').addEventListener('input',function(){clearTimeout(aTimer);const v=this.value.trim();if(v.length<4){hideAS();return;}if(isInt(v)){const hs=/\b(st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way)\b/i.test(v);showAS('valid','<strong>↔ Intersection</strong>'+(hs?'':' — <span class="asd">Include street types (e.g. <strong>Grand Blvd and Gravois Ave</strong>) to avoid ambiguity.</span>'));return;}showAS('checking','Checking...');aTimer=setTimeout(()=>valA(v),600);});}
-async function valA(a){const s=loadS();if(!s.addrKey){hideAS();return;}try{const r=await fetchT(API+'/addressValidation/properties.json?ADDRESSSEARCH='+encodeURIComponent(a)+'&api_key='+encodeURIComponent(s.addrKey),8000);if(!r.ok){hideAS();return;}const d=await r.json();if(!Array.isArray(d)||!d.length){showAS('invalid','Address not found. Check spelling or use a nearby number.');return;}const m=d[0],ca=m.OWNERADDRESS||'',ho=m.NEIGHBORHOODNAME||'',wa=m.WARD||'',zi=m.ZIPCODE||'';let h='<strong>✓ Valid</strong>';if(ho)h+=' · '+ho;if(wa)h+=' · Ward '+wa;if(zi)h+=' · '+zi;const ty=document.getElementById('address').value.trim().toUpperCase();if(ty!==ca.toUpperCase()&&ca)h+='<br><span class="asd">City format: <span class="asug" onclick="document.getElementById(\'address\').value=\''+ca.replace(/'/g,"\\'")+'\';hideAS();">'+ca+'</span> (tap to use)</span>';showAS('valid',h);}catch{hideAS();}}
+async function valA(a){const s=loadS();if(!s.addrKey){hideAS();return;}try{const r=await fetchT(API+'/addressValidation/properties.json?ADDRESSSEARCH='+encodeURIComponent(a)+'&api_key='+encodeURIComponent(s.addrKey),8000);if(!r.ok){hideAS();return;}const d=await r.json();if(!Array.isArray(d)||!d.length){showAS('invalid','Address not found. Check spelling or use a nearby number.');return;}const m=d[0],ca=m.OWNERADDRESS||'',ho=m.NEIGHBORHOODNAME||'',wa=m.WARD||'',zi=m.ZIPCODE||'';let h='<strong>✓ Valid</strong>';if(ho)h+=' · '+esc(ho);if(wa)h+=' · Ward '+esc(String(wa));if(zi)h+=' · '+esc(String(zi));const ty=document.getElementById('address').value.trim().toUpperCase();if(ty!==ca.toUpperCase()&&ca)h+='<br><span class="asd">City format: <span class="asug" onclick="document.getElementById(\'address\').value=\''+ca.replace(/'/g,"\\'")+'\';hideAS();">'+esc(ca)+'</span> (tap to use)</span>';showAS('valid',h);}catch{hideAS();}}
 function showAS(c,h){const e=document.getElementById('addrSt');e.className='as show '+c;e.innerHTML=h;}
 function hideAS(){const e=document.getElementById('addrSt');e.className='as';e.innerHTML='';}
-
-// ═══ City scrape ═══
+// ═══ City page scraping ═══
 async function fetchCP(rid){const u=CSB+'?requestID='+encodeURIComponent(rid);const px=['https://corsproxy.io/?'+encodeURIComponent(u),'https://api.allorigins.win/raw?url='+encodeURIComponent(u),'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u)];let le='';for(const p of px){try{const r=await fetchT(p,12000);if(!r.ok){le='HTTP '+r.status;continue;}const h=await r.text();if(!h||h.length<200){le='Empty';continue;}const d=parsePage(h,rid);if(d)return d;le='Parse fail';}catch(e){le=e.name==='AbortError'?'Timeout':e.message;}}throw new Error(le);}
 function parsePage(html,rid){const doc=new DOMParser().parseFromString(html,'text/html');const t=doc.body?doc.body.textContent:'';if(!t.includes('Service Request')&&!t.includes(rid))return null;function ex(l){for(const re of[new RegExp(l+'\\s*\\n\\s*([^\\n]+)','i'),new RegExp(l+'\\s+([^\\n]+)','i')]){const m=t.match(re);if(m&&m[1]){const v=m[1].trim();if(v&&v.length<200)return v;}}return'';}return{status:ex('Status:'),investigation:ex('Dept Investigation Completed On:'),address:ex('Location:'),dateSubmitted:ex('Request Initiated:'),problemType:ex('Problem Type:'),dept:ex('Dept To Receive SR:'),dueDate:ex('Dept Response Due By:')};}
 
 // ═══ Screens ═══
-function switchTab(t){saveTab(t);document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));document.getElementById('setupScreen').classList.remove('on');document.getElementById('reportScreen').classList.toggle('on',t==='report');document.getElementById('trackerScreen').classList.toggle('on',t==='tracker');document.getElementById('settingsScreen').classList.remove('on');if(t==='tracker')render();}
+function switchTab(t){
+  saveTab(t);
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
+  document.getElementById('setupScreen').classList.remove('on');
+  document.getElementById('reportScreen').classList.toggle('on',t==='report');
+  document.getElementById('trackerScreen').classList.toggle('on',t==='tracker');
+  document.getElementById('statsScreen').classList.toggle('on',t==='stats');
+  document.getElementById('cityScreen').classList.toggle('on',t==='city');
+  document.getElementById('settingsScreen').classList.remove('on');
+  if(t==='tracker')render();
+  if(t==='stats')renderStats();
+  if(t==='city')loadCityStatFrame();
+}
 function showScr(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
-function showSettings(){const s=loadS();document.getElementById('editApiKey').value=s.apiKey||'';document.getElementById('editAddrKey').value=s.addrKey||'';document.getElementById('editFirst').value=s.firstName||'';document.getElementById('editLast').value=s.lastName||'';document.getElementById('editEmail').value=s.email||'';document.getElementById('editPhone').value=s.phone||'';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('reportScreen').classList.remove('on');document.getElementById('trackerScreen').classList.remove('on');showScr('settingsScreen');}
+function showSettings(){const s=loadS();document.getElementById('editApiKey').value=s.apiKey||'';document.getElementById('editAddrKey').value=s.addrKey||'';document.getElementById('editFirst').value=s.firstName||'';document.getElementById('editLast').value=s.lastName||'';document.getElementById('editEmail').value=s.email||'';document.getElementById('editPhone').value=s.phone||'';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('reportScreen').classList.remove('on');document.getElementById('trackerScreen').classList.remove('on');document.getElementById('statsScreen').classList.remove('on');document.getElementById('cityScreen').classList.remove('on');showScr('settingsScreen');}
 function showMain(){document.getElementById('tabBar').style.display='flex';switchTab(loadTab());}
 function switchSub(s){curSub=s;document.querySelectorAll('.stab').forEach(x=>x.classList.toggle('on',x.dataset.st===s));document.getElementById('activePanel').style.display=s==='active'?'block':'none';document.getElementById('closedPanel').style.display=s==='closed'?'block':'none';render();}
 
@@ -269,7 +438,7 @@ function clearAll(){if(confirm('Erase everything?')){localStorage.removeItem('st
 
 // ═══ Speech ═══
 function initSp(){if(!spOK){document.getElementById('narrateBtn').classList.add('off');document.getElementById('narHint').textContent='Voice not supported. Use Chrome, Safari, or Edge.';}}
-function toggleNarrate(){if(!spOK)return;const btn=document.getElementById('narrateBtn'),hint=document.getElementById('narHint'),fb=document.getElementById('vfb'),tr=document.getElementById('vft');if(aRec){aRec.stop();return;}const r=new SR();r.continuous=true;r.interimResults=true;r.lang='en-US';btn.classList.add('rec');hint.textContent='Listening...';hint.classList.add('rh');fb.classList.add('show');tr.textContent='...';aRec=r;let full='';r.onresult=e=>{let i='',f='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}if(f)full+=f;tr.textContent=(full+' '+i).trim()||'...';};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('rec');hint.classList.remove('rh');aRec=null;if(full.trim()){tr.textContent=full.trim();hint.innerHTML='Fields auto-filled — <strong>review before submitting</strong>.';parseNar(full.trim());}else{hint.textContent='No speech detected.';fb.classList.remove('show');}};r.start();}
+function toggleNarrate(){if(!spOK)return;const btn=document.getElementById('narrateBtn'),hint=document.getElementById('narHint'),fb=document.getElementById('vfb'),tr=document.getElementById('vft');if(aRec){aRec.stop();return;}const r=new SRec();r.continuous=true;r.interimResults=true;r.lang='en-US';btn.classList.add('rec');hint.textContent='Listening...';hint.classList.add('rh');fb.classList.add('show');tr.textContent='...';aRec=r;let full='';r.onresult=e=>{let i='',f='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}if(f)full+=f;tr.textContent=(full+' '+i).trim()||'...';};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('rec');hint.classList.remove('rh');aRec=null;if(full.trim()){tr.textContent=full.trim();hint.innerHTML='Fields auto-filled — <strong>review before submitting</strong>.';parseNar(full.trim());}else{hint.textContent='No speech detected.';fb.classList.remove('show');}};r.start();}
 const _SFX='st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way|hwy';
 const _NOT=/^(big|large|small|deep|wide|huge|massive|really|very|pretty|super|bad|terrible|awful|old|new|long|short|rough|smooth|dark|wet|dry|is|has|was|got|the|a|an|it|in|on|at|to|of|up)$/i;
 function parseNar(t){const l=t.toLowerCase();if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');const addr=exAddr(t);let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>470)d=d.substring(0,467)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updCC();af.dispatchEvent(new Event('input'));}
@@ -286,7 +455,7 @@ function hideTS(){document.getElementById('trkSt').className='st';}
 function handlePhoto(inp){if(!inp.files||!inp.files[0])return;selPhoto=inp.files[0];const r=new FileReader();r.onload=e=>{document.getElementById('photoThumb').src=e.target.result;document.getElementById('photoPrev').style.display='block';document.getElementById('photoNote').textContent='Photo attached ('+Math.round(selPhoto.size/1024)+' KB).';};r.readAsDataURL(selPhoto);}
 function rmPhoto(){selPhoto=null;document.getElementById('photoInput').value='';document.getElementById('photoPrev').style.display='none';document.getElementById('photoNote').textContent='Photo may not be accepted by the city\'s API — your text report goes through regardless.';}
 
-// ═══ Tickets ═══
+// ═══ Tickets storage ═══
 function loadT(){try{return JSON.parse(localStorage.getItem('stl_pothole_tickets')||'[]')}catch{return[]}}
 function saveT(t){localStorage.setItem('stl_pothole_tickets',JSON.stringify(t));updBadges();}
 function addTk(t){const ts=loadT();if(!ts.find(x=>x.id===t.id)){ts.unshift(t);saveT(ts);}}
@@ -300,7 +469,7 @@ function reactivateTk(id){const ts=loadT(),i=ts.findIndex(t=>t.id===id);if(i>=0)
 function editSR(old){const nw=prompt('Enter the correct SR number:',old==='pending'?'':old);if(!nw||!nw.trim())return;const ts=loadT(),i=ts.findIndex(t=>t.id===old);if(i>=0){ts[i].id=nw.trim();ts[i].needsSR=false;saveT(ts);render();}}
 function isClosed(t){return t.status&&/close|cancel/i.test(t.status);}
 function cityCloseDate(t){if(t.investigation&&t.investigation!=='Investigation Still Open'&&/\d/.test(t.investigation))return t.investigation;return'';}
-function updBadges(){const ts=loadT(),act=ts.filter(t=>!t.accepted),clo=ts.filter(t=>t.accepted);const b=document.getElementById('ticketCount'),ab=document.getElementById('aBdg'),cb=document.getElementById('cBdg');if(act.length){b.textContent=act.length;b.style.display='inline-block';}else b.style.display='none';ab.textContent='('+act.length+')';cb.textContent='('+clo.length+')';}
+function updBadges(){const ts=loadT(),act=ts.filter(t=>!t.accepted),clo=ts.filter(t=>t.accepted);const b=document.getElementById('ticketCount'),ab=document.getElementById('aBdg'),cb=document.getElementById('cBdg');if(act.length){b.textContent=act.length;b.style.display='inline-block';}else b.style.display='none';if(ab)ab.textContent='('+act.length+')';if(cb)cb.textContent='('+clo.length+')';}
 
 // ═══ Refresh ═══
 async function refreshTk(id){
@@ -313,15 +482,12 @@ async function refreshTk(id){
 }
 async function refreshAll(){const ts=loadT().filter(t=>!t.accepted&&t.id!=='pending');if(!ts.length)return;const btn=document.getElementById('raBtn'),lbl=document.getElementById('raLbl');btn.disabled=true;let ok=0,fail=0,done=0;const tot=ts.length;lbl.innerHTML='<span class="spd"></span> 0/'+tot;for(let i=0;i<tot;i+=BATCH){const b=ts.slice(i,i+BATCH);const res=await Promise.allSettled(b.map(t=>refreshTk(t.id)));res.forEach(r=>{if(r.status==='fulfilled'&&r.value)ok++;else fail++;done++;});lbl.innerHTML='<span class="spd"></span> '+done+'/'+tot;}btn.disabled=false;lbl.textContent='Refresh All';hideTS();if(fail===tot)showTS('wrn','<strong>Could not reach the city.</strong>');else if(fail)showTS('inf','Updated '+ok+'/'+tot+'. '+fail+' failed.');else{showTS('ok','All '+ok+' ticket(s) updated.');setTimeout(hideTS,4000);}}
 async function lookupTicket(){const id=document.getElementById('lookupId').value.trim();if(!id)return;const btn=document.getElementById('lookupBtn');btn.disabled=true;btn.textContent='Loading...';hideTS();addTk({id,address:'',code:'',dateSubmitted:'',description:'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false,accepted:false});render();try{const d=await fetchCP(id);const ts=loadT(),i=ts.findIndex(t=>t.id===id);if(i>=0){Object.assign(ts[i],d,{lastChecked:new Date().toISOString()});saveT(ts);}render();showTS('ok','<strong>#'+id+'</strong> — '+(d.status||'Loaded'));document.getElementById('lookupId').value='';setTimeout(hideTS,4000);}catch{showTS('wrn','<strong>Could not auto-fetch #'+id+'.</strong> Added — <a href="'+CSB+'?requestID='+id+'" target="_blank" style="color:inherit;font-weight:700">check city site</a>.');document.getElementById('lookupId').value='';}finally{btn.disabled=false;btn.textContent='Look Up';}}
-
-// ═══ Render ═══
+// ═══ Render tickets ═══
 function bdgCls(s){if(!s)return'b-new';const l=s.toLowerCase();if(l.includes('close'))return'b-closed';if(l.includes('cancel'))return'b-cancel';if(l.includes('dispatch'))return'b-disp';if(l.includes('progress'))return'b-prog';if(l==='pending')return'b-unk';return'b-new';}
 
 function render(){
   const ts=loadT(),act=ts.filter(t=>!t.accepted),clo=ts.filter(t=>t.accepted);
-  // Sort active: city-closed first
   act.sort((a,b)=>{const ac=isClosed(a)?0:1,bc=isClosed(b)?0:1;return ac-bc;});
-  // Sort closed: most recently accepted first
   clo.sort((a,b)=>(b.acceptedDate||'').localeCompare(a.acceptedDate||''));
   updBadges();
   const aEl=document.getElementById('aList');
@@ -336,47 +502,46 @@ function mkCard(t,isClo){
   const bc=isPend?'b-unk':isClo?'b-closed':bdgCls(t.status);
   const bdgLabel=isClo?'Closed':stat;
   const ptype=t.problemType||TN[t.code]||'Pothole';
-  const sr=isPend?'Pending':'SR #'+t.id;
-  const edit='<span class="esr" onclick="editSR(\''+t.id+'\')">'+(isPend?'Enter SR#':'Edit')+'</span>';
+  const sr=isPend?'Pending':'SR #'+esc(t.id);
+  const edit='<span class="esr" onclick="editSR(\''+esc(t.id)+'\')">'+(isPend?'Enter SR#':'Edit')+'</span>';
   const closedCls=(!isClo&&isClosed(t))?' newly-closed':'';
-  
-  // Dynamic fields — only show what we have
+  const sla=slaBadge(t);
+
   let fields=[];
-  if(t.status)fields.push('<span class="tc-f"><strong>Status:</strong> '+t.status+'</span>');
-  if(t.dept)fields.push('<span class="tc-f"><strong>Dept:</strong> '+t.dept+'</span>');
-  if(t.dueDate)fields.push('<span class="tc-f"><strong>Due:</strong> '+t.dueDate+'</span>');
+  if(t.status)fields.push('<span class="tc-f"><strong>Status:</strong> '+esc(t.status)+'</span>');
+  if(t.dept)fields.push('<span class="tc-f"><strong>Dept:</strong> '+esc(t.dept)+'</span>');
+  if(t.dueDate)fields.push('<span class="tc-f"><strong>Due:</strong> '+esc(t.dueDate)+'</span>');
   const cd=cityCloseDate(t);
-  if(cd)fields.push('<span class="tc-f closed-date"><strong>City Closed:</strong> '+cd+'</span>');
-  if(t.investigation&&t.investigation!=='Investigation Still Open'&&!cd)fields.push('<span class="tc-f"><strong>Investigation:</strong> '+t.investigation+'</span>');
+  if(cd)fields.push('<span class="tc-f closed-date"><strong>City Closed:</strong> '+esc(cd)+'</span>');
+  if(t.investigation&&t.investigation!=='Investigation Still Open'&&!cd)fields.push('<span class="tc-f"><strong>Investigation:</strong> '+esc(t.investigation)+'</span>');
   else if(t.investigation==='Investigation Still Open')fields.push('<span class="tc-f"><strong>Investigation:</strong> Open</span>');
-  if(t.dateSubmitted)fields.push('<span class="tc-f"><strong>Submitted:</strong> '+t.dateSubmitted+'</span>');
-  
+  if(t.dateSubmitted)fields.push('<span class="tc-f"><strong>Submitted:</strong> '+esc(t.dateSubmitted)+'</span>');
+  if(t.code&&SLA_LABEL[t.code])fields.push('<span class="tc-f"><strong>SLA Target:</strong> '+SLA_LABEL[t.code]+'</span>');
+
   let meta=[];
   if(t.lastChecked)meta.push('Refreshed '+fmtD(t.lastChecked));
   if(t.acceptedDate)meta.push('Accepted as closed '+fmtD(t.acceptedDate));
-  
+
   let acts='';
   if(!isClo){
-    if(!isPend)acts+='<button class="tc-ref" onclick="refreshTk(\''+t.id+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>';
-    if(!isPend)acts+='<a class="tc-a" href="'+CSB+'?requestID='+t.id+'" target="_blank" rel="noopener">City Site</a>';
-    acts+='<button class="tc-close" onclick="closeTk(\''+t.id+'\')">Accept as Closed</button>';
-    acts+='<button class="tc-del" onclick="delTk(\''+t.id+'\')">Delete</button>';
+    if(!isPend)acts+='<button class="tc-ref" onclick="refreshTk(\''+esc(t.id)+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>';
+    if(!isPend)acts+='<a class="tc-a" href="'+CSB+'?requestID='+esc(t.id)+'" target="_blank" rel="noopener">City Site</a>';
+    acts+='<button class="tc-close" onclick="closeTk(\''+esc(t.id)+'\')">Accept as Closed</button>';
+    acts+='<button class="tc-del" onclick="delTk(\''+esc(t.id)+'\')">Delete</button>';
   }else{
-    if(!isPend)acts+='<a class="tc-a" href="'+CSB+'?requestID='+t.id+'" target="_blank" rel="noopener">City Site</a>';
-    acts+='<button class="tc-a" onclick="reactivateTk(\''+t.id+'\')">Reactivate</button>';
-    acts+='<button class="tc-del" onclick="delTk(\''+t.id+'\')">Delete</button>';
+    if(!isPend)acts+='<a class="tc-a" href="'+CSB+'?requestID='+esc(t.id)+'" target="_blank" rel="noopener">City Site</a>';
+    acts+='<button class="tc-a" onclick="reactivateTk(\''+esc(t.id)+'\')">Reactivate</button>';
+    acts+='<button class="tc-del" onclick="delTk(\''+esc(t.id)+'\')">Delete</button>';
   }
-  
-  return '<div class="tc-card'+closedCls+'" data-tid="'+t.id+'">'
-    +'<div class="tc-top"><div class="tc-sr">'+sr+' '+edit+'</div><span class="tc-bdg '+bc+'">'+bdgLabel+'</span></div>'
-    +'<div class="tc-sum"><strong>'+ptype+'</strong> at <strong>'+(t.address||'—')+'</strong></div>'
+
+  return '<div class="tc-card'+closedCls+'" data-tid="'+esc(t.id)+'">'
+    +'<div class="tc-top"><div class="tc-sr">'+sr+' '+edit+'</div><span class="tc-bdg '+bc+'">'+esc(bdgLabel)+'</span></div>'
+    +'<div class="tc-sum"><strong>'+esc(ptype)+'</strong> at <strong>'+(esc(t.address)||'—')+'</strong>'+sla+'</div>'
     +(fields.length?'<div class="tc-fields">'+fields.join('')+'</div>':'')
-    +(t.description?'<div class="tc-desc">"'+trunc(t.description,200)+'"</div>':'')
+    +(t.description?'<div class="tc-desc">"'+esc(trunc(t.description,200))+'"</div>':'')
     +(meta.length?'<div class="tc-meta">'+meta.join(' · ')+'</div>':'')
     +'<div class="tc-acts">'+acts+'</div></div>';
 }
-function trunc(s,n){return s.length>n?s.substring(0,n)+'...':s;}
-function fmtD(iso){try{return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch{return iso}}
 
 // ═══ Extract SR ═══
 function exSR(data){const f=['service_request_id','SERVICE_REQUEST_ID','serviceRequestId','request_id','REQUEST_ID','requestId','REQUESTID','id','ID','token','TOKEN'];const src=Array.isArray(data)?data:[data];for(const o of src){if(!o||typeof o!=='object')continue;for(const k of f){const v=o[k];if(v!==undefined&&v!==null&&v!=='')return{id:String(v),field:k,isToken:k.toLowerCase().includes('token')};}}const s=JSON.stringify(data);const m=s.match(/(\d{6,8})/);if(m)return{id:m[1],field:'regex',isToken:false};return null;}
@@ -399,23 +564,201 @@ async function submitReport(){
     const dbg='HTTP '+resp.status+' | '+raw.substring(0,300);
     if(resp.ok&&data){
       const he=(Array.isArray(data)&&data[0]?.code>=400)||data.error;
-      if(he&&!exSR(data)){showRS('err','<strong>City error:</strong><br>'+((Array.isArray(data)&&data[0]?.description)||data?.error||raw.substring(0,200))+'<div class="dbg">'+dbg+'</div>');return;}
+      if(he&&!exSR(data)){showRS('err','<strong>City error:</strong><br>'+esc((Array.isArray(data)&&data[0]?.description)||data?.error||raw.substring(0,200))+'<div class="dbg">'+esc(dbg)+'</div>');return;}
       const sr=exSR(data);
-      if(sr&&!sr.isToken){showRS('ok','<strong>Submitted!</strong> Tracking: <span class="trid">'+sr.id+'</span><div class="dbg">Field: '+sr.field+'</div>');addTk({id:sr.id,address:addr,code:selCode,dateSubmitted:now,description:desc,status:'New',investigation:'Investigation Still Open',dept:'Street Division',dueDate:'',problemType:TN[selCode],lastChecked:'',needsSR:false,accepted:false});clrForm();}
-      else if(sr&&sr.isToken){showRS('inf','<strong>Accepted!</strong> Token: <span class="trid">'+sr.id+'</span><br>Enter the real SR# when assigned.<div class="dbg">'+dbg+'</div>');addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',dept:'Street Division',problemType:TN[selCode],lastChecked:'',needsSR:true,accepted:false,token:sr.id});clrForm();}
-      else{showRS('wrn','<strong>Accepted</strong> but no SR# in response.<div class="dbg">'+dbg+'</div><div class="sre"><label>Enter SR#:</label><div class="sre-r"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sre-b" onclick="linkSR()">Save</button></div></div>');addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',dept:'Street Division',problemType:TN[selCode],lastChecked:'',needsSR:true,accepted:false});clrForm();}
-    }else if(resp.ok){showRS('wrn','<strong>200 OK, not JSON.</strong> Likely submitted.<div class="dbg">'+dbg+'</div><div class="sre"><label>SR#:</label><div class="sre-r"><input type="text" id="manualSR" inputmode="numeric"><button class="sre-b" onclick="linkSR()">Save</button></div></div>');addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',problemType:'',lastChecked:'',needsSR:true,accepted:false});clrForm();}
-    else showRS('err','<strong>HTTP '+resp.status+'</strong><div class="dbg">'+dbg+'</div>');
+      if(sr&&!sr.isToken){showRS('ok','<strong>Submitted!</strong> Tracking: <span class="trid">'+esc(sr.id)+'</span><div class="dbg">Field: '+sr.field+'</div>');addTk({id:sr.id,address:addr,code:selCode,dateSubmitted:now,description:desc,status:'New',investigation:'Investigation Still Open',dept:'Street Division',dueDate:'',problemType:TN[selCode],lastChecked:'',needsSR:false,accepted:false});clrForm();}
+      else if(sr&&sr.isToken){showRS('inf','<strong>Accepted!</strong> Token: <span class="trid">'+esc(sr.id)+'</span><br>Enter the real SR# when assigned.<div class="dbg">'+esc(dbg)+'</div>');addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',dept:'Street Division',problemType:TN[selCode],lastChecked:'',needsSR:true,accepted:false,token:sr.id});clrForm();}
+      else{showRS('wrn','<strong>Accepted</strong> but no SR# in response.<div class="dbg">'+esc(dbg)+'</div><div class="sre"><label>Enter SR#:</label><div class="sre-r"><input type="text" id="manualSR" placeholder="e.g. 2058467" inputmode="numeric"><button class="sre-b" onclick="linkSR()">Save</button></div></div>');addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',dept:'Street Division',problemType:TN[selCode],lastChecked:'',needsSR:true,accepted:false});clrForm();}
+    }else if(resp.ok){showRS('wrn','<strong>200 OK, not JSON.</strong> Likely submitted.<div class="dbg">'+esc(dbg)+'</div><div class="sre"><label>SR#:</label><div class="sre-r"><input type="text" id="manualSR" inputmode="numeric"><button class="sre-b" onclick="linkSR()">Save</button></div></div>');addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',problemType:'',lastChecked:'',needsSR:true,accepted:false});clrForm();}
+    else showRS('err','<strong>HTTP '+resp.status+'</strong><div class="dbg">'+esc(dbg)+'</div>');
   }catch{
     const curl=mkCurl(s,selCode,addr,desc);
-    showRS('wrn','<strong>May have submitted</strong> but response blocked (CORS).<br>Check city website.<div class="sre"><label>SR#:</label><div class="sre-r"><input type="text" id="manualSR" inputmode="numeric"><button class="sre-b" onclick="linkSR()">Save</button></div></div><br>Or paste into terminal:<br><textarea readonly class="curl-box" onclick="this.select()">'+curl+'</textarea><button class="cpb" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>this.textContent=\'Copied!\').catch(()=>{})">Copy</button>');
+    showRS('wrn','<strong>May have submitted</strong> but response blocked (CORS).<div class="sre"><label>SR#:</label><div class="sre-r"><input type="text" id="manualSR" inputmode="numeric"><button class="sre-b" onclick="linkSR()">Save</button></div></div><br>Or terminal:<br><textarea readonly class="curl-box" onclick="this.select()">'+esc(curl)+'</textarea><button class="cpb" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>this.textContent=\'Copied!\').catch(()=>{})">Copy</button>');
     addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',problemType:TN[selCode],lastChecked:'',needsSR:true,accepted:false});clrForm();
   }finally{btn.disabled=false;btn.innerHTML='Submit Pothole Report';}
 }
 function clrForm(){document.getElementById('address').value='';document.getElementById('description').value='';updCC();document.getElementById('vfb').classList.remove('show');hideAS();rmPhoto();}
-function linkSR(){const sr=document.getElementById('manualSR').value.trim();if(!sr)return;const ts=loadT(),i=ts.findIndex(t=>t.id==='pending'||t.needsSR);if(i>=0){ts[i].id=sr;ts[i].needsSR=false;saveT(ts);render();showRS('ok','<strong>Linked to SR #'+sr+'.</strong>');}else{addTk({id:sr,address:pendSub?.addr||'',code:pendSub?.code||'',dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:pendSub?.desc||'',status:'',problemType:'',lastChecked:'',needsSR:false,accepted:false});showRS('ok','<strong>SR #'+sr+' saved.</strong>');}}
+function linkSR(){const sr=document.getElementById('manualSR').value.trim();if(!sr)return;const ts=loadT(),i=ts.findIndex(t=>t.id==='pending'||t.needsSR);if(i>=0){ts[i].id=sr;ts[i].needsSR=false;saveT(ts);render();showRS('ok','<strong>Linked to SR #'+esc(sr)+'.</strong>');}else{addTk({id:sr,address:pendSub?.addr||'',code:pendSub?.code||'',dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:pendSub?.desc||'',status:'',problemType:'',lastChecked:'',needsSR:false,accepted:false});showRS('ok','<strong>SR #'+esc(sr)+' saved.</strong>');}}
+// ═══ Stats dashboard ═══
+function computeStats(){
+  const ts=loadT();
+  const all=ts.filter(t=>t.id!=='pending'&&!t.needsSR);
+  const closed=all.filter(t=>t.accepted||isClosed(t));
+  const open=all.filter(t=>!t.accepted&&!isClosed(t));
+  const closeDays=[];
+  let onTime=0,missed=0;
+  const byCode={'323':0,'372':0,'322':0};
+  const byMonth={};
+  const byAddress={};
+  const slaByCode={'323':{on:0,off:0},'372':{on:0,off:0},'322':{on:0,off:0}};
 
-(function(){const s=loadS();if(s.apiKey){document.getElementById('settingsToggle').style.display='block';showMain();}initSp();updBadges();setupAV();})();
+  for(const t of all){
+    if(t.code&&byCode.hasOwnProperty(t.code))byCode[t.code]++;
+    // Monthly histogram
+    const sd=parseCityDate(t.dateSubmitted);
+    if(sd){const key=sd.getFullYear()+'-'+String(sd.getMonth()+1).padStart(2,'0');byMonth[key]=(byMonth[key]||0)+1;}
+    // Address frequency
+    if(t.address){const a=t.address.toUpperCase();byAddress[a]=(byAddress[a]||0)+1;}
+    // SLA for closed
+    const sla=evalSLA(t);
+    if(sla&&(sla.state==='met'||sla.state==='missed')){
+      closeDays.push(sla.daysUsed);
+      if(sla.state==='met'){onTime++;if(slaByCode[t.code])slaByCode[t.code].on++;}
+      else{missed++;if(slaByCode[t.code])slaByCode[t.code].off++;}
+    }
+  }
+  closeDays.sort((a,b)=>a-b);
+  const median=closeDays.length===0?null:closeDays.length%2===0?(closeDays[closeDays.length/2-1]+closeDays[closeDays.length/2])/2:closeDays[Math.floor(closeDays.length/2)];
+  const slaRate=onTime+missed>0?Math.round(onTime/(onTime+missed)*100):null;
+
+  // Resolution histogram buckets
+  const hist=[0,0,0,0,0]; // 0-2, 3-7, 8-16, 17+, still open
+  for(const d of closeDays){if(d<=2)hist[0]++;else if(d<=7)hist[1]++;else if(d<=16)hist[2]++;else hist[3]++;}
+  hist[4]=open.length;
+
+  // Top addresses
+  const topAddr=Object.entries(byAddress).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  // Calendar heatmap data (last 12 months)
+  const heatmap={};
+  for(const t of all){
+    const sd=parseCityDate(t.dateSubmitted);
+    if(sd){const ts2=Math.floor(sd.getTime()/1000);heatmap[ts2]=(heatmap[ts2]||0)+1;}
+  }
+
+  // Monthly trend (last 12 months)
+  const now=new Date();
+  const months=[];
+  for(let i=11;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    months.push({key,label:d.toLocaleDateString('en-US',{month:'short',year:'2-digit'}),count:byMonth[key]||0});
+  }
+
+  return{total:all.length,openCount:open.length,closedCount:closed.length,median,slaRate,onTime,missed,byCode,hist,topAddr,heatmap,months,slaByCode};
+}
+
+async function loadFrappe(){
+  if(frappeLoaded)return;
+  if(frappeLoading)return frappeLoading;
+  frappeLoading=new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src=FRAPPE_CDN;
+    s.onload=()=>{frappeLoaded=true;res();};
+    s.onerror=()=>rej(new Error('Chart library failed'));
+    document.head.appendChild(s);
+  });
+  return frappeLoading;
+}
+
+async function renderStats(){
+  const body=document.getElementById('statsBody');
+  const st=computeStats();
+  if(st.total===0){body.innerHTML='<div class="stats-empty"><div class="ei">📊</div>No ticket data yet.<br>Submit some pothole reports to see your stats here.</div>';return;}
+
+  // KPI tiles
+  const medianCls=st.median===null?'':st.median<=7?'grn':st.median<=16?'amb':'red';
+  const slaCls=st.slaRate===null?'':st.slaRate>=70?'grn':st.slaRate>=40?'amb':'red';
+  let html='<div class="kpi-grid">';
+  html+='<div class="kpi"><div class="kpi-v">'+st.total+'</div><div class="kpi-l">Total Filed</div></div>';
+  html+='<div class="kpi"><div class="kpi-v">'+st.openCount+'</div><div class="kpi-l">Open</div><div class="kpi-s">'+st.closedCount+' closed</div></div>';
+  html+='<div class="kpi"><div class="kpi-v '+(medianCls)+'">'+(st.median!==null?st.median+'d':'—')+'</div><div class="kpi-l">Median Close</div><div class="kpi-s">business days</div></div>';
+  html+='<div class="kpi"><div class="kpi-v '+(slaCls)+'">'+(st.slaRate!==null?st.slaRate+'%':'—')+'</div><div class="kpi-l">On-Time Rate</div><div class="kpi-s">'+(st.onTime+st.missed>0?st.onTime+' of '+(st.onTime+st.missed)+' closed':'needs closed tickets')+'</div></div>';
+  html+='</div>';
+
+  // Accountability strip (only show if enough data)
+  if(st.onTime+st.missed>=3){
+    html+='<div class="acc-strip"><div class="card-t" style="margin-bottom:12px">City SLA Accountability</div>';
+    for(const code of['323','372','322']){
+      const s=st.slaByCode[code];if(!s||s.on+s.off===0)continue;
+      const rate=Math.round(s.on/(s.on+s.off)*100);
+      const cls=rate>=70?'ok':'late';
+      const label={'323':'Arterial (2d)','372':'Residential (7d)','322':'Alley (16d)'}[code];
+      html+='<div class="acc-row"><span class="acc-lbl">'+label+'</span><span class="acc-val '+cls+'">'+rate+'% on time ('+s.on+'/'+(s.on+s.off)+')</span></div>';
+    }
+    html+='<div style="font-size:11px;color:var(--g4);margin-top:8px;font-style:italic">Compared against the city\'s published SLA targets from CityStat</div>';
+    html+='</div>';
+  }
+
+  // By street type
+  const maxCode=Math.max(st.byCode['323'],st.byCode['372'],st.byCode['322'],1);
+  html+='<div class="chart-wrap"><div class="chart-title">By Street Type</div>';
+  for(const [code,label] of[['323','Arterial/Major'],['372','Residential'],['322','Alley']]){
+    const n=st.byCode[code];const pct=Math.round(n/maxCode*100);
+    html+='<div class="ward-bar"><span class="ward-name">'+label+'</span><div class="ward-track"><div class="ward-fill" style="width:'+pct+'%"></div></div><span class="ward-count">'+n+'</span></div>';
+  }
+  html+='</div>';
+
+  // Resolution time histogram
+  const histLabels=['0–2 days','3–7 days','8–16 days','17+ days','Still open'];
+  const histColors=['ok','ok','due','late','open'];
+  const maxH=Math.max(...st.hist,1);
+  html+='<div class="chart-wrap"><div class="chart-title">Resolution Time Distribution</div><div class="hist-bars">';
+  for(let i=0;i<5;i++){
+    const pct=Math.round(st.hist[i]/maxH*100);
+    html+='<div class="hist-row"><span class="hist-lbl">'+histLabels[i]+'</span><div class="hist-trk"><div class="hist-fill '+histColors[i]+'" style="width:'+Math.max(pct,st.hist[i]?8:0)+'%">'+(st.hist[i]||'')+'</div></div></div>';
+  }
+  html+='</div></div>';
+
+  // Top addresses
+  if(st.topAddr.length>0){
+    const maxA=st.topAddr[0][1];
+    html+='<div class="chart-wrap"><div class="chart-title">Most-Reported Locations</div>';
+    for(const [addr,n] of st.topAddr){
+      const pct=Math.round(n/maxA*100);
+      html+='<div class="ward-bar"><span class="ward-name" style="width:auto;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(addr)+'">'+esc(addr)+'</span><div class="ward-track"><div class="ward-fill" style="width:'+pct+'%"></div></div><span class="ward-count">'+n+'</span></div>';
+    }
+    html+='</div>';
+  }
+
+  // Chart placeholders (filled by Frappe after load)
+  html+='<div class="chart-wrap"><div class="chart-title">Monthly Filing Trend</div><div class="chart-mount" id="trendChart"></div></div>';
+  html+='<div class="chart-wrap"><div class="chart-title">Filing Activity</div><div class="chart-sub">Tickets filed per day over the last 12 months</div><div class="chart-mount" id="heatmapChart"></div></div>';
+
+  body.innerHTML=html;
+
+  // Load Frappe Charts lazily
+  try{
+    await loadFrappe();
+    // Monthly trend bar chart
+    if(st.months.length&&window.frappe){
+      new frappe.Chart('#trendChart',{
+        data:{labels:st.months.map(m=>m.label),datasets:[{values:st.months.map(m=>m.count)}]},
+        type:'bar',height:180,colors:['#3b82f6'],
+        axisOptions:{xIsSeries:true},barOptions:{spaceRatio:0.4},
+      });
+      // Heatmap
+      if(Object.keys(st.heatmap).length){
+        new frappe.Chart('#heatmapChart',{
+          type:'heatmap',height:160,
+          data:{dataPoints:st.heatmap,start:new Date(new Date().getFullYear()-1,new Date().getMonth(),1),end:new Date()},
+          countLabel:'tickets',colors:['#dbeafe','#93c5fd','#3b82f6','#1d4ed8','#1e3a5f'],
+          discreteDomains:1,
+        });
+      }else{
+        document.getElementById('heatmapChart').innerHTML='<div style="color:var(--g4);font-size:13px;padding:20px;text-align:center">Not enough data for heatmap yet.</div>';
+      }
+    }
+  }catch(e){
+    const tc=document.getElementById('trendChart');
+    if(tc)tc.innerHTML='<div style="color:var(--g4);font-size:13px">Charts unavailable — '+esc(e.message)+'</div>';
+  }
+}
+
+// ═══ CityStat iframe ═══
+let csFrameLoaded=false;
+function loadCityStatFrame(){
+  if(csFrameLoaded)return;
+  const f=document.getElementById('csFrame');
+  if(f){f.src=CITYSTAT_URL;csFrameLoaded=true;}
+}
+
+// ═══ Init ═══
+(function(){
+  const s=loadS();
+  if(s.apiKey){document.getElementById('settingsToggle').style.display='block';showMain();}
+  initSp();updBadges();setupAV();
+})();
 </script>
 </body>
 </html>
