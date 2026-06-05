@@ -107,6 +107,33 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .stab.on{background:var(--w);color:var(--g9);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .stab .sb{font-size:11px;font-weight:700;margin-left:4px;opacity:.6}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--g9);color:var(--w);padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:300;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+.sel-fld{width:100%;padding:12px 14px;border:1.5px solid var(--g3);border-radius:8px;font-family:inherit;font-size:15px;color:var(--g9);background:var(--w);outline:0;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='3' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+.sel-fld:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.cave-fields{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:10px;padding:16px}
+.cave-row{display:flex;gap:12px}
+.cave-col{flex:1}
+.cave-col label{margin-bottom:6px}
+@media(max-width:400px){.cave-row{flex-direction:column;gap:14px}}
+.confirm-overlay{position:fixed;inset:0;background:rgba(12,25,41,.55);backdrop-filter:blur(3px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px}
+.confirm-overlay.show{display:flex}
+.confirm-box{background:var(--w);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:480px;width:100%;padding:28px 24px;max-height:90vh;overflow-y:auto;animation:cpop .2s ease-out}
+@keyframes cpop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.confirm-h{font-size:19px;font-weight:700;color:var(--g9);margin-bottom:6px}
+.confirm-sub{font-size:13px;color:var(--g5);line-height:1.5;margin-bottom:20px}
+.confirm-rows{margin-bottom:24px}
+.confirm-row{padding:12px 0;border-bottom:1px solid var(--g1)}
+.confirm-row:last-child{border-bottom:0}
+.confirm-row .crl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--g4);font-weight:600;margin-bottom:3px}
+.confirm-row .crv{font-size:15px;color:var(--g9);line-height:1.5;word-break:break-word}
+.confirm-row .crv.mono{font-family:'JetBrains Mono',monospace;font-size:14px}
+.confirm-row .crv .pin{display:inline-block;background:var(--blue-50);color:var(--blue-600);font-size:12px;font-weight:600;padding:2px 8px;border-radius:6px;margin-left:6px;font-family:'DM Sans',sans-serif}
+.confirm-photo{margin-top:6px;max-width:120px;max-height:90px;border-radius:8px;border:1px solid var(--g2)}
+.confirm-btns{display:flex;gap:10px}
+.btn-cancel{flex:1;padding:14px;background:var(--w);color:var(--g6);border:1.5px solid var(--g3);border-radius:10px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.btn-cancel:hover{background:var(--g0)}
+.btn-confirm{flex:1.4;padding:14px;background:var(--blue-600);color:var(--w);border:0;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.btn-confirm:hover{background:#1d4ed8}
+.btn-confirm:disabled{background:var(--g3);color:var(--g5);cursor:not-allowed}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .tc-card{background:var(--w);border:1px solid var(--g2);border-radius:12px;margin-bottom:16px;box-shadow:var(--sh);overflow:hidden;transition:opacity .4s,max-height .5s,margin .4s,padding .4s}
 .tc-card.refreshing{opacity:.5}
@@ -239,22 +266,55 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
       <div class="nar-hint" id="narHint">Say it all — address (include street types for intersections), street category, and what you see.</div>
       <div class="vfb" id="vfb"><div class="vfl">What I heard</div><div class="vft" id="vft"></div></div>
     </div>
-    <div class="fg"><label>Street Type</label>
+    <div class="fg"><label>Issue Type</label>
       <div class="to">
         <div class="tp sel" data-code="323" onclick="selType(this)"><div class="te">🛣️</div><div class="tl">Arterial / Major</div><div class="tc">323 · 2d</div></div>
         <div class="tp" data-code="372" onclick="selType(this)"><div class="te">🏘️</div><div class="tl">Residential</div><div class="tc">372 · 7d</div></div>
         <div class="tp" data-code="322" onclick="selType(this)"><div class="te">🚗</div><div class="tl">Alley</div><div class="tc">322 · 16d</div></div>
+        <div class="tp" data-code="357" onclick="selType(this)"><div class="te">🕳️</div><div class="tl">Cave-in / Depression</div><div class="tc">357 · 7d</div></div>
+      </div>
+    </div>
+    <div class="fg cave-fields" id="caveFields" style="display:none">
+      <div class="cave-row">
+        <div class="cave-col"><label>Location of issue <span class="lh">(required)</span></label>
+          <select id="caveLocSel" class="sel-fld" onchange="setCaveLoc(this.value)">
+            <option value="477" selected>Street</option>
+            <option value="476">Alley</option>
+            <option value="478">Sidewalk</option>
+            <option value="1675">Tree lawn</option>
+            <option value="3183">Easement</option>
+          </select>
+        </div>
+        <div class="cave-col"><label>Cave-in or depression? <span class="lh">(required)</span></label>
+          <select id="caveKindSel" class="sel-fld" onchange="setCaveKind(this.value)">
+            <option value="3716" selected>Depression</option>
+            <option value="3715">Cave-in</option>
+            <option value="3717">Unknown</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="fg"><label>Address</label><input type="text" id="address" placeholder="e.g. 1200 Market St or Grand Blvd and Gravois Ave" autocomplete="street-address"><div class="as" id="addrSt"></div></div>
-    <div class="fg"><label>Description <span class="lh">(max 470 chars)</span></label><textarea id="description" maxlength="470" placeholder="e.g. Large pothole in the right lane, northbound. About 18 inches wide and 6 inches deep." oninput="updCC()"></textarea><div class="cc" id="charCount">0 / 470</div></div>
+    <div class="fg"><label>Description <span class="lh" id="descHint">(max 470 chars)</span></label><textarea id="description" maxlength="470" placeholder="e.g. Large pothole in the right lane, northbound. About 18 inches wide and 6 inches deep." oninput="updCC()"></textarea><div class="cc" id="charCount">0 / 470</div></div>
     <div class="fg"><label>Photo <span class="lh">(optional)</span></label>
       <div class="pa"><input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(this)">
         <button class="pb" onclick="document.getElementById('photoInput').click()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Take Photo or Choose File</span></button>
         <div class="pp" id="photoPrev" style="display:none"><img id="photoThumb" src="" alt=""><button class="pr" onclick="rmPhoto()">✕</button></div>
-      </div><div class="pn" id="photoNote">Photo may not be accepted by the city's API — your text report goes through regardless.</div>
+      </div><div class="pn" id="photoNote">Photo will be attached to your submission and received by the city.</div>
     </div>
-    <button class="btn-p" id="submitBtn" onclick="submitReport()">Submit Pothole Report</button>
+    <button class="btn-p" id="submitBtn" onclick="openConfirm()">Review &amp; Submit</button>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-h">Review your report</div>
+    <div class="confirm-sub">Double-check before it goes to the city — submissions can't be edited afterward.</div>
+    <div class="confirm-rows" id="confirmRows"></div>
+    <div class="confirm-btns">
+      <button class="btn-cancel" onclick="closeConfirm()">← Go back &amp; edit</button>
+      <button class="btn-confirm" id="confirmBtn" onclick="confirmSubmit()">Confirm &amp; Submit</button>
+    </div>
   </div>
 </div>
 
@@ -313,8 +373,8 @@ const API='https://www.stlouis-mo.gov/powernap/stlouis/api.cfm';
 const CSB='https://www.stlouis-mo.gov/government/departments/public-safety/neighborhood-stabilization-office/citizens-service-bureau/check-service-request.cfm';
 const CITYSTAT_URL='https://www.stlouis-mo.gov/government/departments/mayor/initiatives/citystat/street/streets.cfm';
 // Business-day SLA targets per street type (days)
-const SLA={'323':2,'372':7,'322':16};
-const SLA_LABEL={'323':'Arterial: 2 biz days','372':'Residential: 7 biz days','322':'Alley: 16 biz days'};
+const SLA={'323':2,'372':7,'322':16,'357':7};
+const SLA_LABEL={'323':'Arterial: 2 biz days','372':'Residential: 7 biz days','322':'Alley: 16 biz days','357':'Cave-in/Depression: 7 biz days'};
 // Esri AGOL endpoints (CORS-safe, anonymous)
 const AGOL_WARDS='https://services1.arcgis.com/Hp9wjRMr2uDQQUyG/arcgis/rest/services/Wards2022/FeatureServer/0/query?where=1%3D1&outFields=WARD&outSR=4326&f=geojson';
 const AGOL_NEIGHBORHOODS='https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/neighborhoods_rev/FeatureServer/0/query?where=1%3D1&outFields=NHD_NAME,NHD_NUM&outSR=4326&f=geojson';
@@ -324,7 +384,16 @@ let selCode='323',aRec=null,aTimer=null,pendSub=null,selPhoto=null,curSub='activ
 let wardGeoJSON=null,neighborhoodGeoJSON=null,boundaryLoadAttempted=false;
 let frappeLoaded=false,frappeLoading=null;
 const SRec=window.SpeechRecognition||window.webkitSpeechRecognition,spOK=!!SRec;
-const TN={'323':'Pothole — Major/Arterial','372':'Pothole — Residential','322':'Pothole — Alley'};
+const TN={'323':'Pothole — Major/Arterial','372':'Pothole — Residential','322':'Pothole — Alley','357':'Cave-in or Depression'};
+// Code 357 (cave-in/depression) attribute definitions
+const CAVE_CODE='357';
+const CAVE_LOC={'476':'Alley','477':'Street','478':'Sidewalk','1675':'Tree lawn','3183':'Easement'};
+const CAVE_KIND={'3715':'Cave-in','3716':'Depression','3717':'Unknown'};
+let caveLoc='477',caveKind='3716'; // defaults: Street + Depression
+// Inline onchange handlers run in global scope, so expose setters on window
+function setCaveLoc(v){caveLoc=v;}
+function setCaveKind(v){caveKind=v;}
+window.setCaveLoc=setCaveLoc;window.setCaveKind=setCaveKind;
 const BATCH=5;
 
 // ═══ General helpers ═══
@@ -403,7 +472,48 @@ function loadTab(){return localStorage.getItem('stl_pothole_tab')||'report';}
 // ═══ Address validation ═══
 function isInt(a){return/\b(and|&|at)\b/i.test(a)||/\//.test(a)||!/\d/.test(a);}
 function setupAV(){document.getElementById('address').addEventListener('input',function(){clearTimeout(aTimer);const v=this.value.trim();if(v.length<4){hideAS();return;}if(isInt(v)){const hs=/\b(st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way)\b/i.test(v);showAS('valid','<strong>↔ Intersection</strong>'+(hs?'':' — <span class="asd">Include street types (e.g. <strong>Grand Blvd and Gravois Ave</strong>) to avoid ambiguity.</span>'));return;}showAS('checking','Checking...');aTimer=setTimeout(()=>valA(v),600);});}
-async function valA(a){const s=loadS();if(!s.addrKey){hideAS();return;}try{const r=await fetchT(API+'/addressValidation/properties.json?ADDRESSSEARCH='+encodeURIComponent(a)+'&api_key='+encodeURIComponent(s.addrKey),8000);if(!r.ok){hideAS();return;}const d=await r.json();if(!Array.isArray(d)||!d.length){showAS('invalid','Address not found. Check spelling or use a nearby number.');return;}const m=d[0],ca=m.OWNERADDRESS||'',ho=m.NEIGHBORHOODNAME||'',wa=m.WARD||'',zi=m.ZIPCODE||'';let h='<strong>✓ Valid</strong>';if(ho)h+=' · '+esc(ho);if(wa)h+=' · Ward '+esc(String(wa));if(zi)h+=' · '+esc(String(zi));const ty=document.getElementById('address').value.trim().toUpperCase();if(ty!==ca.toUpperCase()&&ca)h+='<br><span class="asd">City format: <span class="asug" onclick="document.getElementById(\'address\').value=\''+ca.replace(/'/g,"\\'")+'\';hideAS();">'+esc(ca)+'</span> (tap to use)</span>';showAS('valid',h);}catch{hideAS();}}
+// Strip common street suffixes for matching
+const ADDR_SFX_RE=/\s+(STREET|ST|AVENUE|AVE|AV|BOULEVARD|BLVD|BL|ROAD|RD|DRIVE|DR|LANE|LN|COURT|CT|PLACE|PL|PARKWAY|PKWY|CIRCLE|CIR|TERRACE|TER|TR|WAY|HIGHWAY|HWY|PLAZA|PLZ)\.?$/i;
+function parseTyped(a){
+  const m=a.trim().match(/^(\d+)\s+(.+)$/);
+  if(!m)return null;
+  const bare=m[2].replace(ADDR_SFX_RE,'').trim().toUpperCase();
+  return{num:parseInt(m[1],10),name:bare};
+}
+function isReformat(typed,rec){
+  const u=parseTyped(typed);if(!u||!rec)return false;
+  const lo=rec.LOWADDRNUM,hi=rec.HIGHADDRNUM,apiName=(rec.STREETNAME||'').toUpperCase().trim();
+  // Number must fall within the API record's range (single-parcel cases have lo===hi)
+  if(lo==null||hi==null)return false;
+  if(u.num<lo||u.num>hi)return false;
+  // Street name must match (allow prefix match in either direction for typos/partials, ≥3 chars)
+  if(!apiName||!u.name)return false;
+  if(u.name===apiName)return true;
+  if(u.name.length>=3&&apiName.startsWith(u.name))return true;
+  if(apiName.length>=3&&u.name.startsWith(apiName))return true;
+  return false;
+}
+async function valA(a){
+  const s=loadS();if(!s.addrKey){hideAS();return;}
+  try{
+    const r=await fetchT(API+'/addressValidation/properties.json?ADDRESSSEARCH='+encodeURIComponent(a)+'&api_key='+encodeURIComponent(s.addrKey),8000);
+    if(!r.ok){hideAS();return;}
+    const d=await r.json();
+    if(!Array.isArray(d)||!d.length){showAS('invalid','Address not found. Check spelling or try a nearby number.');return;}
+    const m=d[0];
+    // The API will fall back to the nearest known property when no exact match exists —
+    // verify the returned record actually corresponds to what was typed before suggesting it
+    if(!isReformat(a,m)){showAS('invalid','Address not recognized by the city. Check spelling or try a nearby number.');return;}
+    const ca=m.OWNERADDRESS||'',ho=m.NEIGHBORHOODNAME||'',wa=m.WARD||'',zi=m.ZIPCODE||'';
+    let h='<strong>✓ Valid</strong>';
+    if(ho)h+=' · '+esc(ho);
+    if(wa)h+=' · Ward '+esc(String(wa));
+    if(zi)h+=' · '+esc(String(zi));
+    const ty=document.getElementById('address').value.trim().toUpperCase();
+    if(ty!==ca.toUpperCase()&&ca)h+='<br><span class="asd">City format: <span class="asug" onclick="document.getElementById(\'address\').value=\''+ca.replace(/'/g,"\\'")+'\';hideAS();">'+esc(ca)+'</span> (tap to use)</span>';
+    showAS('valid',h);
+  }catch{hideAS();}
+}
 function showAS(c,h){const e=document.getElementById('addrSt');e.className='as show '+c;e.innerHTML=h;}
 function hideAS(){const e=document.getElementById('addrSt');e.className='as';e.innerHTML='';}
 // ═══ City page scraping ═══
@@ -441,11 +551,24 @@ function initSp(){if(!spOK){document.getElementById('narrateBtn').classList.add(
 function toggleNarrate(){if(!spOK)return;const btn=document.getElementById('narrateBtn'),hint=document.getElementById('narHint'),fb=document.getElementById('vfb'),tr=document.getElementById('vft');if(aRec){aRec.stop();return;}const r=new SRec();r.continuous=true;r.interimResults=true;r.lang='en-US';btn.classList.add('rec');hint.textContent='Listening...';hint.classList.add('rh');fb.classList.add('show');tr.textContent='...';aRec=r;let full='';r.onresult=e=>{let i='',f='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}if(f)full+=f;tr.textContent=(full+' '+i).trim()||'...';};r.onerror=()=>{};r.onend=()=>{btn.classList.remove('rec');hint.classList.remove('rh');aRec=null;if(full.trim()){tr.textContent=full.trim();hint.innerHTML='Fields auto-filled — <strong>review before submitting</strong>.';parseNar(full.trim());}else{hint.textContent='No speech detected.';fb.classList.remove('show');}};r.start();}
 const _SFX='st|ave?|blvd|rd|dr|ln|ct|pl|pkwy|cir|ter|way|hwy';
 const _NOT=/^(big|large|small|deep|wide|huge|massive|really|very|pretty|super|bad|terrible|awful|old|new|long|short|rough|smooth|dark|wet|dry|is|has|was|got|the|a|an|it|in|on|at|to|of|up)$/i;
-function parseNar(t){const l=t.toLowerCase();if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');const addr=exAddr(t);let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>470)d=d.substring(0,467)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updCC();af.dispatchEvent(new Event('input'));}
+function parseNar(t){const l=t.toLowerCase();
+  // Cave-in / depression takes priority since it's a distinct issue type
+  if(/\bcave[- ]?in\b|\bdepression\b|\bsink\s*hole\b|\bsinkhole\b/.test(l)){stbc('357');if(/\bcave[- ]?in\b|\bsink\s*hole\b|\bsinkhole\b/.test(l))caveKind='3715',setCaveSel('caveKindSel','3715');else if(/\bdepression\b/.test(l))caveKind='3716',setCaveSel('caveKindSel','3716');if(/\bsidewalk\b/.test(l))caveLoc='478',setCaveSel('caveLocSel','478');else if(/\balley\b/.test(l))caveLoc='476',setCaveSel('caveLocSel','476');else if(/\btree\s*lawn\b/.test(l))caveLoc='1675',setCaveSel('caveLocSel','1675');else if(/\beasement\b/.test(l))caveLoc='3183',setCaveSel('caveLocSel','3183');else if(/\bstreet\b/.test(l))caveLoc='477',setCaveSel('caveLocSel','477');}
+  else if(/\balley\b/.test(l))stbc('322');else if(/\bresidential\b/.test(l))stbc('372');else if(/\barterial\b|\bmajor\b|\bboulevard\b|\bblvd\b/.test(l))stbc('323');
+  const addr=exAddr(t);const max=selCode===CAVE_CODE?250:470;let d=t.replace(/\b(arterial|residential|alley|major street|main street)\b/gi,'').replace(/\s{2,}/g,' ').trim();if(d.length>max)d=d.substring(0,max-3)+'...';const af=document.getElementById('address');if(addr)af.value=addr;document.getElementById('description').value=d;updCC();af.dispatchEvent(new Event('input'));}
+function setCaveSel(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function exAddr(t){let addr='';const am=t.match(/([A-Za-z][A-Za-z.\s'-]*?)\s+(?:and|&)\s+([A-Za-z][A-Za-z.\s'-]*)/i);if(am){const w1=am[1].trim().split(/\s+/).pop(),w2=am[2].trim().split(/\s+/)[0];if(!_NOT.test(w1)&&!_NOT.test(w2)){let s1=am[1],s2=am[2];s1=s1.replace(/^.*?\b(?:at|on|near|corner\s+of|pothole|there|theres|there's|is|has|big|large|huge|massive)\s+/i,'').trim();const x1=s1.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x1)s1=x1[1];s1=s1.trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');const x2=s2.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x2)s2=x2[1];else s2=s2.replace(/\s+(there|it|the|I|a|an|big|large|small|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|has|is|got|needs|really|in|on|arterial|residential|alley)\b.*/i,'');s2=s2.trim().replace(/\s+(there|it|the|I|we|a|an)$/i,'');if(s1.length>=2&&s2.length>=2)addr=s1+' and '+s2;}}if(!addr){const nm=t.match(/(?:at|on|near|address\s*(?:is)?)?\s*(\d+\s+[A-Za-z][A-Za-z0-9\s.'-]+?)(?:\s*[,.]|\s+(?:there|it|the|I|big|large|small|medium|deep|wide|about|approximately|pothole|hole|crater|damage|it's|its|this|has|is|got|needs))/i);if(nm){let a=nm[1].trim();const x=a.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x)a=x[1].trim();addr=a;}else{const nm2=t.match(/(?:at|on|near)?\s*(\d+\s+[A-Za-z][\w\s.'-]+)/i);if(nm2){let a=nm2[1].trim();const x=a.match(new RegExp('^(.*?\\b(?:'+_SFX+')\\b)','i'));if(x)a=x[1].trim();else a=a.replace(/\s+(there|it|the|I|big|large|small|has|is|got|pothole|hole).*/i,'').trim();addr=a;}}}return addr;}
-function stbc(c){document.querySelectorAll('.tp').forEach(o=>o.classList.toggle('sel',o.dataset.code===c));selCode=c;}
-function selType(el){document.querySelectorAll('.tp').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');selCode=el.dataset.code;}
-function updCC(){const l=document.getElementById('description').value.length,c=document.getElementById('charCount');c.textContent=l+' / 470';c.className='cc'+(l>450?' warn':'')+(l>470?' over':'');}
+function stbc(c){document.querySelectorAll('.tp').forEach(o=>o.classList.toggle('sel',o.dataset.code===c));selCode=c;applyCodeUI();}
+function selType(el){document.querySelectorAll('.tp').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');selCode=el.dataset.code;applyCodeUI();}
+function applyCodeUI(){
+  const isCave=selCode===CAVE_CODE;
+  document.getElementById('caveFields').style.display=isCave?'block':'none';
+  const ta=document.getElementById('description'),hint=document.getElementById('descHint');
+  if(isCave){ta.maxLength=250;hint.textContent='(optional, max 250 chars)';if(ta.value.length>250)ta.value=ta.value.substring(0,250);}
+  else{ta.maxLength=470;hint.textContent='(max 470 chars)';}
+  updCC();
+}
+function updCC(){const ta=document.getElementById('description'),max=ta.maxLength>0?ta.maxLength:470,l=ta.value.length,c=document.getElementById('charCount');c.textContent=l+' / '+max;c.className='cc'+(l>max-20?' warn':'')+(l>max?' over':'');}
 function showRS(t,h){const b=document.getElementById('statusBox');b.className='st show '+t;b.innerHTML=h;b.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function hideRS(){document.getElementById('statusBox').className='st';}
 function showTS(t,h){document.getElementById('trkSt').className='st show '+t;document.getElementById('trkSt').innerHTML=h;}
@@ -453,7 +576,7 @@ function hideTS(){document.getElementById('trkSt').className='st';}
 
 // ═══ Photo ═══
 function handlePhoto(inp){if(!inp.files||!inp.files[0])return;selPhoto=inp.files[0];const r=new FileReader();r.onload=e=>{document.getElementById('photoThumb').src=e.target.result;document.getElementById('photoPrev').style.display='block';document.getElementById('photoNote').textContent='Photo attached ('+Math.round(selPhoto.size/1024)+' KB).';};r.readAsDataURL(selPhoto);}
-function rmPhoto(){selPhoto=null;document.getElementById('photoInput').value='';document.getElementById('photoPrev').style.display='none';document.getElementById('photoNote').textContent='Photo may not be accepted by the city\'s API — your text report goes through regardless.';}
+function rmPhoto(){selPhoto=null;document.getElementById('photoInput').value='';document.getElementById('photoPrev').style.display='none';document.getElementById('photoNote').textContent='Photo will be attached to your submission and received by the city.';}
 
 // ═══ Tickets storage ═══
 function loadT(){try{return JSON.parse(localStorage.getItem('stl_pothole_tickets')||'[]')}catch{return[]}}
@@ -547,16 +670,57 @@ function mkCard(t,isClo){
 function exSR(data){const f=['service_request_id','SERVICE_REQUEST_ID','serviceRequestId','request_id','REQUEST_ID','requestId','REQUESTID','id','ID','token','TOKEN'];const src=Array.isArray(data)?data:[data];for(const o of src){if(!o||typeof o!=='object')continue;for(const k of f){const v=o[k];if(v!==undefined&&v!==null&&v!=='')return{id:String(v),field:k,isToken:k.toLowerCase().includes('token')};}}const s=JSON.stringify(data);const m=s.match(/(\d{6,8})/);if(m)return{id:m[1],field:'regex',isToken:false};return null;}
 
 // ═══ Submit ═══
-function mkCurl(s,code,a,d){let c='curl -X POST "'+API+'/requests.json" \\\n  -d "api_key='+s.apiKey+'" \\\n  -d "service_code='+code+'" \\\n  -d "address_string='+a+'" \\\n  -d "attribute[detail_description]='+d+'"';if(s.firstName)c+=' \\\n  -d "first_name='+s.firstName+'"';if(s.lastName)c+=' \\\n  -d "last_name='+s.lastName+'"';if(s.email)c+=' \\\n  -d "email='+s.email+'"';if(s.phone)c+=' \\\n  -d "phone='+s.phone+'"';return c;}
+function mkCurl(s,code,a,d){
+  let c='curl -X POST "'+API+'/requests.json" \\\n  -d "api_key='+s.apiKey+'" \\\n  -d "service_code='+code+'" \\\n  -d "address_string='+a+'"';
+  if(code===CAVE_CODE){
+    c+=' \\\n  -d "attribute[139]='+caveLoc+'" \\\n  -d "attribute[1642]='+caveKind+'"';
+    if(d)c+=' \\\n  -d "attribute[detail_description]='+d+'"';
+  } else {
+    c+=' \\\n  -d "attribute[detail_description]='+d+'"';
+  }
+  if(s.firstName)c+=' \\\n  -d "first_name='+s.firstName+'"';if(s.lastName)c+=' \\\n  -d "last_name='+s.lastName+'"';if(s.email)c+=' \\\n  -d "email='+s.email+'"';if(s.phone)c+=' \\\n  -d "phone='+s.phone+'"';return c;
+}
+
+// ═══ Confirmation step ═══
+function openConfirm(){
+  const addr=document.getElementById('address').value.trim(),desc=document.getElementById('description').value.trim();
+  const isCave=selCode===CAVE_CODE,max=isCave?250:470;
+  if(isCave){caveLoc=document.getElementById('caveLocSel').value;caveKind=document.getElementById('caveKindSel').value;}
+  if(!addr){showRS('err','<strong>Address required.</strong>');return;}
+  if(!isCave&&!desc){showRS('err','<strong>Description required.</strong>');return;}
+  if(desc.length>max){showRS('err','<strong>Description too long.</strong>');return;}
+  // Build review rows
+  let rows='';
+  rows+='<div class="confirm-row"><div class="crl">Issue Type</div><div class="crv">'+esc(TN[selCode])+'<span class="pin">Code '+selCode+'</span></div></div>';
+  if(isCave){
+    rows+='<div class="confirm-row"><div class="crl">Location of Issue</div><div class="crv">'+esc(CAVE_LOC[caveLoc]||caveLoc)+'</div></div>';
+    rows+='<div class="confirm-row"><div class="crl">Cave-in or Depression</div><div class="crv">'+esc(CAVE_KIND[caveKind]||caveKind)+'</div></div>';
+  }
+  rows+='<div class="confirm-row"><div class="crl">Address</div><div class="crv mono">'+esc(addr)+'</div></div>';
+  rows+='<div class="confirm-row"><div class="crl">Description'+(isCave?' (optional)':'')+'</div><div class="crv">'+(desc?esc(desc):'<span style="color:var(--g4);font-style:italic">— none —</span>')+'</div></div>';
+  if(selPhoto){rows+='<div class="confirm-row"><div class="crl">Photo</div><div class="crv">'+esc(selPhoto.name)+' ('+Math.round(selPhoto.size/1024)+' KB)<br><img class="confirm-photo" src="'+document.getElementById('photoThumb').src+'" alt=""></div></div>';}
+  document.getElementById('confirmRows').innerHTML=rows;
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+function closeConfirm(){document.getElementById('confirmOverlay').classList.remove('show');}
+function confirmSubmit(){closeConfirm();submitReport();}
 
 async function submitReport(){
   const s=loadS(),addr=document.getElementById('address').value.trim(),desc=document.getElementById('description').value.trim();
+  const isCave=selCode===CAVE_CODE,max=isCave?250:470;
   if(!addr){showRS('err','<strong>Address required.</strong>');return;}
-  if(!desc){showRS('err','<strong>Description required.</strong>');return;}
-  if(desc.length>470){showRS('err','<strong>Too long.</strong>');return;}
+  if(!isCave&&!desc){showRS('err','<strong>Description required.</strong>');return;}
+  if(desc.length>max){showRS('err','<strong>Too long.</strong>');return;}
+  // Build payload — append() works the same for FormData and URLSearchParams
+  const addFields=(p,isFD)=>{
+    p.append('api_key',s.apiKey);p.append('service_code',selCode);p.append('address_string',addr);
+    if(isCave){p.append('attribute[139]',caveLoc);p.append('attribute[1642]',caveKind);if(desc)p.append('attribute[detail_description]',desc);}
+    else{p.append('attribute[detail_description]',desc);}
+    if(s.firstName)p.append('first_name',s.firstName);if(s.lastName)p.append('last_name',s.lastName);if(s.email)p.append('email',s.email);if(s.phone)p.append('phone',s.phone);
+  };
   let fo;
-  if(selPhoto){const fd=new FormData();fd.append('api_key',s.apiKey);fd.append('service_code',selCode);fd.append('address_string',addr);fd.append('attribute[detail_description]',desc);if(s.firstName)fd.append('first_name',s.firstName);if(s.lastName)fd.append('last_name',s.lastName);if(s.email)fd.append('email',s.email);if(s.phone)fd.append('phone',s.phone);fd.append('media[]',selPhoto,selPhoto.name);fo={method:'POST',body:fd};}
-  else{const p=new URLSearchParams();p.append('api_key',s.apiKey);p.append('service_code',selCode);p.append('address_string',addr);p.append('attribute[detail_description]',desc);if(s.firstName)p.append('first_name',s.firstName);if(s.lastName)p.append('last_name',s.lastName);if(s.email)p.append('email',s.email);if(s.phone)p.append('phone',s.phone);fo={method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()};}
+  if(selPhoto){const fd=new FormData();addFields(fd,true);fd.append('media[]',selPhoto,selPhoto.name);fo={method:'POST',body:fd};}
+  else{const p=new URLSearchParams();addFields(p,false);fo={method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()};}
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<span class="sp"></span> Submitting...';hideRS();
   pendSub={addr,desc,code:selCode};const now=new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
   try{
@@ -575,7 +739,7 @@ async function submitReport(){
     const curl=mkCurl(s,selCode,addr,desc);
     showRS('wrn','<strong>May have submitted</strong> but response blocked (CORS).<div class="sre"><label>SR#:</label><div class="sre-r"><input type="text" id="manualSR" inputmode="numeric"><button class="sre-b" onclick="linkSR()">Save</button></div></div><br>Or terminal:<br><textarea readonly class="curl-box" onclick="this.select()">'+esc(curl)+'</textarea><button class="cpb" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>this.textContent=\'Copied!\').catch(()=>{})">Copy</button>');
     addTk({id:'pending',address:addr,code:selCode,dateSubmitted:now,description:desc,status:'',problemType:TN[selCode],lastChecked:'',needsSR:true,accepted:false});clrForm();
-  }finally{btn.disabled=false;btn.innerHTML='Submit Pothole Report';}
+  }finally{btn.disabled=false;btn.innerHTML='Review &amp; Submit';}
 }
 function clrForm(){document.getElementById('address').value='';document.getElementById('description').value='';updCC();document.getElementById('vfb').classList.remove('show');hideAS();rmPhoto();}
 function linkSR(){const sr=document.getElementById('manualSR').value.trim();if(!sr)return;const ts=loadT(),i=ts.findIndex(t=>t.id==='pending'||t.needsSR);if(i>=0){ts[i].id=sr;ts[i].needsSR=false;saveT(ts);render();showRS('ok','<strong>Linked to SR #'+esc(sr)+'.</strong>');}else{addTk({id:sr,address:pendSub?.addr||'',code:pendSub?.code||'',dateSubmitted:new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),description:pendSub?.desc||'',status:'',problemType:'',lastChecked:'',needsSR:false,accepted:false});showRS('ok','<strong>SR #'+esc(sr)+' saved.</strong>');}}
