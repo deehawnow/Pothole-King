@@ -31,6 +31,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--g1);color:v
 .card-t{font-size:15px;font-weight:600;color:var(--g7);margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px}
 label{display:block;font-size:14px;font-weight:600;color:var(--g7);margin-bottom:6px}
 .lh{font-weight:400;color:var(--g5);font-size:13px}
+.fld-help{font-size:12px;color:var(--g5);margin-top:5px;line-height:1.5}
 input[type=text],input[type=email],input[type=tel],textarea{width:100%;padding:12px 14px;border:1.5px solid var(--g3);border-radius:8px;font-family:inherit;font-size:15px;color:var(--g9);background:var(--w);outline:0;transition:border-color .15s,box-shadow .15s}
 input:focus,textarea:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
 input::placeholder,textarea::placeholder{color:var(--g4)}
@@ -241,7 +242,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 <body>
 <div id="app-body">
 <div class="hdr">
-  <div class="hdr-top"><div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="hdr-sub">City of St. Louis CSB — Open311 API <span class="ver">v2.3</span></div></div><button class="sbtn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button></div>
+  <div class="hdr-top"><div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="hdr-sub">City of St. Louis CSB — Open311 API <span class="ver">v2.4</span></div></div><button class="sbtn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button></div>
   <div class="tabs" id="tabBar" style="display:none">
     <button class="tab active" data-tab="report" onclick="switchTab('report')">Report</button>
     <button class="tab" data-tab="tracker" onclick="switchTab('tracker')">My Tickets <span class="tbdg" id="ticketCount" style="display:none">0</span></button>
@@ -369,6 +370,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
   <div class="fg"><label>Last Name</label><input type="text" id="editLast"></div>
   <div class="fg"><label>Email</label><input type="email" id="editEmail"></div>
   <div class="fg"><label>Phone</label><input type="tel" id="editPhone"></div>
+  <div class="fg"><label>Custom Refresh Proxy <span class="lh">(optional, advanced)</span></label><input type="text" id="editProxy" autocomplete="off" spellcheck="false" placeholder="e.g. https://your-worker.workers.dev/"><div class="fld-help">Ticket refresh relies on a CORS proxy to read the city's status pages. Public proxies are rate-limited and flaky. Paste a personal Cloudflare Worker URL here for fast, reliable refreshes. Leave blank to use public proxies.</div></div>
   <button class="btn-s" onclick="updSettings()">Save Changes</button>
   <button class="btn-d" onclick="clearAll()">Clear All Saved Data</button>
   <button class="sbtn" style="width:100%;margin-top:12px;background:var(--g1);color:var(--g7);border-color:var(--g3)" onclick="switchTab(loadTab())">← Back</button>
@@ -540,33 +542,44 @@ function hideAS(){const e=document.getElementById('addrSt');e.className='as';e.i
 // ═══ City page scraping ═══
 // Track most-recently-successful CORS proxy in-session so we don't keep paying the discovery cost
 let lastGoodProxy=null;
+// Proxy builders. Each takes the encoded target URL and returns the full proxy request URL.
+// Order matters: most origin-permissive / reliable first (verified current as of 2026).
+// corsproxy.io moved to last — it now restricts its free tier and changed its URL format (?url=).
+function proxyList(){
+  const s=loadS();
+  const list=[];
+  // User-configured proxy (e.g. a personal Cloudflare Worker) always takes priority if set
+  if(s.customProxy){const cp=s.customProxy.trim();list.push({name:'custom',build:t=>cp+(cp.includes('?')?'':'?url=')+encodeURIComponent(t)});}
+  list.push({name:'allorigins',build:t=>'https://api.allorigins.win/raw?url='+encodeURIComponent(t)});
+  list.push({name:'codetabs',build:t=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(t)});
+  list.push({name:'corsproxy.io',build:t=>'https://corsproxy.io/?url='+encodeURIComponent(t)});
+  return list;
+}
 async function fetchCP(rid){
-  const u=CSB+'?requestID='+encodeURIComponent(rid);
-  const base=['https://corsproxy.io/?','https://api.allorigins.win/raw?url=','https://api.codetabs.com/v1/proxy?quest='];
+  const target=CSB+'?requestID='+encodeURIComponent(rid);
+  let proxies=proxyList();
   // If we have a winner from earlier this session, try it first
-  const ordered=lastGoodProxy?[lastGoodProxy,...base.filter(b=>b!==lastGoodProxy)]:base;
+  if(lastGoodProxy){const i=proxies.findIndex(p=>p.name===lastGoodProxy);if(i>0){proxies=[proxies[i],...proxies.slice(0,i),...proxies.slice(i+1)];}}
   let le='';
-  // Two passes — many proxy failures are transient (rate limit, transient TLS, etc.) and resolve within 1-2s
+  // Two passes — many proxy failures are transient (rate limit, transient TLS, etc.) and resolve within ~1.5s
   for(let pass=0;pass<2;pass++){
     if(pass>0)await new Promise(r=>setTimeout(r,1500));
-    for(const baseUrl of ordered){
-      const p=baseUrl+encodeURIComponent(u);
+    for(const px of proxies){
       try{
-        const r=await fetchT(p,12000);
-        if(!r.ok){le='HTTP '+r.status+' via '+shortName(baseUrl);continue;}
+        const r=await fetchT(px.build(target),12000);
+        if(!r.ok){le='HTTP '+r.status+' ('+px.name+')';continue;}
         const h=await r.text();
-        if(!h||h.length<200){le='Empty response from '+shortName(baseUrl);continue;}
+        if(!h||h.length<200){le='Empty response ('+px.name+')';continue;}
         const d=parsePage(h,rid);
-        if(d){lastGoodProxy=baseUrl;return d;}
-        le='Parse failed from '+shortName(baseUrl);
+        if(d){lastGoodProxy=px.name;return d;}
+        le='Parse failed ('+px.name+')';
       }catch(e){
-        le=(e.name==='AbortError'?'Timeout':e.message)+' via '+shortName(baseUrl);
+        le=(e.name==='AbortError'?'Timeout':e.message)+' ('+px.name+')';
       }
     }
   }
   throw new Error(le||'All proxies failed');
 }
-function shortName(u){return u.includes('corsproxy')?'corsproxy.io':u.includes('allorigins')?'allorigins':u.includes('codetabs')?'codetabs':'proxy';}
 function parsePage(html,rid){const doc=new DOMParser().parseFromString(html,'text/html');const t=doc.body?doc.body.textContent:'';if(!t.includes('Service Request')&&!t.includes(rid))return null;function ex(l){for(const re of[new RegExp(l+'\\s*\\n\\s*([^\\n]+)','i'),new RegExp(l+'\\s+([^\\n]+)','i')]){const m=t.match(re);if(m&&m[1]){const v=m[1].trim();if(v&&v.length<200)return v;}}return'';}return{status:ex('Status:'),investigation:ex('Dept Investigation Completed On:'),address:ex('Location:'),dateSubmitted:ex('Request Initiated:'),problemType:ex('Problem Type:'),dept:ex('Dept To Receive SR:'),dueDate:ex('Dept Response Due By:')};}
 
 // ═══ Screens ═══
@@ -584,7 +597,7 @@ function switchTab(t){
   if(t==='city')loadCityStatFrame();
 }
 function showScr(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
-function showSettings(){const s=loadS();document.getElementById('editApiKey').value=s.apiKey||'';document.getElementById('editAddrKey').value=s.addrKey||'';document.getElementById('editFirst').value=s.firstName||'';document.getElementById('editLast').value=s.lastName||'';document.getElementById('editEmail').value=s.email||'';document.getElementById('editPhone').value=s.phone||'';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('reportScreen').classList.remove('on');document.getElementById('trackerScreen').classList.remove('on');document.getElementById('statsScreen').classList.remove('on');document.getElementById('cityScreen').classList.remove('on');showScr('settingsScreen');}
+function showSettings(){const s=loadS();document.getElementById('editApiKey').value=s.apiKey||'';document.getElementById('editAddrKey').value=s.addrKey||'';document.getElementById('editFirst').value=s.firstName||'';document.getElementById('editLast').value=s.lastName||'';document.getElementById('editEmail').value=s.email||'';document.getElementById('editPhone').value=s.phone||'';const ep=document.getElementById('editProxy');if(ep)ep.value=s.customProxy||'';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('reportScreen').classList.remove('on');document.getElementById('trackerScreen').classList.remove('on');document.getElementById('statsScreen').classList.remove('on');document.getElementById('cityScreen').classList.remove('on');showScr('settingsScreen');}
 function showMain(){document.getElementById('tabBar').style.display='flex';switchTab(loadTab());}
 function switchSub(s){curSub=s;document.querySelectorAll('.stab').forEach(x=>x.classList.toggle('on',x.dataset.st===s));document.getElementById('activePanel').style.display=s==='active'?'block':'none';document.getElementById('closedPanel').style.display=s==='closed'?'block':'none';render();}
 
@@ -592,7 +605,7 @@ function switchSub(s){curSub=s;document.querySelectorAll('.stab').forEach(x=>x.c
 function loadS(){try{return JSON.parse(localStorage.getItem('stl_pothole_settings')||'{}')}catch{return{}}}
 function storeS(o){localStorage.setItem('stl_pothole_settings',JSON.stringify(o))}
 function saveSettings(){const k=document.getElementById('setupApiKey').value.trim();if(!k){alert('CSB API key required.');return;}storeS({apiKey:k,addrKey:document.getElementById('setupAddrKey').value.trim(),firstName:document.getElementById('setupFirst').value.trim(),lastName:document.getElementById('setupLast').value.trim(),email:document.getElementById('setupEmail').value.trim(),phone:document.getElementById('setupPhone').value.trim()});document.getElementById('settingsToggle').style.display='block';showMain();}
-function updSettings(){const k=document.getElementById('editApiKey').value.trim();if(!k){alert('CSB API key required.');return;}storeS({apiKey:k,addrKey:document.getElementById('editAddrKey').value.trim(),firstName:document.getElementById('editFirst').value.trim(),lastName:document.getElementById('editLast').value.trim(),email:document.getElementById('editEmail').value.trim(),phone:document.getElementById('editPhone').value.trim()});switchTab(loadTab());}
+function updSettings(){const k=document.getElementById('editApiKey').value.trim();if(!k){alert('CSB API key required.');return;}const ep=document.getElementById('editProxy');storeS({apiKey:k,addrKey:document.getElementById('editAddrKey').value.trim(),firstName:document.getElementById('editFirst').value.trim(),lastName:document.getElementById('editLast').value.trim(),email:document.getElementById('editEmail').value.trim(),phone:document.getElementById('editPhone').value.trim(),customProxy:ep?ep.value.trim():''});switchTab(loadTab());}
 function clearAll(){if(confirm('Erase everything?')){localStorage.removeItem('stl_pothole_settings');localStorage.removeItem('stl_pothole_tickets');localStorage.removeItem('stl_pothole_tab');document.getElementById('settingsToggle').style.display='none';document.getElementById('tabBar').style.display='none';showScr('setupScreen');}}
 
 // ═══ Speech ═══
