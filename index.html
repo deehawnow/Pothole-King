@@ -242,7 +242,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 <body>
 <div id="app-body">
 <div class="hdr">
-  <div class="hdr-top"><div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="hdr-sub">City of St. Louis CSB — Open311 API <span class="ver">v2.4</span></div></div><button class="sbtn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button></div>
+  <div class="hdr-top"><div><h1><span class="icon">🕳️</span> STL Pothole Reporter</h1><div class="hdr-sub">City of St. Louis CSB — Open311 API <span class="ver">v2.5</span></div></div><button class="sbtn" id="settingsToggle" style="display:none" onclick="showSettings()">Settings</button></div>
   <div class="tabs" id="tabBar" style="display:none">
     <button class="tab active" data-tab="report" onclick="switchTab('report')">Report</button>
     <button class="tab" data-tab="tracker" onclick="switchTab('tracker')">My Tickets <span class="tbdg" id="ticketCount" style="display:none">0</span></button>
@@ -539,16 +539,55 @@ async function valA(a){
 }
 function showAS(c,h){const e=document.getElementById('addrSt');e.className='as show '+c;e.innerHTML=h;}
 function hideAS(){const e=document.getElementById('addrSt');e.className='as';e.innerHTML='';}
-// ═══ City page scraping ═══
-// Track most-recently-successful CORS proxy in-session so we don't keep paying the discovery cost
+// ═══ Ticket status fetch ═══
+// PRIMARY path: the city's Open311 GET endpoint returns clean JSON directly from the powernap
+// API domain — the same domain/mechanism address validation already fetches without a proxy.
+// This avoids the flaky CORS-proxy + HTML-scraping path entirely.
+// Convert the city's ISO datetimes (2026-03-02T17:26:49Z) to MM/DD/YYYY so the existing
+// SLA/date logic (which expects MM/DD/YYYY via parseCityDate) keeps working unchanged.
+function isoToMDY(iso){
+  if(!iso)return'';
+  const d=new Date(iso);
+  if(isNaN(d))return'';
+  const mm=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');
+  return mm+'/'+dd+'/'+d.getFullYear();
+}
+function mapOpen311(r){
+  const out={};
+  if(r.STATUS)out.status=String(r.STATUS).trim();
+  if(r.ADDRESS)out.address=String(r.ADDRESS).trim();
+  if(r.SERVICE_NAME)out.problemType=String(r.SERVICE_NAME).trim();
+  if(r.AGENCY_RESPONSIBLE)out.dept=String(r.AGENCY_RESPONSIBLE).trim();
+  if(r.SERVICE_CODE!=null&&r.SERVICE_CODE!=='')out.code=String(r.SERVICE_CODE).trim();
+  const sub=isoToMDY(r.REQUESTED_DATETIME);if(sub)out.dateSubmitted=sub;
+  const due=isoToMDY(r.EXPECTED_DATETIME);if(due)out.dueDate=due;
+  // Closed/cancelled → record the completion date (UPDATED_DATETIME) as the "investigation"
+  // value, which the card/SLA logic uses as the city close date. Otherwise mark still-open.
+  const st=out.status||'';
+  if(/close|cancel/i.test(st)){
+    const upd=isoToMDY(r.UPDATED_DATETIME);
+    out.investigation=upd||'Investigation Completed';
+  }else if(st){
+    out.investigation='Investigation Still Open';
+  }
+  return out;
+}
+async function fetchDirect(rid){
+  const s=loadS();
+  if(!s.apiKey)throw new Error('No API key');
+  const r=await fetchT(API+'/requests/'+encodeURIComponent(rid)+'.json?api_key='+encodeURIComponent(s.apiKey),10000);
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const j=await r.json();
+  const rec=Array.isArray(j)?j[0]:j;
+  if(!rec||(rec.STATUS==null&&rec.SERVICE_REQUEST_ID==null))throw new Error('No record');
+  return mapOpen311(rec);
+}
+
+// ═══ Fallback: CORS-proxy + HTML scrape (only used if the direct JSON path fails) ═══
 let lastGoodProxy=null;
-// Proxy builders. Each takes the encoded target URL and returns the full proxy request URL.
-// Order matters: most origin-permissive / reliable first (verified current as of 2026).
-// corsproxy.io moved to last — it now restricts its free tier and changed its URL format (?url=).
 function proxyList(){
   const s=loadS();
   const list=[];
-  // User-configured proxy (e.g. a personal Cloudflare Worker) always takes priority if set
   if(s.customProxy){const cp=s.customProxy.trim();list.push({name:'custom',build:t=>cp+(cp.includes('?')?'':'?url=')+encodeURIComponent(t)});}
   list.push({name:'allorigins',build:t=>'https://api.allorigins.win/raw?url='+encodeURIComponent(t)});
   list.push({name:'codetabs',build:t=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(t)});
@@ -558,10 +597,8 @@ function proxyList(){
 async function fetchCP(rid){
   const target=CSB+'?requestID='+encodeURIComponent(rid);
   let proxies=proxyList();
-  // If we have a winner from earlier this session, try it first
   if(lastGoodProxy){const i=proxies.findIndex(p=>p.name===lastGoodProxy);if(i>0){proxies=[proxies[i],...proxies.slice(0,i),...proxies.slice(i+1)];}}
   let le='';
-  // Two passes — many proxy failures are transient (rate limit, transient TLS, etc.) and resolve within ~1.5s
   for(let pass=0;pass<2;pass++){
     if(pass>0)await new Promise(r=>setTimeout(r,1500));
     for(const px of proxies){
@@ -579,6 +616,19 @@ async function fetchCP(rid){
     }
   }
   throw new Error(le||'All proxies failed');
+}
+// Unified fetch: try direct Open311 JSON first, fall back to proxy/HTML scrape.
+async function fetchStatus(rid){
+  try{
+    return await fetchDirect(rid);
+  }catch(directErr){
+    try{
+      return await fetchCP(rid);
+    }catch(proxyErr){
+      // Surface the more informative (direct) error, noting the fallback also failed
+      throw new Error(directErr.message+' (direct); '+proxyErr.message+' (proxy)');
+    }
+  }
 }
 function parsePage(html,rid){const doc=new DOMParser().parseFromString(html,'text/html');const t=doc.body?doc.body.textContent:'';if(!t.includes('Service Request')&&!t.includes(rid))return null;function ex(l){for(const re of[new RegExp(l+'\\s*\\n\\s*([^\\n]+)','i'),new RegExp(l+'\\s+([^\\n]+)','i')]){const m=t.match(re);if(m&&m[1]){const v=m[1].trim();if(v&&v.length<200)return v;}}return'';}return{status:ex('Status:'),investigation:ex('Dept Investigation Completed On:'),address:ex('Location:'),dateSubmitted:ex('Request Initiated:'),problemType:ex('Problem Type:'),dept:ex('Dept To Receive SR:'),dueDate:ex('Dept Response Due By:')};}
 
@@ -662,7 +712,7 @@ async function refreshTk(id){
   const card=document.querySelector('[data-tid="'+id+'"]');
   const btn=card&&card.querySelector('.tc-ref');
   if(card)card.classList.add('refreshing');if(btn){btn.disabled=true;btn.innerHTML='<span class="spd"></span>';}
-  try{const data=await fetchCP(id);const ts=loadT(),i=ts.findIndex(t=>t.id===id);if(i>=0){for(const k of['status','investigation','address','dateSubmitted','problemType','dept','dueDate']){if(data[k])ts[i][k]=data[k];}ts[i].lastChecked=new Date().toISOString();saveT(ts);}render();return true;}
+  try{const data=await fetchStatus(id);const ts=loadT(),i=ts.findIndex(t=>t.id===id);if(i>=0){for(const k of['status','investigation','address','dateSubmitted','problemType','dept','dueDate','code']){if(data[k])ts[i][k]=data[k];}ts[i].lastChecked=new Date().toISOString();saveT(ts);}render();return true;}
   catch(e){
     if(card)card.classList.remove('refreshing');
     if(btn){btn.disabled=false;btn.textContent='Refresh';}
@@ -696,7 +746,7 @@ async function refreshAll(){
   else if(fail)showTS('inf','Updated '+ok+'/'+tot+'. '+fail+' failed.'+skipMsg);
   else{showTS('ok','All '+ok+' ticket(s) updated.'+skipMsg);setTimeout(hideTS,4000);}
 }
-async function lookupTicket(){const id=document.getElementById('lookupId').value.trim();if(!id)return;const btn=document.getElementById('lookupBtn');btn.disabled=true;btn.textContent='Loading...';hideTS();addTk({id,address:'',code:'',dateSubmitted:'',description:'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false,accepted:false});render();try{const d=await fetchCP(id);const ts=loadT(),i=ts.findIndex(t=>t.id===id);if(i>=0){Object.assign(ts[i],d,{lastChecked:new Date().toISOString()});saveT(ts);}render();showTS('ok','<strong>#'+id+'</strong> — '+(d.status||'Loaded'));document.getElementById('lookupId').value='';setTimeout(hideTS,4000);}catch{showTS('wrn','<strong>Could not auto-fetch #'+id+'.</strong> Added — <a href="'+CSB+'?requestID='+id+'" target="_blank" style="color:inherit;font-weight:700">check city site</a>.');document.getElementById('lookupId').value='';}finally{btn.disabled=false;btn.textContent='Look Up';}}
+async function lookupTicket(){const id=document.getElementById('lookupId').value.trim();if(!id)return;const btn=document.getElementById('lookupBtn');btn.disabled=true;btn.textContent='Loading...';hideTS();addTk({id,address:'',code:'',dateSubmitted:'',description:'',status:'',investigation:'',dept:'',dueDate:'',problemType:'',lastChecked:'',needsSR:false,accepted:false});render();try{const d=await fetchStatus(id);const ts=loadT(),i=ts.findIndex(t=>t.id===id);if(i>=0){Object.assign(ts[i],d,{lastChecked:new Date().toISOString()});saveT(ts);}render();showTS('ok','<strong>#'+id+'</strong> — '+(d.status||'Loaded'));document.getElementById('lookupId').value='';setTimeout(hideTS,4000);}catch(e){showTS('wrn','<strong>Could not auto-fetch #'+id+'.</strong> '+esc(e&&e.message||'')+' Added — <a href="'+CSB+'?requestID='+id+'" target="_blank" style="color:inherit;font-weight:700">check city site</a>.');document.getElementById('lookupId').value='';}finally{btn.disabled=false;btn.textContent='Look Up';}}
 // ═══ Render tickets ═══
 function bdgCls(s){if(!s)return'b-new';const l=s.toLowerCase();if(l.includes('close'))return'b-closed';if(l.includes('cancel'))return'b-cancel';if(l.includes('dispatch'))return'b-disp';if(l.includes('progress'))return'b-prog';if(l==='pending')return'b-unk';return'b-new';}
 
